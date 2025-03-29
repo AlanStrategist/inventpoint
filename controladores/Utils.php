@@ -1,0 +1,53 @@
+<?php
+
+#Create Invoice Number
+
+function GetFac() : int{
+
+   $db = new clasedb();
+   $conex = $db->conectar();
+   $sql_get_last_id ="SELECT MAX(factura) as last FROM pedidos";
+   
+   try{
+   
+   $fac_query= mysqli_query($conex, $sql_get_last_id);
+
+   $last_fac = mysqli_fetch_array($fac_query);
+
+   $fac_num = $last_fac['last'];
+
+   if($fac_num == null){ $fac_num = 0; }
+
+   $fac_num++;
+
+   return $fac_num;
+   
+   }catch(mysqli_sql_exception $e){
+        
+    echo "". $e->getMessage() ."";
+
+   }finally{
+
+    mysqli_close($conex);
+
+   }
+
+   return 0;
+
+}
+
+function isLoged() : bool{
+
+   session_start();
+
+   if(isset($_SESSION["id"]) && $_SESSION["logueado"] == "Si"){ 
+
+      #is Loged
+
+      return true;
+
+    } 
+
+    return false;
+
+}
