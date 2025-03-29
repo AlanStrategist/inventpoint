@@ -36,13 +36,13 @@ class ControladorCarrito
 
 			if ($res) {
 
-				header("Location: ../vista/categorias/car/carro.php?alert=elimino");
+				header("Location: ../vista/categorias/car/carro.php?alert=rem");
 
 			}
 
 		} catch (mysqli_sql_exception $e) {
 
-			header("Location:../vista/categorias/car/carro.php?alert=falloel");
+			header("Location:../vista/categorias/car/carro.php?alert=error");
 
 		} finally {
 
@@ -76,14 +76,14 @@ class ControladorCarrito
 			if ($res) {
 
 
-				$loc = $ByCon == "true" ? "Location: ../vista/categorias/car/productos.php?alert=modisi" : "Location: ../vista/categorias/car/carro.php?alert=modisi";
+				$loc = $ByCon == "true" ? "Location: ../vista/categorias/car/productos.php?alert=ac" : "Location: ../vista/categorias/car/carro.php?alert=ac";
 
 				header($loc);
 			}
 
 		} catch (mysqli_sql_exception $e) {
 
-			header("Location: ../vista/categorias/car/carro.php?alert=falloac");
+			header("Location: ../vista/categorias/car/carro.php?alert=error");
 
 		} finally {
 
@@ -110,14 +110,16 @@ class ControladorCarrito
 
 			#check availability
 
-			$cons = "SELECT * FROM producto WHERE id=" . $id . " AND stock >= 1 AND stock >= $quantity ";
+			$cons = "SELECT producto.stock FROM producto WHERE id=" . $id . " AND stock >= 1 AND stock >= ".$quantity."";
 
 			$resul = mysqli_query($conex, $cons);
 
 			$porsiala = mysqli_num_rows($resul);
 
 			if (!($porsiala > 0)) {
-				header("location: ../vista/categorias/car/productos.php?alert=stockinsuficiente");
+				
+				header("Location: ../vista/categorias/car/productos.php?alert=nostock");
+				
 			}
 
 			#Check if already has in the car
@@ -136,6 +138,17 @@ class ControladorCarrito
 
 				$quantity += $quant['quantity'];
 
+				$loc = "";
+
+				while ($row = mysqli_fetch_array($resul)) {
+
+					if( $row['stock'] < $quantity ){ header("Location: ../vista/categorias/car/productos.php?alert=nostock"); 
+						
+					return; //is not have else, must have return;
+
+					} 
+				}
+			
 				header("Location: ./ControladorCarrito.php?operacion=actualizar&quantity=" . $quantity . "&product_id=" . $id . "&ByCon=true");
 
 			} else {
@@ -146,7 +159,7 @@ class ControladorCarrito
 
 				if ($res) {
 
-					header("Location: ../vista/categorias/car/productos.php?alert=agregado");
+					header("Location: ../vista/categorias/car/productos.php?alert=add");
 
 				}
 
@@ -156,7 +169,7 @@ class ControladorCarrito
 
 			//echo "". $e->getMessage() ."";
 
-			header("location: ../vista/categorias/car/productos.php?alert=no");
+			header("location: ../vista/categorias/car/productos.php?alert=error");
 
 
 		} finally {

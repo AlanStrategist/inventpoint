@@ -3,29 +3,61 @@ $nucleo = 'Ventas';
 $title = 'Realizar una venta';
 
 include('../../js/restric.php');
-include ('../../../modelos/ClassAlert.php');
+include('../../../modelos/ClassAlert.php');
 
 extract($_REQUEST);
 
-if(isset($alert) && $alert == 'agregado'){ $al = new ClassAlert('Agregado con exito <br>',"Se ha agregado al carrito exitosamente","primary"); }
+if( isset($alert) && $alert == "add"){ $al = new ClassAlert("Agregado !<br>","","primary"); }
 
-if(isset($alert) && $alert == 'modisi'){ $al = new ClassAlert('Modificacion Exitosa',"","warning"); }
+else if( isset($alert) && $alert == "nostock"){ $al = new ClassAlert("No Stock!<br>","No hay la suficiente cantidad del producto","danger"); }
 
-$quero = "SELECT p.id,p.precio,p.stock,p.id_categorias,p.id_ubicacion,cart_menu.quantity,cart_menu.user_id,p.porcentaje,p.porcentaje * " . $valor . " AS cambio FROM producto p,cart_menu WHERE cart_menu.product_id=p.id AND p.stock > 0";
-$response = mysqli_query($conex, $quero);
+else if( isset($alert) && $alert == "error"){ $al = new ClassAlert("Error!<br>","No se registraron los cambios","danger"); }
+
+else if( isset($alert) && $alert == "rem"){ $al = new ClassAlert("Removido!<br>","","primary"); }
+
+else if( isset($alert) && $alert == "ac"){ $al = new ClassAlert("Cantidad actualizada!<br>","","primary"); }
+
+else if( isset($alert) && $alert == "donefac"){ $al = new ClassAlert("Venta almacenada con exito<br>","","primary"); }
 
 
-if (!$response)
-  echo "Error en la carga";
+try{
 
+// show all products
 
+$query = "SELECT DISTINCT p.id,
+p.cod_barra,
+p.nombre,
+p.stock,
+u.nombre as ubicacion,
+ca.nombre as categorias,
+ROUND( p.precio + ( (p.precio * p.porcentaje) / 100),2) AS precio,
+ROUND( p.precio + ( (p.precio * p.porcentaje) / 100),2) * ".$valor." AS cambio 
 
-// select products from database
+FROM producto p,categorias ca , ubicacion u 
 
-$query = "SELECT p.id,p.cod_barra,p.nombre,p.precio,p.stock,p.id_categorias,p.id_ubicacion,p.porcentaje,p.porcentaje * " . $valor . " AS cambio FROM producto p WHERE p.stock > 0";
+WHERE p.stock > 0 AND 
+p.id_categorias = ca.id 
+AND p.id_ubicacion = u.id";
 
 $respuesta = mysqli_query($conex, $query);
 $pruebo = mysqli_num_rows($respuesta);
+
+$dat = [];
+
+//fill the array
+
+while($data = mysqli_fetch_array($respuesta)) { $dat[] = $data; }
+
+
+}catch(mysqli_sql_exception | Exception $e ){
+
+  $respuesta = false;
+
+}finally{
+
+  mysqli_close($conex);
+
+}
 
 if ($respuesta) {
 
@@ -38,7 +70,7 @@ if ($respuesta) {
       <div class="row">
         <div class="col-md-12">
 
-          <?php if(isset($al)){$al->Show_Alert();}?>
+          <?php if(isset($al)){ echo $al->Show_Alert(); } ?>
 
           <div class="card">
             <div class="card-header">
@@ -71,15 +103,10 @@ if ($respuesta) {
                   </thead>
 
                   <?php
-                  $chiguire = 0;
-                  while ($data = mysqli_fetch_array($respuesta)) {
+                   $chiguire = 0;
 
-
-                    //obtenemos la ubicacion y la categoria ya que al parecer no se puede traer en una sola consulta
-                    include('jorgereguero.php');
-                    //fin de la broma
-                
-
+                   foreach ($dat as $data) {
+                    
 
                     $cedula = 0;
 
@@ -88,74 +115,48 @@ if ($respuesta) {
 
 
 
-                    ?>     <?= $data['cod_barra'] ?>    <?php
-                             echo "</td>";
-                             echo "<td>";
+                    ?>     <?= $data['cod_barra'] ?>     <?php
+                                echo "</td>";
+                                echo "<td>";
 
 
 
-                             ?>     <?= $data['nombre'] ?>    <?php
-                                      echo "</td>";
+                                ?>     <?= $data['nombre'] ?>     <?php
+                                            echo "</td>";
+                                           
 
-
-
-                                      echo "<td>";
-                                      ?>     <?= $categorias ?>    <?php
-                                                echo "</td>";
-
-
-
-
-                                                echo "<td>";
-                                                ?>     <?= $ubicacion ?>    <?php
-                                                         echo "</td>";
+                                            echo "<td>";
+                                            ?>     <?= $data['categorias'] ?>     <?php
+                                                        echo "</td>";
 
 
 
 
-
-
-                                                         echo "<td>";
-                                                         ?>    <?= $data['stock'] ?>    <?php
-                                                                 echo "</td>";
-
-
-                                                                 echo "<td>&#36;" . number_format($data['porcentaje'], 2, '.', ',') . "</td>";
-
-                                                                 echo "</td>";
+                                                        echo "<td>";
+                                                        ?>     <?= $data['ubicacion'] ?>     <?php
+                                                                    echo "</td>";
 
 
 
 
 
-                                                                 echo "<td>BS  " . number_format($data['cambio'], 2, ',', '.') . "</td>";
+
+                                                                    echo "<td>";
+                                                                    ?>     <?= $data['stock'] ?>     <?php
+                                                                                echo "</td>";
+
+
+                                                                                echo "<td>&#36;" . number_format($data['precio'], 2, '.', ',') . "</td>";
+
+                                                                                echo "</td>";
 
 
 
 
 
-                                                                 if (isset($data['quantity'])) {
-                                                                   echo "<td>";
+                                                                                echo "<td>BS  " . number_format($data['cambio'], 2, ',', '.') . "</td>";
 
-                                                                   echo "<input type='text' name='quantity' min='1' max='".$data['stock']."' value='" . $data['quantity'] . "' disabled class='form-control' />";
-
-                                                                   echo "</td>";
-
-                                                                   echo "<td>";
-                                                                   echo "<button class='btn-lg btn-success text-white' disabled>";
-                                                                   echo "<i class='far fa-2x fa-cart-arrow-down'></i><strong>¡Agregado!</strong>";
-                                                                   echo "</button>";
-                                                                   echo "</td>";
-
-
-
-
-                                                                 } else {
-
-
-
-
-                                                                   ?>
+                                                                                  ?>
 
                       <form name="form<?= $chiguire ?>" method="POST" action="../../../controladores/controladorcarrito.php">
 
@@ -164,7 +165,7 @@ if ($respuesta) {
                         <input type="hidden" name="operacion" value="agregar">
                         <?php
                         echo "<td>";
-                        echo "<input type='number' min='1' name='quantity' value='1' class='form-control' />";
+                        echo "<input type='number' min='1' max='".$data['stock']."' name='quantity' value='1' class='form-control' />";
                         echo "</td>";
                         echo "<td>";
 
@@ -174,12 +175,12 @@ if ($respuesta) {
                       <input  class='btn-lg btn-primary text-white' type='submit' value='Agregar'>";
 
                         echo "</td>";
-                                                                 }
+                                                                                
 
 
 
 
-                                                                 ?>
+                                                                                ?>
                     </form>
 
                     <!-- 
@@ -221,12 +222,13 @@ if ($respuesta) {
       $('#example').DataTable();
     });
   </script>
+
 <?php } else {
   ?>
   <script type="text/javascript">
     alert('Error al generar listado');
     window.location = '../home/home.php'
   </script>
-<?php
+  <?php
 }
 include('../footerbtn.php'); ?>

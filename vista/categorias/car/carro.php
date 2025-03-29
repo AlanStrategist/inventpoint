@@ -6,15 +6,30 @@ $title = 'Carro de compra';
 extract($_REQUEST);
 
 include('../../js/restric.php');
-//include '../alertas/alertas.php';
+include('../../../modelos/ClassAlert.php');
 
 $db = new clasedb();
 $conex = $db->conectar();
 
+
+if( isset($alert) && $alert == "add"){ $al = new ClassAlert("Agregado !<br>","","primary"); }
+
+else if( isset($alert) && $alert == "nostock"){ $al = new ClassAlert("No Stock!<br>","No hay la suficiente cantidad del producto","danger"); }
+
+else if( isset($alert) && $alert == "error"){ $al = new ClassAlert("Error!<br>","No se registraron los cambios","danger"); }
+
+else if( isset($alert) && $alert == "rem"){ $al = new ClassAlert("Removido!<br>","","primary"); }
+
+else if( isset($alert) && $alert == "ac"){ $al = new ClassAlert("Cantidad actualizada!<br>","","primary"); }
+
 // select products in the cart
-$query = "SELECT DISTINCT p.id,p.stock,p.nombre,ROUND( p.precio + ( (p.precio * p.porcentaje) / 100),2) AS precio_venta, c.quantity ,
- ROUND( c.quantity * p.precio + ( (p.precio * p.porcentaje) / 100),2) AS subtotal ,
- ROUND((p.precio + ( (p.precio * p.porcentaje) / 100) * " . $valor . "),2) AS cambio 
+$query = "SELECT DISTINCT p.id,
+p.stock,
+p.nombre,
+ROUND( p.precio + ( (p.precio * p.porcentaje) / 100),2) AS precio_venta,
+ c.quantity ,
+ ROUND( p.precio + ( (p.precio * p.porcentaje) / 100),2) * c.quantity AS subtotal ,
+ ROUND((p.precio + ( (p.precio * p.porcentaje) / 100) ),2)* " . $valor . " AS cambio 
  FROM cart_menu c,producto p,usuarios u 
  WHERE c.product_id=p.id AND p.stock > 0 AND c.user_id=" . $_SESSION['id'];
 
@@ -40,6 +55,7 @@ if ( !($num > 0) ){
     <div class="content">
         <div class="row">
             <div class="col-md-12">
+            <?php if(isset($al)){ echo $al->Show_Alert(); } ?>
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Culminar una Venta</h4>

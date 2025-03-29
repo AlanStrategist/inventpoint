@@ -10,6 +10,10 @@ if( isset($alert) && $alert == "modisi"){ $al = new ClassAlert("Modificaci&oacut
 
 else if( isset($alert) && $alert == "modino"){ $al = new ClassAlert("Error al modificar!<br>","Verifique su conexion a internet","danger"); }
 
+else if( isset($alert) && $alert == "status"){ $al = new ClassAlert("Estatus Modificado!<br>","","warning"); }
+
+else if( isset($alert) && $alert == "error"){ $al = new ClassAlert("Error!<br>","No se registraron los cambios","danger"); }
+
 
 $lista     = "SELECT p.id,p.cod_barra,p.nombre, p.precio, p.porcentaje,p.stock,p.estatus, c.nombre AS categorias, u.nombre AS ubicacion FROM producto p,categorias c, ubicacion u where c.id = p.id_categorias AND u.id = p.id_ubicacion";
 $respuesta = mysqli_query($conex, $lista);

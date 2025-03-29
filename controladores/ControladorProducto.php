@@ -195,7 +195,7 @@ class ControladorProducto
 
         } else {
 
-            header("location: ControladorProducto.php?operacion=index&autorizo=autorizo&alert=no");
+            header("location: ControladorProducto.php?operacion=index&autorizo=autorizo&alert=error");
         }
     } //mysqli_affected_rows($conex): Se utiliza para ver si ha habido un cambio
     //especifico en el campo de una tabla. ejem, se hace una modificación y se

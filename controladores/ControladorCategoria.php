@@ -1,6 +1,6 @@
-
 <?php
 include "../modelos/clasedb.php";
+
 extract($_REQUEST);
 
 class ControladorCategoria
@@ -21,9 +21,9 @@ class ControladorCategoria
 
             $clave = 1;
 
-            if (isset($alerta)) {
+            if (isset($alert)) {
 
-                header("Location: ../vista/categorias/categoria/index.php?clave=" . $clave . "&alerta=" . $alerta);
+                header("Location: ../vista/categorias/categoria/index.php?clave=" . $clave . "&alert=" . $alert);
 
             } else {
                 header("Location: ../vista/categorias/categoria/index.php?clave=" . $clave);
@@ -59,7 +59,7 @@ class ControladorCategoria
 
         if ($nombresbd > 0) {
 
-            header("Location: ControladorCategoria.php?operacion=index&alerta=nombredu&autorizo=autorizo");
+            header("Location: ControladorCategoria.php?operacion=index&alert=du&autorizo=autorizo");
 //si el nombre esta duplicado
         } else {
             $estatus = 'habilitado';
@@ -72,11 +72,11 @@ class ControladorCategoria
 
             if ($resultado) {
 
-                header("Location: ControladorCategoria.php?operacion=index&alerta=alertacat&autorizo=autorizo");
+                header("Location: ControladorCategoria.php?operacion=index&alert=exito&autorizo=autorizo");
 
             } else {
 
-                header("Location: ControladorCategoria.php?operacion=index&alerta=nocat&autorizo=autorizo");
+                header("Location: ControladorCategoria.php?operacion=index&alert=error&autorizo=autorizo");
             }
         }
     }
@@ -108,11 +108,10 @@ class ControladorCategoria
 
         if ($resultado) {
 
-            header("Location: ControladorCategoria.php?operacion=index&modisi&autorizo=autorizo")
-            ; #
+            header("Location: ControladorCategoria.php?operacion=index&alert=modisi&autorizo=autorizo"); #
         } else {
 
-            header("Location: ControladorCategoria.php?operacion=index&modino&autorizo=autorizo");
+            header("Location: ControladorCategoria.php?operacion=index&alert=modino&autorizo=autorizo");
         }
     }
 

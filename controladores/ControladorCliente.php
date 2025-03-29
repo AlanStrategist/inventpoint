@@ -21,9 +21,9 @@ class ControladorCliente
 
             $clave = 1;
 
-            if (isset($alerta)) {
+            if (isset($alert)) {
 
-                header("Location: ../vista/categorias/cliente/index.php?clave=" . $clave . "&alerta=" . $alerta);
+                header("Location: ../vista/categorias/cliente/index.php?clave=" . $clave . "&alert=" . $alert);
 
             } else {
                 header("Location: ../vista/categorias/cliente/index.php?clave=" . $clave);
@@ -59,7 +59,7 @@ class ControladorCliente
 
         if ($nombresbd > 0) {
 
-            header("Location: ControladorCliente.php?operacion=index&alerta=nombredu&autorizo=autorizo");
+            header("Location: ControladorCliente.php?operacion=index&alert=du&autorizo=autorizo");
 
         } else {
 
@@ -69,11 +69,11 @@ class ControladorCliente
 
             if ($resultado) {
 
-                header("Location: ControladorCliente.php?operacion=index&alerta=alerta&autorizo=autorizo");
+                header("Location: ControladorCliente.php?operacion=index&alert=exito&autorizo=autorizo");
 
             } else {
 
-               header("Location: ControladorCliente.php?operacion=index&alerta=no&autorizo=autorizo");
+               header("Location: ControladorCliente.php?operacion=index&alert=error&autorizo=autorizo");
             }
         }
     }

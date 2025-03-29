@@ -158,8 +158,8 @@ if ($valid > 0) {
                 ?>
                 <table class="table">
                   <tr>
-                    <td></td>
-                    <td class="text-primary"><strong> Total Cancelado</strong></td>
+                    <td class="text-primary">Total(USD)</td>
+                    <td class="text-primary"><strong> Total(BS)</strong></td>
                   </tr>
                   <?php
 
