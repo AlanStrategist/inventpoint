@@ -1,28 +1,22 @@
 <?php
 
-session_start();
+extract($_REQUEST);
+
 include("../modelos/clasedb.php");
 include "Utils.php";
 
-extract($_REQUEST);
-
+if(!isLoged()){	header(" Location: ../index.php?alert=inicia "); return; }
 
 class ControladorPedido
 {
-
-
 	public function menu()
 	{
 
-		if (empty($_SESSION['id'])) {
-			header("Location: ../index.php?inicia");
-		} else {
-			$id_usuario = $_SESSION['id'];
-
-		}
-
-		extract($_REQUEST);
 		extract($_POST);
+
+		$id_usuario = $_SESSION['id'];
+
+		try{
 
 		$db = new clasedb();
 		$conex = $db->conectar();
@@ -31,11 +25,12 @@ class ControladorPedido
 		$response = mysqli_query($conex, $sql23);
 		$porsi = mysqli_num_rows($response);
 
-		if ($porsi == 0) {
-
+		if ($porsi == 0) { 
+			
 			header("Location: ../vista/categorias/car/carro.php?alert=cedula");
 
-		} else {
+			return;
+		} 
 			$cliente = mysqli_fetch_object($response);
 			$id_cliente = $cliente->id;
 			//traigo el id del cliente
@@ -43,31 +38,35 @@ class ControladorPedido
 			//pido todos los datos de los productos del carrito segun el usuario y calculo la cantidad en existencia
 
 			$sql = "SELECT DISTINCT cm.product_id,cm.user_id,cm.quantity,p.nombre,
-ROUND(p.precio + ( (p.precio * p.porcentaje) / 100),2) AS precio_venta,
-p.stock,(p.stock-cm.quantity) AS restante 
+			ROUND(p.precio + ( (p.precio * p.porcentaje) / 100),2) AS precio_venta,
+			p.stock,(p.stock-cm.quantity) AS restante 
 
-FROM cart_menu cm,producto p,usuarios u,cliente c 
+			FROM cart_menu cm,producto p,usuarios u,cliente c 
 
-WHERE cm.user_id=u.id AND cm.product_id=p.id";
+			WHERE cm.user_id=u.id AND cm.product_id=p.id";
 
 			$respuesta = mysqli_query($conex, $sql);
 
-			if ($respuesta) {
+			if (!$respuesta) {
+				
+				header("Location: ../vista/categorias/car/carro.php?alert=error");
+				
+				return;
+			}
 
 				$facNum = GetFac();
 
-
-
 				while ($data = mysqli_fetch_array($respuesta)) {
 
-					if ($data['restante'] < 0) {
-
+					if ($data['restante'] < 0) { 
+						
 						header("Location: ../vista/categorias/car/carro.php?alert=nostock");
+						
+						return;
+					
+					}
 
-					} else {
-
-
-						if ($fecha_credi == '') {
+					if ($fecha_credi == '') {
 
 							$sql2 = "INSERT INTO `pedidos` (`id`,`factura`, `id_usuario`, `product_id`,`cliente_id`, `modified`,`estatus`,`quantity`,`metodo`,`fecha`,`fecha_credi`) VALUES (NULL," . $facNum . "," . $data['user_id'] . ",'" . $data['product_id'] . "','" . $id_cliente . "',CURRENT_TIMESTAMP,'pago','" . $data['quantity'] . "','" . $metodo . "',CURRENT_DATE,NULL)";
 
@@ -79,52 +78,53 @@ WHERE cm.user_id=u.id AND cm.product_id=p.id";
 
 						$fino = mysqli_query($conex, $sql2);
 
-						if ($fino) {
+						if (!$fino) {
 
+							header("Location: ../vista/categorias/car/carro.php?alert=error");
 
-							//actualizo cantidad del producto
-							$sql3 = "UPDATE producto SET stock=" . $data['restante'] . " WHERE `id`=" . $data['product_id'] . "";
+							return;
 
-							$pavo = mysqli_query($conex, $sql3);
-
-							if ($pavo) {
-
-								if ($metodo == 'Credito') {
-									header("Location: ../vista/categorias/car/todo_dia.php?credit");
-								} else {
-									header("Location: ../vista/categorias/car/clienpagos.php?pedido");
-								}
-							} else {
-
-								header("Location: ../vista/categorias/car/clienpagos.php?stockerror");
-							}
-
-						} else {
-
-							header("Location: ../vista/categorias/car/carro.php?no");
 						}
 
+						$sql3 = "UPDATE producto SET stock=" . $data['restante'] . " WHERE `id`=" . $data['product_id'] . "";
 
+						$pavo = mysqli_query($conex, $sql3);
 
-					}//stock suficiente
-				}//cierre del while
+							if (!$pavo) {
 
+								header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
 
-				//si no me trae los datos
-			} else {
+								return;
+							}
+				}
+							
 
-				header("Location: ../vista/categorias/car/carro.php?no");
-			}
+							//Vacio el carrito
 
+							$sql4 = "DELETE FROM cart_menu WHERE  `user_id`=" . $id_usuario . "";
 
-			$sql4 = "DELETE FROM cart_menu WHERE  `user_id`=" . $id_usuario . "";
+							$res = mysqli_query($conex, $sql4);
 
-			$res = mysqli_query($conex, $sql4) or die;
-			("Algo ha ido mal en la eliminacion de los datos del carrito a la base de datos");
+							if (!$res) {
 
+								header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
 
+								return;
+							}
 
-		}//si el cliente agarra
+							$loc = $metodo == 'Credito' ? "Location: ../vista/categorias/car/todo_dia.php?alert=credit" : "Location: ../vista/categorias/car/clienpagos.php?alert=pedido"; 
+							
+							header($loc);
+
+		}catch(mysqli_sql_exception | Exception $e) {
+			
+			header("Location: ../vista/categorias/car/carro.php?alert=no");
+		}
+		finally{
+
+			mysqli_close($conex);
+		}
+		
 
 	}//fin de la funcion
 
