@@ -186,7 +186,7 @@ class ControladorPedido
 		$conex = $db->conectar();
 
 		//tomo la cantidad y la repongo en el stock
-		$query = "SELECT pedidos.product_id,pedidos.quantity FROM pedidos WHERE id=$id";
+		$query = "SELECT pedidos.factura,.pedidos.product_id,pedidos.quantity FROM pedidos WHERE id=$id";
 
 		$ros = mysqli_query($conex, $query);
 		$count = mysqli_num_rows($ros);
@@ -200,7 +200,7 @@ class ControladorPedido
 		}
 
 		$rows = mysqli_fetch_array($ros);
-		
+
 		$sql2 = "SELECT producto.stock FROM producto WHERE id=" . $rows['product_id'];
 
 		$rus = mysqli_query($conex, $sql2);
@@ -228,7 +228,9 @@ class ControladorPedido
 			return;
 		}
 
-		$sql = "UPDATE pedidos SET estatus='eliminado' WHERE id=" . $id;
+		//Remove item of the sale
+
+		$sql = "DELETE FROM pedidos WHERE product_id=" . $rows['product_id'];
 
 		$res = mysqli_query($conex, $sql);
 
