@@ -4,6 +4,15 @@ $title = "Ventas sin culminar";
 
 include('../../js/restric.php');
 
+include('../../../modelos/ClassAlert.php');
+
+extract($_REQUEST);
+
+if( isset($alert) && $alert == "pedido"){ $al = new ClassAlert("Se ha realizado un pedido !<br>","Verifique los resultados y culmine la venta","primary"); }
+
+else if( isset($alert) && $alert == "errorven"){ $al = new ClassAlert("Error al realizar la venta!<br>","Contacte al desarrollador","danger"); }
+
+else if( isset($alert) && $alert == "deletevent"){ $al = new ClassAlert("Venta Removida!<br>","Se ha removido la venta, se repusieron los stocks necesarios","warning"); }
 
 $sql7 = "SELECT DISTINCT pe.id AS id_pedidos,
  pr.nombre,
@@ -33,6 +42,7 @@ if ($valid > 0) {
   <div class="content">
     <div class="row">
       <div class="col-md-12">
+      <?php if(isset($al)){ echo $al->Show_Alert(); } ?>
         <div class="card">
           <div class="card-header">
             <h4 class="card-title">Ventas sin culminar</h4>

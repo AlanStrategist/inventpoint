@@ -210,7 +210,7 @@ if ($rescata) {
 
                   <a class="dropdown-item" href="../car/clienpagos.php">Ventas sin culminar</a>
 
-                  <a class="dropdown-item" href="../car/facturas.php">Facturas</a>
+                  <a class="dropdown-item" href="../factura/index.php">Facturas</a>
 
                   <hr>
 

@@ -2,8 +2,7 @@
 
 $nucleo='ventas';
 include('../../js/restric.php');  
-include('../alertas/alertas.php');
-    
+
 
 
 $sql7="SELECT DISTINCT pe.id,

@@ -55,85 +55,17 @@ $pruebo = mysqli_num_rows($respuesta);
                 $cedula = 0;
 
                 echo "<tr>";
-                echo "<td>";
+                echo "<td>".$data['nombre_product']."</td>";
+                echo "<td>".$data['precio_venta']."</td>";
+                echo "<td>BS " . number_format($data['cambio'], 2, '.', ',') . "</td>";
+                echo "<td>".$data['quantity']."</td>";
+                echo "<td>".$data['metodo']."</td>";
+                echo "<td>".$data['modified']."</td>";
+                echo "<td>".$data['nombre_usuario']."</td>";
+                echo "<td>".$data['nombre_cliente']."<br> ".$data['cedula']."</td>";
 
-
-
-                ?>   <?= $data['nombre_product'] ?>  <?php
-                     echo "</td>";
-
-                     echo "<td>";
-
-
-
-                     ?>   <?= $data['precio_venta'] ?>  <?php
-                          echo "</td>";
-
-                          echo "<td>BS " . number_format($data['cambio'], 2, '.', ',') . "</td>";
-
-
-
-
-
-                          echo "<td>";
-                          ?>   <?= $data['quantity'] ?>  <?php
-                               echo "</td>";
-
-
-
-                               echo "<td>";
-                               ?>   <?= $data['metodo'] ?>  <?php
-                                    echo "</td>";
-
-
-
-
-
-                                    echo "<td>";
-
-                                    ?>   <?= $data['modified'] ?>  <?php
-
-                                         echo "</td>";
-
-
-                                         echo "<td>";
-
-
-                                         ?>   <?= $data['nombre_usuario'] ?>  <?php
-
-
-                                              echo "</td>";
-
-
-                                              echo "<td>";
-
-
-                                              ?>   <?= $data['nombre_cliente'] ?>
-                <br><?php
-                ?>   <?= $data['cedula'] ?>   <?php
-
-
-                      echo "</td>";
-
-                /*echo "<td>";
-                                     
-                                        
-                                      ?>  <a href="controladorpedido.php?operacion=borrar&id=<?=$data['id_pedidos']?>"><i class="fas fa-times"></i></a> <?php
-
-                                        
-                            echo "</td>";
-                */
-              }
-
-
-
-
-
-              ?>
-
-
-
-
+              }  ?>
+            
             </table>
           </div>
         </div>

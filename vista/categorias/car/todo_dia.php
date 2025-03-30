@@ -1,11 +1,6 @@
 <?php 
 $nucleo='ventas';
 include('../../js/restric.php');  
-      include('../alertas/alertas.php');
-      ?>
-     
-
-<?php
 
 
 $sql7="SELECT DISTINCT pe.id,
@@ -240,6 +235,6 @@ echo "<td>BS  " . number_format($pedido['cambio'], 2, '.', ',') . "</td>";
 } );
     </script>
     <?php
-include 'footer.php';
+include '../footerbtn.php';
 
  ?>

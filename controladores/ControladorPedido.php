@@ -176,19 +176,14 @@ class ControladorPedido
 
 	public function borrar()
 	{
-		if (empty($_SESSION['id'])) {
-			header("Location: ../index.php?inicia");
-		} else {
-			$id_usuario = $_SESSION['id'];
-
-		}
+		
 
 		extract($_REQUEST);
 
+		try{
 
 		$db = new clasedb();
 		$conex = $db->conectar();
-
 
 		//tomo la cantidad y la repongo en el stock
 		$query = "SELECT pedidos.product_id,pedidos.quantity FROM pedidos WHERE id=$id";
@@ -196,66 +191,71 @@ class ControladorPedido
 		$ros = mysqli_query($conex, $query);
 		$count = mysqli_num_rows($ros);
 
-		if ($count > 0) {
+		if (!($count > 0)) {
 
-			$rows = mysqli_fetch_array($ros);
+			header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
 
+			return;
 
-			$sql2 = "SELECT producto.stock FROM producto WHERE id=" . $rows['product_id'];
-
-			$rus = mysqli_query($conex, $sql2);
-
-			if ($rus) {
-
-				$rows2 = mysqli_fetch_array($rus);
-
-				$stock = $rows['quantity'] + $rows2['stock'];
-
-				$sql3 = "UPDATE producto SET stock=$stock WHERE id=" . $rows['product_id'];
-
-				$ras = mysqli_query($conex, $sql3);
-
-				if ($ras) {
-
-					$sql = "UPDATE pedidos SET estatus='eliminado' WHERE id=" . $id;
-
-					$res = mysqli_query($conex, $sql);
-
-					if ($res) {
-						header("Location: ../vista/categorias/car/clienpagos.php?deletevent");
-
-					} else {
-
-						echo $sql; //header("Location: ../vista/categorias/car/clienpagos.php?errorven");
-					}
-
-
-
-				} else {
-
-					echo $sql3; //header("Location: ../vista/categorias/car/clienpagos.php?errorven");
-				}
-
-
-
-			} else {
-
-				echo $sql2; //header("Location: ../vista/categorias/car/clienpagos.php?errorven");
-			}
-
-
-		} else {
-			echo $query; //header("Location: ../vista/categorias/car/clienpagos.php?errorven");
 		}
 
+		$rows = mysqli_fetch_array($ros);
+		
+		$sql2 = "SELECT producto.stock FROM producto WHERE id=" . $rows['product_id'];
 
+		$rus = mysqli_query($conex, $sql2);
+
+		if (!$rus) {
+			
+			header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
+
+			return;
+
+		}
+
+		$rows2 = mysqli_fetch_array($rus);
+
+		$stock = $rows['quantity'] + $rows2['stock'];
+
+		$sql3 = "UPDATE producto SET stock=$stock WHERE id=" . $rows['product_id'];
+
+		$ras = mysqli_query($conex, $sql3);
+
+		if (!$ras) {
+
+			header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
+
+			return;
+		}
+
+		$sql = "UPDATE pedidos SET estatus='eliminado' WHERE id=" . $id;
+
+		$res = mysqli_query($conex, $sql);
+
+		if (!$res) {
+
+			header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
+
+			return;
+
+		}else{
+			
+			header("Location: ../vista/categorias/car/clienpagos.php?alert=deletevent");
+			
+			return;
+		}
+					
+	} catch (mysqli_sql_exception | Exception $e) {	
+
+		header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
+
+	}finally{
+
+		mysqli_close($conex);
 
 	}
 
-
-
-
-
+	}
 
 	public function notificarad()
 	{
@@ -340,6 +340,15 @@ class ControladorPedido
 
 		//mandar datos codificados a la dirección de la función header
 	}
+
+	public function details(){
+
+		extract($_REQUEST);
+
+		header("Location: ../vista/categorias/factura/details.php?id=".$id."");
+
+	}
+
 	static function controlador($operacion)
 	{
 
@@ -377,6 +386,11 @@ class ControladorPedido
 			case 'factura'://que guarda realza el registro de la compra
 				$pro->factura();
 				break;
+
+			case 'details': //Show all invoices
+				$pro->details();
+				break;	
+
 			default:
 				?>
 
@@ -388,6 +402,6 @@ class ControladorPedido
 				break;
 		}
 	}
-}//cierro el ControladorPedido 
+}
 ControladorPedido::controlador($operacion);
-//se tiene que destruir los datos en cart_items una vez que se presione pagar ?>
+ ?>
