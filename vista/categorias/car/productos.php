@@ -17,7 +17,7 @@ else if( isset($alert) && $alert == "rem"){ $al = new ClassAlert("Removido!<br>"
 
 else if( isset($alert) && $alert == "ac"){ $al = new ClassAlert("Cantidad actualizada!<br>","","primary"); }
 
-else if( isset($alert) && $alert == "donefac"){ $al = new ClassAlert("Venta almacenada con exito<br>","","primary"); }
+else if( isset($alert) && $alert == "save"){ $al = new ClassAlert("Venta almacenada con exito<br>","","primary"); }
 
 
 try{
@@ -107,74 +107,27 @@ if ($respuesta) {
 
                    foreach ($dat as $data) {
                     
-
                     $cedula = 0;
 
                     echo "<tr>";
-                    echo "<td>";
+                    echo "<td>".$data['cod_barra']. "</td>";
+                    echo "<td>". $data['nombre']."</td>";
+                    echo "<td>".$data['categorias']."</td>";
+                    echo "<td>". $data['ubicacion']."</td>";
+                    echo "<td>".$data['stock']."</td>";
+                    echo "<td>&#36;" . number_format($data['precio'], 2, '.', ',') . "</td>"; echo "</td>";
+                    echo "<td>BS  " . number_format($data['cambio'], 2, ',', '.') . "</td>";
+                    ?>
 
-
-
-                    ?>     <?= $data['cod_barra'] ?>     <?php
-                                echo "</td>";
-                                echo "<td>";
-
-
-
-                                ?>     <?= $data['nombre'] ?>     <?php
-                                            echo "</td>";
-                                           
-
-                                            echo "<td>";
-                                            ?>     <?= $data['categorias'] ?>     <?php
-                                                        echo "</td>";
-
-
-
-
-                                                        echo "<td>";
-                                                        ?>     <?= $data['ubicacion'] ?>     <?php
-                                                                    echo "</td>";
-
-
-
-
-
-
-                                                                    echo "<td>";
-                                                                    ?>     <?= $data['stock'] ?>     <?php
-                                                                                echo "</td>";
-
-
-                                                                                echo "<td>&#36;" . number_format($data['precio'], 2, '.', ',') . "</td>";
-
-                                                                                echo "</td>";
-
-
-
-
-
-                                                                                echo "<td>BS  " . number_format($data['cambio'], 2, ',', '.') . "</td>";
-
-                                                                                  ?>
-
-                      <form name="form<?= $chiguire ?>" method="POST" action="../../../controladores/controladorcarrito.php">
+                      <form name="form<?=$chiguire?>" method="POST" action="../../../controladores/controladorcarrito.php">
 
                         <input type="hidden" name="id" value="<?= $data['id'] ?>">
 
                         <input type="hidden" name="operacion" value="agregar">
                         <?php
                         echo "<td>";
-                        echo "<input type='number' min='1' max='".$data['stock']."' name='quantity' value='1' class='form-control' />";
-                        echo "</td>";
-                        echo "<td>";
-
-
-                        echo "
-                      
-                      <input  class='btn-lg btn-primary text-white' type='submit' value='Agregar'>";
-
-                        echo "</td>";
+                        echo "<input type='number' min='1' max='".$data['stock']."' name='quantity' value='1' class='form-control' /></td>";
+                        echo "<td><input  class='btn-lg btn-primary text-white' type='submit' value='Agregar'></td>";
                                                                                 
 
 
@@ -183,29 +136,13 @@ if ($respuesta) {
                                                                                 ?>
                     </form>
 
-                    <!-- 
-   <td><a title="Modificar" href=""><i class="fas fa-pen"> </i></a>
-    
-    </td>
- -->
-
                     <?php
 
 
                     $chiguire++;
                   }
 
-
-
-
-
-
-
                   ?>
-
-
-
-
                 </table>
               </div>
             </div>

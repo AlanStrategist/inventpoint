@@ -98,16 +98,11 @@ if ( !($num > 0) ){
                                         echo "<span class='input-group-btn'>";
                                         echo "<input type='submit' class='btn btn-info update-quantity' >";
                                         echo "</span>";
-
                                         echo "</form>";
-
                                         echo "</div>";
                                         echo "</td>";
                                         echo "<td>&#36;" . number_format($data['subtotal'], 2, '.', ',') . "</td>";
                                         echo "<td>";
-
-
-
                                         echo "<a href='../../../controladores/ControladorCarrito.php?operacion=eliminar&id=".$data['id']."' class='btn btn-sm btn-danger' title='Quitar del Pedido'>";
                                         echo "<i title='Quitar del Pedido' class='fad fa-2x fa-eraser' ></i>";
                                         echo "</a>";
@@ -125,10 +120,6 @@ if ( !($num > 0) ){
                                     <table class="table">
 
                                         <?php
-
-
-
-
 
 
                                         echo "<tr>";

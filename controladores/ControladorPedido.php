@@ -9,9 +9,8 @@ if(!isLoged()){	header(" Location: ../index.php?alert=inicia "); return; }
 
 class ControladorPedido
 {
-	public function menu()
+	public function guardar()
 	{
-
 		extract($_POST);
 
 		$id_usuario = $_SESSION['id'];
@@ -133,51 +132,39 @@ class ControladorPedido
 		extract($_REQUEST);
 		extract($_POST);
 
+		try{
+
 		$db = new clasedb();
+		
 		$conex = $db->conectar();
-		$sql = "UPDATE pedidos SET metodo='$metodo', estatus='pago',fecha=CURRENT_DATE WHERE id='$id'";
+		
+		$sql = "UPDATE pedidos SET metodo='$metodo', estatus='pago', fecha=CURRENT_DATE WHERE factura=".$factura;
 
 		$res = mysqli_query($conex, $sql) or die;
-		("Algo ha ido mal en la aprobación de los datos del carrito a la base de datos");
+		
+		if (!$res) {
 
-		header("Location: ../vista/categorias/car/clienpagos.php?alert=donefac");
-
-	}//fin de funcion aprobar
-
-	public function notificar()
-	{
-		if (empty($_SESSION['id'])) {
-			header("Location: ../index.php?inicia");
-		} else {
-			$id_usuario = $_SESSION['id'];
+		header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
+			
+		return;
 
 		}
 
-		extract($_REQUEST);
-		extract($_POST);
+		header("Location: ../vista/categorias/car/clienpagos.php?alert=donefac");
 
-		$db = new clasedb();
-		$conex = $db->conectar();
+		}catch(mysqli_sql_exception | Exception $e) {
 
+			header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
 
+		}finally{
 
-		$estatus = "facturado";
+			mysqli_close($conex);
 
-		$sql = "UPDATE pedidos SET estatus='$estatus' WHERE id_usuario='$id_usuario'";
-
-
-		$res = mysqli_query($conex, $sql) or die;
-		("Algo ha ido mal en la eliminacion de los datos del pago ");
-
-		header("Location: ../vista/categorias/carro/productos.php?alert=donefac");
-
+		}
 	}
-
 
 	public function borrar()
 	{
-		
-
 		extract($_REQUEST);
 
 		try{
@@ -259,88 +246,52 @@ class ControladorPedido
 
 	}
 
-	public function notificarad()
+	public function notificar()
 	{
-		if (empty($_SESSION['id'])) {
-			header("Location: ../index.php?inicia");
-		} else {
-			$id_usuario = $_SESSION['id'];
-
-		}
-
+		
 		extract($_REQUEST);
 		extract($_POST);
 
+		$id_usuario = $_SESSION['id'];
+
+		try{
+
 		$db = new clasedb();
 		$conex = $db->conectar();
-
-
 
 		$estatus = "facturado";
 
 		$sql = "UPDATE pedidos SET estatus='$estatus' WHERE id_usuario='$id_usuario'";
 
-
 		$res = mysqli_query($conex, $sql) or die;
-		("Algo ha ido mal en la eliminacion de los datos del pago ");
+		
+		if (!$res) {
+		
+			header("Location: ../vista/categorias/car/productos.php?alert=errorven");
 
-		header("Location: ../vista/categorias/car/productos.php?notificacion");
+			return;
 
+		}
+
+		header("Location: ../vista/categorias/car/productos.php?alert=save");
+
+		}catch (mysqli_sql_exception | Exception $e) {
+
+		}finally{
+
+			mysqli_close($conex);
+		}
 	}
 	public function pago()
 	{
 		extract($_REQUEST);
+
 		header("Location: ../vista/categorias/car/metodo.php?id=" . $id);
 	}
 
 	public function factura()
 	{
-		$db = new clasedb();
-		$conex = $db->conectar();
-
-
-
 		header("Location: ../vista/categorias/car/facturado.php");
-
-
-		//mandar datos codificados a la dirección de la función header
-	}
-
-
-
-
-	public function empleadofact()
-	{
-		$db = new clasedb();
-		$conex = $db->conectar();
-
-		$sql = "SELECT * FROM pedidos WHERE estatus='facturado'";//mostrar
-		$res = mysqli_query($conex, $sql);
-
-		$campos = mysqli_num_fields($res);
-		$filas = mysqli_num_rows($res);
-
-		$i = 0;
-
-		$datos[] = array();
-
-		while ($data = mysqli_fetch_array($res)) {
-			for ($j = 0; $j < $campos; $j++) {
-				$datos[$i][$j] = $data[$j];
-			}
-			$i++;
-		}
-
-		if (isset($_GET['entregado'])) {
-
-
-			header("Location: ../vista/categorias/carro/facturado.php?filas=" . $filas . "&campos=" . $campos . "&data=" . serialize($datos) . "&entregado=entregado");
-		} else {
-
-			header("Location: ../vista/categorias/carro/facturado.php?filas=" . $filas . "&campos=" . $campos . "&data=" . serialize($datos));
-		}
-
-		//mandar datos codificados a la dirección de la función header
 	}
 
 	public function details(){
@@ -362,30 +313,23 @@ class ControladorPedido
 				$pro->aprobar();
 				break;
 
-			case 'menu'://que guarda realza el registro de la compra
-				$pro->menu();
+			case 'guardar':  
+				$pro->guardar();
 				break;
-
-			case 'empleadofact'://que guarda realza el registro de la compra
-				$pro->empleadofact();
-				break;
-
-			case 'notificar'://que guarda realza el registro de la compra
+			
+			case 'notificar':
 				$pro->notificar();
 				break;
 
-			case 'notificarad'://que guarda realza el registro de la compra
-				$pro->notificarad();
-				break;
-
-			case 'pago'://que guarda realza el registro de la compra
+			case 'pago':
 				$pro->pago();
 				break;
 
-			case 'borrar'://que guarda realza el registro de la compra
+			case 'borrar': // delete items of a sale in pedidos, repos stock in the table products
 				$pro->borrar();
 				break;
-			case 'factura'://que guarda realza el registro de la compra
+
+			case 'factura':
 				$pro->factura();
 				break;
 

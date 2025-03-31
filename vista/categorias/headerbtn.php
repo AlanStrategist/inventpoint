@@ -38,9 +38,8 @@ $rows = mysqli_num_rows($res4);
 if ($rows > 0) {
   $dolar = mysqli_fetch_object($res4);
   $valor = $dolar->valor;
-} else {
-  echo "<a class='dropdown-item' data-toggle='modal' data-target='#exampleModal1' href=''>Ingresar <strong>Valor del dolar | USD</strong></a>";
 }
+
 
 $sql5 = "SELECT DISTINCT producto.nombre,pedidos.quantity FROM pedidos,producto WHERE pedidos.metodo='Credito' AND pedidos.fecha_credi='$hoy' AND pedidos.product_id=producto.id ";
 $reste = mysqli_query($conex, $sql5);
@@ -454,12 +453,24 @@ if ($rescata) {
                   </a>
                 </li>
 
-              <?php } else {
-                echo "";
-              }
+              <?php } 
+              
+               if( !isset($valor) ){ ?>
 
-              ?>
+                <li class="nav-item">
+                <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal1" id="openModal11">
+                  <i class="far fa-3x fa-dollar-sign " title="No hay valor del dolar"></i>
+                </a>
+               </li>
 
+                
+
+               <?php } ?>
+
+
+
+
+              
 
 
 

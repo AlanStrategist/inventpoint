@@ -14,6 +14,8 @@ else if( isset($alert) && $alert == "errorven"){ $al = new ClassAlert("Error al 
 
 else if( isset($alert) && $alert == "deletevent"){ $al = new ClassAlert("Venta Removida!<br>","Se ha removido la venta, se repusieron los stocks necesarios","warning"); }
 
+else if( isset($alert) && $alert == "donefac"){ $al = new ClassAlert("Pedido creado exitosamente!<br>","Verifique los resultados y culmine la venta","primary"); }
+
 $sql7 = "SELECT DISTINCT pe.id AS id_pedidos,
  pr.nombre,
  ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) AS precio_venta,
@@ -34,7 +36,16 @@ $respuesta = mysqli_query($conex, $sql7);
 $valid = mysqli_num_rows($respuesta);
 
 
-if ($valid > 0) {
+if (!($valid > 0)) { ?>
+
+  <br>
+  <div class='alert alert-danger'>
+  <strong>No hay ventas que mostrar <i class='fad fa-sad-tear'></i> </strong>
+  </div>
+
+<?php
+
+}
 
   //start table
   ?>
@@ -50,31 +61,15 @@ if ($valid > 0) {
           <div class="card-body">
             <div class="table-responsive">
               <table id="example" class="table">
-
-
-
                 <thead class="text-primary">
-
-
                   <th class="textAlignLeft">Nombre del producto</th>
-
                   <th class="textAlignLeft">Precio unitario</th>
-
                   <th class="textAlignLeft">Cantidad</th>
-
                   <th class="textAlignLeft">Precio Total en $</th>
-
                   <th class="textAlignLeft">Precio unitario en Bs</th>
-
                   <th class="textAlignLeft">Cliente</th>
-
                   <th class="textAlignLeft">Método de Pago</th>
-
-
                 </thead>
-
-
-
 
                 <?php
 
@@ -85,86 +80,30 @@ if ($valid > 0) {
 
                   $cedula = $pedido['cedula'];
 
-
                   echo "<tr>";
-                  echo "<td>";
-
-
-
-                  ?>
-                  <div class='product-nombre'>
-                    <?= $pedido['nombre'] ?>
-                  </div><?php
-                  echo "</td>";
-                  echo "<td>";
-                  ?>
-                  <div class='product-nombre'><?= $pedido['precio_venta'] ?></div> <?php
-                  echo "</td>";
-
-
-
-
-
-
-                  echo "<td>";
-                  ?>
-                  <div class='product-nombre'><?= $pedido['quantity'] ?></div><?php
-                  echo "</td>";
-
-
+                  echo "<td><div class='product-nombre'>".$pedido['nombre']."</div></td>";
+                  echo "<td> <div class='product-nombre'>".$pedido['precio_venta']."</div></td>";           
+                  echo "<td><div class='product-nombre'>".$pedido['quantity']."</div></td>";
                   echo "<td>&#36;" . number_format($pedido['subtotal'], 2, '.', ',') . "</td>";
-
                   echo "</td>";
-
-
                   echo "<td>BS " . number_format($pedido['cambio'], 2, '.', ',') . "</td>";
+                  
+                  
                   $total += $pedido['subtotal'];
-
-
                   $valor_cambio = $pedido['cambio'] * $pedido['quantity'];
                   $total_bs += $valor_cambio;
-                  echo "<td>";
 
-                  ?>
-                  <div class='product-nombre'><?= $pedido['nombre_cliente'] ?>     <?= $pedido['telefono'] ?></div><?php
-                       echo "</td>";
-
-
-                       echo "<td>";
-
-                       ?>
-                  <div class='product-nombre'><?php
-
-                  if ($pedido['metodo'] == 'Debito') {
-                    ?> Débito <?php
-                  } else {
-                    echo $pedido['metodo'];
-                  } ?> </div><?php
-
-
-                    echo "</td>";
-
-
-                    echo "<td>";
-
-
-                    ?> <a
-                    href="../../../controladores/controladorpedido.php?operacion=borrar&id=<?= $pedido['id_pedidos'] ?>"><i
-                      title="Eliminar Venta" class="fas fa-times"></i></a>
-                  <?php
-
-
+                  echo "<td><div class='product-nombre'>".$pedido['nombre_cliente']."<br>".$pedido['telefono']."</td>";
+                 
+                  echo "<td><div class='product-nombre'>";
+                  echo $pedido['metodo'] == 'Debito' ? 'D&eacute;bito': $pedido['metodo'];
                   echo "</td>";
 
+                  echo "<td><a href='../../../controladores/controladorpedido.php?operacion=borrar&id=".$pedido['id_pedidos']."'><i title='Eliminar Item' class='fas fa-times'></i></a> </td>";
                   echo "</tr>";
                 }
-
-
-
-
+                
                 echo "</table>";
-
-
                 ?>
                 <table class="table">
                   <tr>
@@ -172,45 +111,18 @@ if ($valid > 0) {
                     <td class="text-primary"><strong> Total(BS)</strong></td>
                   </tr>
                   <?php
-
-
-
-
-
                   echo "<tr>";
                   echo "<td>USD " . number_format($total, 2, '.', ',') . "</td>";
                   echo "<td>BS " . number_format($total_bs, 2, '.', ',') . "</td>";
                   echo "</tr>";
                   echo "<tr>";
                   echo "<td>";
-                  echo "<td>";
-                  ?> <a href='pdf.php?cedula=<?= $cedula ?>' class='btn btn-success'>
-                    <?php
+                  echo "<td><a href='pdf.php?cedula=<?= $cedula ?>' class='btn btn-success'><i class='fad fa-file-pdf'></i>Imprimir</a></td>";
+                  echo "<td><a href='../../../controladores/controladorpedido.php?operacion=notificar' class='btn btn-info'><i class='fad fa-check-double'></i>Guardar venta</a></td>";
+                  echo "</tr>";
+                  echo "</table>";
 
 
-
-
-
-
-                    echo "<i class='fad fa-file-pdf'></i>Imprimir";
-                    echo "</a>";
-
-                    echo "</a>";
-                    echo "</td>";
-                    echo "<td>";
-                    echo "<a href='../../../controladores/controladorpedido.php?operacion=notificarad' class='btn btn-info'>";
-                    echo "<i class='fad fa-check-double'></i>Guardar venta";
-                    echo "</td>";
-                    echo "</tr>";
-
-                    echo "</table>";
-} else {
-
-  echo "<br>";
-  echo "<div class='alert alert-danger'>";
-  echo "<strong>No hay ventas que mostrar <i class='fad fa-sad-tear'></i> </strong>";
-  echo "</div>";
-}
 
 ?>
                   <script type="text/javascript">

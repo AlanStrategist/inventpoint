@@ -1,99 +1,74 @@
-<?php 
-     
-$nucleo='Productos';
-$title="Tasa de Cambio";
-include('../../js/restric.php'); 
+<?php
+
+$nucleo = 'Productos';
+$title = "Tasa de Cambio";
+include('../../js/restric.php');
+include('../../../modelos/ClassAlert.php');
 
 extract($_REQUEST);
 
-if ($clave=='') { ?> 
+if( isset($alert) && $alert == "error"){ $al = new ClassAlert("Error al almacenar el tipo de cambio !<br>","","danger"); }
 
-  <script type="text/javascript">
-alert('No se puede listar,no hay autorización');
-window.location="../home/home.php";
+else if( isset($alert) && $alert == "exito"){ $al = new ClassAlert("Se ha registrado el dolar<br>","","primary"); }
 
-  </script> 
 
-  
-<?php }else{
- 
+$lista = "SELECT dolar.valor,dolar.fecha,usuarios.nombre,usuarios.correo FROM dolar,usuarios WHERE dolar.id_usuario=usuarios.id";
+$respuesta = mysqli_query($conex, $lista);
+$pruebo = mysqli_num_rows($respuesta);
 
- $lista="SELECT dolar.valor,dolar.fecha,usuarios.nombre,usuarios.correo FROM dolar,usuarios WHERE dolar.id_usuario=usuarios.id";
- $respuesta=mysqli_query($conex,$lista);
- $pruebo=mysqli_num_rows($respuesta);
+if (!($pruebo > 0)) {
+
+  header("Location: ../home/home.php?alert=nodolar");
+
+}
 
 ?>
 
- <div class="content">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <h4 class="card-title">Lista de los valores del dolar</h4>
-              </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                  <table id="example" class="table">
-            
-       <thead class="text-primary">
-  <th><small>Valor del Dolar</small></th>
-  <th><small>Fecha</small></th>
-  
-  <th><small>Usuario que <br> realizo la conversion</small></th>
+<div class="content">
+  <div class="row">
+    <div class="col-md-12">
+    <?php  if(isset($al)){ echo $al->Show_Alert(); } ?>
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Lista de los valores del dolar</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id="example" class="table">
+
+              <thead class="text-primary">
+                <th><small>Valor del Dolar</small></th>
+                <th><small>Fecha</small></th>
+                <th><small>Usuario que <br> realizo la conversion</small></th>
 
 
-</thead>
+              </thead>
 
-<?php
+              <?php
 
-while($data=mysqli_fetch_array($respuesta)){
+              while ($data = mysqli_fetch_array($respuesta)) {
 
+                echo "<tr>";
+                echo "<td>".$data['valor']."</td>";
+                echo "<td>".$data['fecha']."</td>";
+                echo "<td>".$data['nombre']."<br>".$data['correo']."</td>";
+                echo "</tr>";
 
+              }
 
-        echo "<tr>";
-        echo "<td>";
-                        
-                         
+               ?>
 
-                  echo $data['valor'];
-            echo "</td>";
-            echo "<td>";
-                        
-                         
-  echo $data['fecha'];
-            echo "</td>";
-
-            
-                                 echo "<td>";
-                                 echo $data['nombre'];
-                                 echo '<br>';
-                       echo $data['correo'];
- echo "</td>";
-                           
-                        
-        echo "</tr>";
-                         
-          }
-     
-}
-
-
- 
- 
-
- ?>
-
- 
-
-
-    </table>
-
-  </div></div></div>          </div>  
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
     </body>
-</html>
+
+    </html>
     <script type="text/javascript">
-        $(document).ready(function() {
-    $('#example').DataTable();
-} );
+      $(document).ready(function () {
+        $('#example').DataTable();
+      });
     </script>
-<?php include('../footerbtn.php'); ?>
+    <?php include('../footerbtn.php'); ?>

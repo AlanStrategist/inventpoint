@@ -9,9 +9,6 @@ $total_ig_otro=0;
 $ALE_otro=0;
 $total_ig_otro=0;
 
-
-
-
 while($dato = mysqli_fetch_array($dev)){
 
   $total_otro = $dato['cambio'] * $dato['quantity'];
@@ -22,7 +19,7 @@ while($dato = mysqli_fetch_array($dev)){
 
 
 
-  $SUB += $datos['subtotal'];
+  $SUB += $dato['subtotal'];
 
    $porcentaje_otro= 5 * $total_otro /100;
     

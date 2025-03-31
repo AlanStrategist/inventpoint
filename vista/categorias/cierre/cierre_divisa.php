@@ -9,7 +9,8 @@ $ALE=0;#divisa
 $total =0;
 $perro =0;
 $total_ig=0;
-  $total_neto=0;
+$total_neto=0;
+
 while($datos = mysqli_fetch_array($respuesta)){
 
   $total = $datos['precio_venta'] * $datos['quantity'];

@@ -1,14 +1,16 @@
-<?php 
-$nucleo='ventas';
-include('../../js/restric.php');  
+<?php
+$nucleo = 'ventas';
+$title = "Cr&eacute;ditos";
+include('../../js/restric.php');
 
 
-$sql7="SELECT DISTINCT pe.id,
+$sql7 = "SELECT DISTINCT pe.id,
+pe.factura,
 pe.fecha,
 pe.fecha_credi,
 pr.nombre,
 ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) AS precio_venta,
-ROUND(pr.precio + ( ( (pr.precio * pr.porcentaje) / 100) * ".$valor."),2) AS cambio,
+ROUND(pr.precio + ( ( (pr.precio * pr.porcentaje) / 100) * " . $valor . "),2) AS cambio,
 pe.quantity,
 pe.metodo,
 c.cedula,
@@ -20,221 +22,165 @@ FROM pedidos pe,producto pr,cliente c
 
 WHERE pe.metodo='credito' AND pe.cliente_id=c.id AND pe.product_id=pr.id";
 
-$respuesta=mysqli_query($conex,$sql7);
-$valid=mysqli_num_rows($respuesta);
+$respuesta = mysqli_query($conex, $sql7);
+$valid = mysqli_num_rows($respuesta);
 
 
-if($valid>0){
-     
-    //start table
-?>
+if ($valid > 0) {
 
-      <div class="content">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <h4 class="card-title">Creditos totales</h4>
-              <p>*Los que tienen el campo "fecha del crédito" en <strong>negrita</strong> es porque se deben pagar hoy.</p>
+  //start table
+  ?>
 
-              </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                  <table id="example" class="table">
+  <div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Creditos totales</h4>
+            <p>*Los que tienen el campo "fecha del crédito" en <strong>negrita</strong> es porque se deben pagar hoy.</p>
 
-
-
-      <thead class="text-primary">
-
-           
-            <th class="textAlignLeft">Nombre del producto</th>
-             
-             <th class="textAlignLeft">Precio unitario</th>
-             
-            <th class="textAlignLeft">Precio unitario en Bs</th>
-
-             <th class="textAlignLeft">Cantidad</th>
-
-             <th class="textAlignLeft">Precio Total</th>
-   
-            <th class="textAlignLeft">Comprador</th>
-
-            <th class="textAlignLeft">Método de Pago</th>
-            
-            <th class="textAlignLeft">Fecha del crédito </th>
-
-            <th class="textAlignLeft">Fecha a Cancelar </th>
-
-            <th class="textAlignLeft">Pagar crédito</th>
-            
-            
- 
-</thead>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table id="example" class="table">
 
 
 
+                <thead class="text-primary">
 
-<?php
-   
-$total=0;
-$total_bs=0;
-while($pedido=mysqli_fetch_array($respuesta)) {
-   
-   $cedula=0;
-   $cedula=$pedido['cedula'];
+                  <th class="textAlignLeft"># Factura</th>
 
-        echo "<tr>";
-            echo "<td>";
-                        
-                         
+                  <th class="textAlignLeft">Nombre del producto</th>
 
-                      ?> <div class='product-nombre'><?=$pedido['nombre']?></div><?php
-            echo "</td>";
-                                 
-                        echo "<td>&#36;" . number_format($pedido['precio_venta'], 2, '.', ',') . "</td>";
+                  <th class="textAlignLeft">Precio unitario</th>
 
- echo "</td>";
-                           
-                             
-echo "<td>BS  " . number_format($pedido['cambio'], 2, '.', ',') . "</td>";
+                  <th class="textAlignLeft">Precio unitario en Bs</th>
 
+                  <th class="textAlignLeft">Cantidad</th>
 
-                        
-            echo "<td>";
-                      ?> <div class='product-nombre'><?=$pedido['quantity']?></div><?php
-        echo "</td>";
-    
-                         
- echo "<td>&#36;" . number_format($pedido['subtotal'], 2, '.', ',') . "</td>";
+                  <th class="textAlignLeft">Precio Total</th>
 
-  
-         
-                echo "</td>";
-                   
-            
-             echo "<td>";
-          
-            ?> <div class='product-nombre'> <?=$pedido['nombre_cliente']?><br> <?=$pedido['telefono']?></div><?php
-        echo "</td>";
+                  <th class="textAlignLeft">Comprador</th>
 
+                  <th class="textAlignLeft">Método de Pago</th>
 
-        echo "<td>";
-          
-      ?> <div class='product-nombre'>Crédito</div><?php
-        echo "</td>";
-   
-      echo "<td>";
-                      
+                  <th class="textAlignLeft">Fecha del crédito </th>
 
+                  <th class="textAlignLeft">Fecha a Cancelar </th>
 
-                      echo $pedido['fecha'];
+                  <th class="textAlignLeft">Pagar crédito</th>
 
+                </thead>
+
+                <?php
+
+                $total = 0;
+                $total_bs = 0;
+                $fac = 0;
+                while ($pedido = mysqli_fetch_array($respuesta)) {
+
+                  $cedula = 0;
+                  $cedula = $pedido['cedula'];
+                  $fac= $pedido['factura'];
+                  echo "<tr>";
+                  echo "<td>FAC00".$pedido['factura']."</td>";
+                  echo "<td>".$pedido['nombre']."</td>";
+                  echo "<td>&#36;" . number_format($pedido['precio_venta'], 2, '.', ',') . "</td>";
+                  echo "</td>";
+                  echo "<td>BS  " . number_format($pedido['cambio'], 2, '.', ',') . "</td>";
+                  echo "<td>".$pedido['quantity']."</td>";
+                  echo "<td>&#36;" . number_format($pedido['subtotal'], 2, '.', ',') . "</td>";
+                  echo "</td>";
+                  echo "<td>".$pedido['nombre_cliente'] ."<br>".$pedido['telefono']."</td>";
+                  echo "<td>Crédito</td>"; 
+                  echo "<td>".$pedido['fecha']."</td>";
+                  echo "<td>";
+
+                  if ($pedido['fecha_credi'] == $hoy) {
+
+                 
+                    echo "<strong>" . $pedido['fecha_credi'] . "</strong>";
 
 
-        echo "</td>";
+                  } else {
+                  
+                    echo $pedido['fecha_credi'];
+                  
+                  } 
+                  echo "</td>";
 
-        echo "<td>";
-                      
+                  echo "<td>";
+                  ?>
 
+                  <a title="Registrar pago de este crédito" data-toggle="modal" data-target="#exampleModalcliente"><i
+                      class="fas fa-coins"> </i></a>
+                  <div class="modal fade" id="exampleModalcliente" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
 
-                      if($pedido['fecha_credi']==$hoy){
+                          <div class="modal-body">
+                            <form name="formpavo" method='POST' action='../../../controladores/controladorpedido.php'>
+                              <h5 class="modal-title text-info" id="exampleModalLabel">Tipo de Pago <i
+                                  class="fad  fa-coins"></i></h5>
+                              <select name="metodo" class="form-control" id="metodo">
+                                <option value="Efectivo">Efectivo</option>
+                                <option value="Debito">Débito</option>
+                                <option value="Divisa">Divisa</option>
+                                <option value="Transferencia">Transferencia</option>
+                              </select>
 
-                        echo "<strong>".$pedido['fecha_credi']."</strong>";
+                              <div class="modal-footer">
+                                <input type="hidden" name="operacion" value="aprobar">
+                                <input type="hidden" name="factura" value="<?=$pedido['factura']?>">
+                                <input class="btn btn-sm btn-success text-white" type="submit" value="Registrar Compra">
 
-                        
-                                          }else{ echo $pedido['fecha_credi'];}?>
-
-
-
-                      <?php
-        echo "</td>";
-         
-
-             echo "<td>"; 
-         
-             ?>
-
-             <a title="Registrar pago de este crédito" data-toggle="modal" data-target="#exampleModalcliente"><i class="fas fa-coins"> </i></a>
-            <div class="modal fade" id="exampleModalcliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-       
-      <div class="modal-body">
-         <form name="formpavo" method='POST' action='../../../controladores/controladorpedido.php'>
-    
-    
- <h5 class="modal-title text-info" id="exampleModalLabel">Tipo de Pago <i class="fad  fa-coins"></i></h5>
-
-
-    
-
-<select name="metodo" class="form-control" id="metodo">
-<option value="Efectivo">Efectivo</option> 
-<option value="Debito">Débito</option> 
-<option value="Divisa">Divisa</option> 
-<option value="Transferencia">Transferencia</option>
-</select>
-  
-
-
-  <div class="modal-footer">  
-      
-
-  <input type="hidden" name="operacion" value="aprobar">
-  
-  <input type="hidden" name="id" value="<?php echo $pedido['id']; ?>">
-  <input  class="btn btn-sm btn-success text-white" type="submit" value="Registrar Compra">
-    
-  </div>
-
-  
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
 
 
-       
-      </div>
-    </div>
-  </div>
-</div>
 
 
-   
-       
-      
-         </form>
+                    </form>
 
 
 
-             <?php
-             echo "</td>";
-         echo "</tr>";
+                    <?php
+                    echo "</td>";
+                    echo "</tr>";
 
-         $total += $pedido['subtotal'];
-
-
-        $valor_cambio=$pedido['cambio']*$pedido['quantity'];
-        $total_bs += $valor_cambio; }
-     
+                    $total += $pedido['subtotal'];
 
 
-                       
-    echo "</table>";         
-}else{
+                    $valor_cambio = $pedido['cambio'] * $pedido['quantity'];
+                    $total_bs += $valor_cambio;
+                }
 
-    echo "<br>";
-    echo "<div class='alert alert-danger'>";
-    echo "<strong>No hay ventas que mostrar <i class='fad fa-sad-tear'></i> </strong>";
-    echo "</div>";
+
+
+
+                echo "</table>";
+              
+} else {
+
+  echo "<br>";
+  echo "<div class='alert alert-danger'>";
+  echo "<strong>No hay ventas que mostrar <i class='fad fa-sad-tear'></i> </strong>";
+  echo "</div>";
 }
 
 ?>
- <script type="text/javascript">
-        $(document).ready(function() {
-    $('#example').DataTable();
-} );
-    </script>
-    <?php
-include '../footerbtn.php';
+                <script type="text/javascript">
+                  $(document).ready(function () {
+                    $('#example').DataTable();
+                  });
+                </script>
+                <?php
+                include '../footerbtn.php';
 
- ?>
+                ?>
