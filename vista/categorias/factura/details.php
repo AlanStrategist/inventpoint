@@ -81,8 +81,8 @@ $pruebo = mysqli_num_rows($respuesta);
                 echo "<td>".$data['nombre_cliente']."<br> ".$data['cedula']."</td>";
                 echo "</tr>";
 
-                $total += $data["precio_venta"];
-                $totalBS += $data['cambio'];
+                $total += $data["subtotal"];
+                $totalBS += $data['cambio'] * $data['quantity'];
 
               }  ?>
             

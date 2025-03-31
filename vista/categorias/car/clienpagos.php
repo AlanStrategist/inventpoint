@@ -16,6 +16,8 @@ else if( isset($alert) && $alert == "deletevent"){ $al = new ClassAlert("Venta R
 
 else if( isset($alert) && $alert == "donefac"){ $al = new ClassAlert("Pedido creado exitosamente!<br>","Verifique los resultados y culmine la venta","primary"); }
 
+else if( isset($alert) && $alert == "culm"){ $al = new ClassAlert("No se ha realizado la venta!<br>","Existen a&uacute;n ventas sin culminar","warning"); }
+
 $sql7 = "SELECT DISTINCT pe.id AS id_pedidos,
  pr.nombre,
  ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) AS precio_venta,

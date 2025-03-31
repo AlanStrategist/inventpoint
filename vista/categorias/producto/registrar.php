@@ -7,9 +7,11 @@ extract($_REQUEST);
 include('../../js/restric.php');
 include('../../../modelos/ClassAlert.php');
 
-if( isset($alert) && $alert == "exito"){ $al = new ClassAlert("Registro exitoso!<br>","Se ha registrado exitosamente","primary"); }
-
-else if( isset($alert) && $alert == "error"){ $al = new ClassAlert("Error al registrar!<br>","Verifique su conexion a internet","danger"); }
+if (isset($alert) && $alert == "exito") {
+  $al = new ClassAlert("Registro exitoso!<br>", "Se ha registrado exitosamente", "primary");
+} else if (isset($alert) && $alert == "error") {
+  $al = new ClassAlert("Error al registrar!<br>", "Verifique su conexion a internet", "danger");
+}
 
 $sql2 = "SELECT * FROM categorias";
 $res2 = mysqli_query($conex, $sql2);
@@ -23,7 +25,9 @@ $resub = mysqli_query($conex, $sqlub);
   <div class="row">
     <div class="col-md-8">
 
-    <?php  if(isset($al)){ echo $al->Show_Alert(); } ?>
+      <?php if (isset($al)) {
+        echo $al->Show_Alert();
+      } ?>
 
       <div class="card">
         <div class="card-header">
@@ -66,7 +70,7 @@ $resub = mysqli_query($conex, $sqlub);
 
               <div class="col-md-4 pl-1">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Precio</label>
+                  <label for="exampleInputEmail1">Precio de compra (USD)</label>
                   <input type="number" name="precio" step="any" title="Solo números sin espacios y símbolos" min="1"
                     max="10000" class=" form-control" placeholder="Ejemplo:10" required="required">
 
@@ -96,7 +100,7 @@ $resub = mysqli_query($conex, $sqlub);
 
               <div class="col-md-3 pr-1">
                 <div class="form-group">
-                  <label>Porcentaje </label>
+                  <label>Porcentaje de ganancia </label>
 
                   <input type="number" name="porcentaje" title="Coloque el porcentaje de ganancia de este producto"
                     min="0.01" max="10000" step="0.01" class="form-control" placeholder="Ejemplo:23"

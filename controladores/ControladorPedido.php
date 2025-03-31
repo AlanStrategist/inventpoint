@@ -30,6 +30,22 @@ class ControladorPedido
 
 			return;
 		} 
+		    #verify sales without end
+
+		    $sql_has_p = "SELECT * FROM pedidos WHERE estatus='pago'"; 
+			$qu = mysqli_query($conex, $sql_has_p);
+		    $num = mysqli_num_rows($qu);
+
+			if( $num > 0) {
+				
+				header("Location: ../vista/categorias/car/clienpagos.php?alert=culm");
+
+				return;
+
+			}
+			
+
+
 			$cliente = mysqli_fetch_object($response);
 			$id_cliente = $cliente->id;
 			//traigo el id del cliente

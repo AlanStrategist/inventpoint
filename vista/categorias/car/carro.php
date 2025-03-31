@@ -22,6 +22,8 @@ else if( isset($alert) && $alert == "rem"){ $al = new ClassAlert("Removido!<br>"
 
 else if( isset($alert) && $alert == "ac"){ $al = new ClassAlert("Cantidad actualizada!<br>","","primary"); }
 
+
+
 // select products in the cart
 $query = "SELECT DISTINCT p.id,
 p.stock,

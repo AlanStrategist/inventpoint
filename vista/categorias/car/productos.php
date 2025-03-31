@@ -36,8 +36,9 @@ ROUND( p.precio + ( (p.precio * p.porcentaje) / 100),2) * ".$valor." AS cambio
 FROM producto p,categorias ca , ubicacion u 
 
 WHERE p.stock > 0 AND 
-p.id_categorias = ca.id 
-AND p.id_ubicacion = u.id";
+p.id_categorias = ca.id AND 
+p.id_ubicacion = u.id AND
+p.estatus = 'habilitado'";
 
 $respuesta = mysqli_query($conex, $query);
 $pruebo = mysqli_num_rows($respuesta);
