@@ -51,3 +51,18 @@ function isLoged() : bool{
     return false;
 
 }
+
+function has_privi( array $privi , string $name, string $nucleo) : bool{
+
+   foreach($privi as $p){
+    
+      if( $p['name'] === $name && $p['nucleo'] === $nucleo ){
+                
+         return true;
+
+         
+      }
+   }
+
+   return false;
+}

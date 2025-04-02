@@ -1,5 +1,7 @@
 <?php
 
+try{
+
 /* ´connect to db */
 $db = new clasedb();
 $conex = $db->conectar();
@@ -36,28 +38,41 @@ $res4 = mysqli_query($conex, $sql4);
 $rows = mysqli_num_rows($res4);
 
 if ($rows > 0) {
+
   $dolar = mysqli_fetch_object($res4);
   $valor = $dolar->valor;
 }
-
 
 $sql5 = "SELECT DISTINCT producto.nombre,pedidos.quantity FROM pedidos,producto WHERE pedidos.metodo='Credito' AND pedidos.fecha_credi='$hoy' AND pedidos.product_id=producto.id ";
 $reste = mysqli_query($conex, $sql5);
 $resrows = mysqli_num_rows($reste);
 
-$privi = "SELECT * FROM privilegio WHERE id_usuario=" . $_SESSION['id'];
+$privi = "SELECT p.id,p.nucleo,p.name FROM privileges p ,usuarios_has_privileges uh ,usuarios u WHERE u.id=".$_SESSION['id']." AND uh.id_usuarios = u.id AND p.id = uh.id_privileges;";
 $rescata = mysqli_query($conex, $privi);
 
+if (!$rescata) {
 
-if ($rescata) {
-  $privis = mysqli_fetch_array($rescata);
-} else { ?>
+  header(" Location: ../../../index.php?alert=privs");
 
-  <script type="text/javascript">
-    window.location: '../../index.php?alerta=noprivis'
-  </script>
+} 
 
-<?php }
+while($privis = mysqli_fetch_array($rescata)){
+
+  $privs[] = $privis;
+
+}
+
+
+}catch(mysqli_sql_exception | Exception $e) {
+
+  header(" Location: ../../../index.php?alert=privs");
+
+}finally {
+
+  mysqli_close($conex);
+
+}
+
 
 ?>
 
@@ -110,7 +125,7 @@ if ($rescata) {
         <ul class="nav">
 
           <?php
-          if ($privis['producto'] == 1) { ?>
+         if ( has_privi($privs,"List","Producto") ) { ?>
 
             <li>
 
@@ -171,17 +186,11 @@ if ($rescata) {
                 </div>
               </a>
             </li>
-
-
-
-
-          <?php } else {
-
-            echo "";
+          <?php 
 
           }
 
-          if ($privis['pedidos'] == 1) {
+          if ( has_privi($privs,"List","Pedidos")) {
             ?>
 
             <li>
@@ -235,11 +244,9 @@ if ($rescata) {
             </li>
             <?php
 
-          } else {
-            echo "";
           }
 
-          if ($privis['usuarios']) { ?>
+          if ( has_privi($privs,"List","Usuarios")) { ?>
 
             <li>
 

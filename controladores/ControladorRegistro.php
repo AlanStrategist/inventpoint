@@ -14,12 +14,12 @@ class ControladorRegistro
         if ($autorizo == '') {
             ?>
 
-        <script type="text/javascript">
-            alert('No existe autorización para listar');
-            window.Location:'../vista/categorias/home/home.php'
-        </script>
-    <?php
-} else {
+            <script type="text/javascript">
+                alert('No existe autorización para listar');
+                window.Location: '../vista/categorias/home/home.php'
+            </script>
+            <?php
+        } else {
 
             $clave = 1;
 
@@ -44,43 +44,93 @@ class ControladorRegistro
     {
         extract($_POST);
 
-        $db    = new clasedb();
+        try{
+
+        $db = new clasedb();
         $conex = $db->conectar();
 
-        $nomexist  = "SELECT * FROM usuarios WHERE correo ='" . $correo . "' OR cedula = " . $cedula;
-        $result    = mysqli_query($conex, $nomexist);
+        $nomexist = "SELECT * FROM usuarios WHERE correo ='" . $correo . "' OR cedula = " . $cedula;
+        $result = mysqli_query($conex, $nomexist);
         $nombresbd = mysqli_num_rows($result);
 
         if ($nombresbd > 0) {
 
-            header("Location: ../vista/categorias/registro/registrar.php?alerta=duplicidad");
-        } else {
+            header("Location: ../vista/categorias/registro/registrar.php?alert=dup");
 
-            if ($clave == $clave_repetir) {
-                
-                $clave = hash('sha256', $clave);
+            return;
+        } 
 
+        if ($clave != $clave_repetir) {
 
-                $sql = "INSERT INTO usuarios VALUES (NULL,'" . $cedula . "','" . $correo . "','" . $nombre . "','" . $clave . "','" . $tipo_usuario . "','" . $estatus . "')";
+            header("Location: ../vista/categorias/registro/registrar.php?alert=nocon");
 
-                $resultado = mysqli_query($conex, $sql);
-
-                if ($resultado) {
-
-                    header("Location: ControladorRegistro.php?operacion=index&alerta=si");
-
-                } else {
-
-                    header("Location: ControladorRegistro.php?operacion=index&alerta=no");
-
-                }
-            } else {
-
-                header("Location: ../vista/categorias/registro/registrar.php?alerta=nocoinciden");
-
-            }
         }
-    } //fin de la funcion
+
+        $clave = hash('sha256', $clave);
+
+        //Insert user
+
+        $sql = "INSERT INTO usuarios VALUES (NULL,'" . $cedula . "','" . $correo . "','" . $nombre . "','" . $clave . "','" . $tipo_usuario . "','" . $estatus . "')";
+
+        $resultado = mysqli_query($conex, $sql);
+
+        if (!$resultado) {
+
+           header("Location: ControladorRegistro.php?operacion=index&alert=error");
+
+           return;
+        } 
+        
+        //Get User Id
+
+        $sql_user = "SELECT id FROM usuarios WHERE cedula=".$cedula;
+
+        $query_user = mysqli_query($conex, $sql_user);
+
+        if(!$query_user){
+
+            header("Location: ControladorRegistro.php?operacion=index&alert=erroruser");
+
+            return;
+        }
+
+        $data_user = mysqli_fetch_array($query_user);
+
+        $id = $data_user["id"];
+
+        //Insert privileges
+        $insert = "";
+
+        foreach ($privi as $key => $value) {
+
+            $sql_2="INSERT INTO `usuarios_has_privileges`(`id`, `id_usuarios`, `id_privileges`) VALUES (NULL,".$id.",".$value.");";
+
+            $insert .= $sql_2;
+
+        }
+
+        $query_privs = mysqli_query($conex, $insert);
+
+        if (!$query_privs) {
+            
+            header("Location: ControladorRegistro.php?operacion=index&alert=errorprivs");
+            
+            return;
+        }
+
+        header("Location: ControladorRegistro.php?operacion=index&alert=si");
+        
+        
+        } catch (mysqli_sql_exception | Exception $e) {
+
+            header("Location: ControladorRegistro.php?operacion=index&alert=error");
+
+        }finally {
+
+            mysqli_close($conex);
+            
+        }
+    } 
 
     public function modificar()
     {
@@ -92,7 +142,7 @@ class ControladorRegistro
     {
         extract($_POST);
 
-        $db    = new clasedb();
+        $db = new clasedb();
         $conex = $db->conectar();
 
         $sql = "UPDATE usuarios SET id='$id',nombre='$nombre',correo='$correo',telefono='$telefono',clave='$clave',tipo_usuarios='$tipo_usuarios',pregunta='$pregunta',respuesta='$respuesta' WHERE id='$id'";
@@ -104,48 +154,51 @@ class ControladorRegistro
             ?>
             <script type="text/javascript">
                 alert("se modifico con exito");
-                window.location="../index.php";
+                window.location = "../index.php";
             </script>
 
 
-        <?php
-} else {
+            <?php
+        } else {
             if (isset($cambiar)) {
-                $sql            = "SELECT clave FROM usuarios WHERE id=" . $id_usuario;
-                $res            = mysqli_query($conex, $sql);
-                $row            = mysqli_fetch_object($res);
+                $sql = "SELECT clave FROM usuarios WHERE id=" . $id_usuario;
+                $res = mysqli_query($conex, $sql);
+                $row = mysqli_fetch_object($res);
                 $clave_anterior = hash('sha256', $clave_anterior);
                 if ($clave_repetir = $clave) {
                     $clave = hash('sha256', $clave);
-                    $sql   = "UPDATE usuarios SET nombre='" . $nombre . "', correo='" . $correo . "',clave='" . $clave . "',tipo_usuario='" . $tipo_usuario . "',pregunta='" . $pregunta . "',respuesta='" . $respuesta . "'WHERE id=" . $id_usuario;
-                    $res   = mysqli_query($res);
+                    $sql = "UPDATE usuarios SET nombre='" . $nombre . "', correo='" . $correo . "',clave='" . $clave . "',tipo_usuario='" . $tipo_usuario . "',pregunta='" . $pregunta . "',respuesta='" . $respuesta . "'WHERE id=" . $id_usuario;
+                    $res = mysqli_query($res);
                     if ($res) {
 
-                        ?> <script type="text/javascript">
-                        alert('Modificacion exitosa');
-                        window.location="ControladorRegistro.php?operacion=index.php";
-                    </script> <?php } else {
                         ?>
                         <script type="text/javascript">
-                        alert('Modificacion no exitosa');
-                        window.location="ControladorRegistro.php?operacion=index.php";
+                            alert('Modificacion exitosa');
+                            window.location = "ControladorRegistro.php?operacion=index.php";
+                        </script> <?php } else {
+                        ?>
+                        <script type="text/javascript">
+                            alert('Modificacion no exitosa');
+                            window.location = "ControladorRegistro.php?operacion=index.php";
                         </script> <?php
-}
+                    }
 
                 } else {
-                    ?> <script type="text/javascript">
+                    ?>
+                    <script type="text/javascript">
 
-                    alert('Las claves no coinciden');
-                    window.location="ControladorRegistro.php?operacion=index";
-                </script>
-                 <?php
-}
+                        alert('Las claves no coinciden');
+                        window.location = "ControladorRegistro.php?operacion=index";
+                    </script>
+                    <?php
+                }
 
             } else {
-                ?> <script type="text/javascript">
-                alert('La clave anterior no coincide');
-                window.location="ControladorRegistro.php?operacion=index"
-            </script> <?php
+                ?>
+                <script type="text/javascript">
+                    alert('La clave anterior no coincide');
+                    window.location = "ControladorRegistro.php?operacion=index"
+                </script> <?php
 
             }
 
@@ -153,17 +206,18 @@ class ControladorRegistro
 
         $sql = "UPDATE usuarios SET nombre='" . $nombre . "', correo='" . $correo . "',tipo_usuario='" . $tipo_usuario . "',pregunta='" . $pregunta . "',respuesta='" . $respuesta . "'WHERE id=" . $id_usuario;
         $res = mysqli_num_rows($conex, $sql);
-        if ($res) {?>
+        if ($res) { ?>
 
-                    ?> <script type="text/javascript">
-                        alert('Registro Modificado');
-                        window.location="ControladorRegistro.php?operacion=index.php";
-                    </script> <?php } else {
             ?>
-                        <script type="text/javascript">
-                        alert('Registro no modificado');
-                        window.location="ControladorRegistro.php?operacion=index.php";
-                        </script> <?php
+            <script type="text/javascript">
+                alert('Registro Modificado');
+                window.location = "ControladorRegistro.php?operacion=index.php";
+            </script> <?php } else {
+            ?>
+            <script type="text/javascript">
+                alert('Registro no modificado');
+                window.location = "ControladorRegistro.php?operacion=index.php";
+            </script> <?php
 
         }
 
@@ -172,9 +226,9 @@ class ControladorRegistro
     public function Rol()
     {
         extract($_REQUEST);
-        $db    = new clasedb;
+        $db = new clasedb;
         $conex = $db->conectar();
-        $sql   = "UPDATE usuarios SET tipo_usuario='$rol' WHERE id=" . $id;
+        $sql = "UPDATE usuarios SET tipo_usuario='$rol' WHERE id=" . $id;
 
         $res = mysqli_query($conex, $sql);
         if ($res) {
@@ -189,12 +243,12 @@ class ControladorRegistro
     public function Status()
     {
         extract($_REQUEST);
-        $db    = new clasedb;
+        $db = new clasedb;
         $conex = $db->conectar();
-        $sql   = "UPDATE usuarios SET estatus='$status' WHERE id=" . $id;
+        $sql = "UPDATE usuarios SET estatus='$status' WHERE id=" . $id;
 
         $res = mysqli_query($conex, $sql);
-        
+
         if ($res) {
 
             header("Location: ControladorRegistro.php?operacion=index&autorizo=autorizo&alerta=status");
@@ -243,13 +297,13 @@ class ControladorRegistro
                 ?>
 
 
-        <script type="text/javascript">
-            alert("sin ruta, no existe");
-            window.location="ControladorRegistro.php?operacion=index";
-        </script>
+                <script type="text/javascript">
+                    alert("sin ruta, no existe");
+                    window.location = "ControladorRegistro.php?operacion=index";
+                </script>
 
-    <?php
-break;
+                <?php
+                break;
         }
 
     }

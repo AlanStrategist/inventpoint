@@ -7,7 +7,6 @@ extract($_REQUEST);
 
 class ControladorLogin
 {
-
 	static function controlador($operacion)
 	{
 		$login = new ControladorLogin();
@@ -47,42 +46,37 @@ class ControladorLogin
 		if ($correo == "" || $clave == "") {
 
 			header("Location: ../index.php?vacio");
+			
+			return;
 
 		} else {
+			
 			$clave = hash('sha256', $clave);
 
+			try{
+			
 			$sql = "SELECT * FROM usuarios WHERE correo='" . $correo . "' AND clave='" . $clave . "' AND estatus='activo'";
 
 			$res = mysqli_query($conex, $sql);
 			$tipo = mysqli_fetch_array($res);
+			
+			$_SESSION['id'] = $tipo['id'];
+			$_SESSION['logueado'] = 'Si';
 
+			$loc = $tipo['tipo_usuario'] == "admin" ? "Location: ../vista/categorias/home/home.php":"Location: ../vista/categorias/cliente/registrar.php";
 
-			switch ($tipo['tipo_usuario']) {
-
-				case 'admin':
-
-					$_SESSION['id'] = $tipo['id'];
-					$_SESSION['logueado'] = 'Si';
-					header("Location:../vista/categorias/home/home.php");
-					break;
-
-				case 'empleado':
-
-					$_SESSION['id'] = $tipo['id'];
-					$_SESSION['logueado'] = "Si";
-					header("Location:../vista/categorias/cliente/registrar.php");
-
-
-					break;
-
-				default:
-
-					header("Location:../index.php?alert=noexiste");
-
-
-					break;
+			header($loc);
+			
 			}
+			catch (mysqli_sql_exception | Exception $e ) {
+				
+				header('Location: ../../index.php?alert=inicia');
 
+			}finally{
+
+				mysqli_close($conex);
+
+			}
 
 
 		}

@@ -5,32 +5,24 @@ $nucleo = 'Usuarios';
 
 include '../../js/restric.php';
 
-if ($privis['usuarios'] == 1) {
+if ( !($privis['usuarios'] == 1) ) { 
 
-  echo "";
+  header('../../../index.php?alert=inicia');
 
-} else {?>
-
- <script type="text/javascript">
-  window.location="../home/home.php?alerta=sinprivi";
-
-</script>
-
-<?php } 
-
-if (isset($alerta) AND $alerta='duplicidad') {
-  ?>
-  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-   Nombre o cédula duplicada <i class="fas fa-copy"></i>
-   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-
-    <span aria-hidden="true">&times;</span>
-
-  </button> 
-</div>
-<?php 
+  exit;
 }
 
+try{
+
+  $sql = "SELECT * FROM privileges";
+
+  $result = mysqli_query($conex,$sql);
+
+}catch(mysqli_sql_exception $e){
+
+  header('../../../index.php?alert=inicia');
+
+}
 
 ?>
 
@@ -93,7 +85,7 @@ if (isset($alerta) AND $alerta='duplicidad') {
                 </div>
               </div>
             </div>
-            <div class="row">
+           
               <div class="col-md-5 pr-1">
                 <div class="form-group">
                   <label class="text-primary" for="repeat">Repita la clave</label>
@@ -104,13 +96,36 @@ if (isset($alerta) AND $alerta='duplicidad') {
                   <div class="invalid-feedback">¡Debe coincidir con el campo anterior!</div>
 
                 </div>
+              
+               
+              <fieldset>
+              <h4 class="text-primary"> Permisos dentro del sistema</h4>
+              
+              <table class="table">
+                <thead>
+                  <th>Nucleo</th>
+                  <th>Descripci&oacute;n</th>
+                  <th>Asignar</th>
+                </thead>
+                <tr>
+                  <?php while ($row = mysqli_fetch_array($result)) {
+                    
+                    echo "<tr>";
+                    echo "<td>".$row['nucleo']."</td>";
+                    
+                    echo "<td>".$row['descrip']."</td>";
+                    
+                    echo "<td> <input name=privi[] type='checkbox' value=".$row['id']." </td>";
 
-              </div>
+                  }
+  
+                  ?>
+              
+                </tr>
 
 
-
-
-
+              </table>
+             </fieldset> 
 
               <input type="hidden" name="tipo_usuario" value="empleado">
               <input type="hidden" name="estatus" value="activo">
