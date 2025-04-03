@@ -258,25 +258,18 @@ while($privis = mysqli_fetch_array($rescata)){
 
                 <div class="dropdown-menu" aria-labelledby="sidebarDropdownLink">
 
-                  <a class="dropdown-item" href="../registro/registrar.php">Registro de Empleados</a>
+                  <a class="dropdown-item" href="../../../controladores/ControladorUsuarios.php?operacion=registrar">Registro de Empleados</a>
                   <a class="dropdown-item"
-                    href="../../../controladores/controladorregistro.php?operacion=index&autorizo=autorizo">Lista de
+                    href="../../../controladores/ControladorUsuarios.php?operacion=index">Lista de
                     usuarios</a>
                   <hr>
                   <a class="dropdown-item"
-                    href="../../../controladores/controladorprivilegio.php?operacion=index&autorizo=autorizo">Ver
-                    privilegios</a>
+                    href="../../../controladores/ControladorUsuarios.php?operacion=index">Olvido de Clave</a>
                 </div>
               </a>
             </li>
 
-
-          <?php } else {
-            echo "";
-          }
-          ?>
-
-
+          <?php } ?>
 
           <li class="active-pro">
             <a href="https://www.instagram.com/romgodevelop1/">
@@ -396,10 +389,6 @@ while($privis = mysqli_fetch_array($rescata)){
 
                 <?php } ?>
 
-
-
-
-
               </li>
 
 
@@ -473,14 +462,6 @@ while($privis = mysqli_fetch_array($rescata)){
                 
 
                <?php } ?>
-
-
-
-
-              
-
-
-
             </ul>
           </div>
         </div>

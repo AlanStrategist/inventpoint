@@ -3,9 +3,8 @@ include "../modelos/clasedb.php";
 
 extract($_REQUEST);
 
-class ControladorRegistro
+class ControladorUsuarios
 {
-
     public function index()
     {
         extract($_REQUEST);
@@ -19,7 +18,7 @@ class ControladorRegistro
 
     public function registrar()
     {
-        header("Location: ../vista/categorias/registro/registrar.php");
+        header("Location: ../vista/categorias/usuarios/registrar.php");
     }
 
     public function guardar()
@@ -37,14 +36,14 @@ class ControladorRegistro
 
             if ($nombresbd > 0) {
 
-                header("Location: ../vista/categorias/registro/registrar.php?alert=dup");
+                header("Location: ../vista/categorias/usuarios/registrar.php?alert=dup");
 
                 return;
             }
 
             if ($clave != $clave_repetir) {
 
-                header("Location: ../vista/categorias/registro/registrar.php?alert=nocon");
+                header("Location: ../vista/categorias/usuarios/registrar.php?alert=nocon");
 
             }
 
@@ -58,7 +57,7 @@ class ControladorRegistro
 
             if (!$resultado) {
 
-                header("Location: ControladorRegistro.php?operacion=index&alert=error");
+                header("Location: ControladorUsuarios.php?operacion=index&alert=error");
 
                 return;
             }
@@ -71,7 +70,7 @@ class ControladorRegistro
 
             if (!$query_user) {
 
-                header("Location: ControladorRegistro.php?operacion=index&alert=erroruser");
+                header("Location: ControladorUsuarios.php?operacion=index&alert=erroruser");
 
                 return;
             }
@@ -95,17 +94,17 @@ class ControladorRegistro
 
             if (!$query_privs) {
 
-                header("Location: ControladorRegistro.php?operacion=index&alert=errorprivs");
+                header("Location: ControladorUsuarios.php?operacion=index&alert=errorprivs");
 
                 return;
             }
 
-            header("Location: ControladorRegistro.php?operacion=index&alert=si");
+            header("Location: ControladorUsuarios.php?operacion=index&alert=si");
 
 
         } catch (mysqli_sql_exception | Exception $e) {
 
-            header("Location: ControladorRegistro.php?operacion=index&alert=error");
+            header("Location: ControladorUsuarios.php?operacion=index&alert=error");
 
         } finally {
 
@@ -114,93 +113,49 @@ class ControladorRegistro
         }
     }
 
-    public function modificar()
+    public function Update()
     {
         extract($_REQUEST);
-        header("Location: ../vista/registro/modificar.php?id=" . $id);
+
+        if($id == "" ){
+           
+            header("ControladorUsuarios.php?operacion=index&alert=errorUp");
+        }
+
+        header("Location: ../vista/categorias/usuarios/modificar.php?id=" . $id);
     }
 
-    public function guardar_modificacion()
+    public function Save_Update()
     {
         extract($_POST);
 
+        try{
+
         $db = new clasedb();
+
         $conex = $db->conectar();
 
-        $sql = "UPDATE usuarios SET id='$id',nombre='$nombre',correo='$correo',telefono='$telefono',clave='$clave',tipo_usuarios='$tipo_usuarios',pregunta='$pregunta',respuesta='$respuesta' WHERE id='$id'";
+        $sql = "UPDATE usuarios SET nombre=' ".$nombre. " ',correo='".$correo."',cedula='".$cedula."' WHERE id=".$id;
 
-        $resultado = mysqli_query($conex, $sql);
+        $res = mysqli_query($conex, $sql);
 
-        if ($resultado) {
+        if ( !$res ) {
 
-            ?>
-            <script type="text/javascript">
-                alert("se modifico con exito");
-                window.location = "../index.php";
-            </script>
+            header("Location: ControladorUsuarios.php?operacion=index&alert=errorUp");
 
-
-            <?php
-        } else {
-            if (isset($cambiar)) {
-                $sql = "SELECT clave FROM usuarios WHERE id=" . $id_usuario;
-                $res = mysqli_query($conex, $sql);
-                $row = mysqli_fetch_object($res);
-                $clave_anterior = hash('sha256', $clave_anterior);
-                if ($clave_repetir = $clave) {
-                    $clave = hash('sha256', $clave);
-                    $sql = "UPDATE usuarios SET nombre='" . $nombre . "', correo='" . $correo . "',clave='" . $clave . "',tipo_usuario='" . $tipo_usuario . "',pregunta='" . $pregunta . "',respuesta='" . $respuesta . "'WHERE id=" . $id_usuario;
-                    $res = mysqli_query($res);
-                    if ($res) {
-
-                        ?>
-                        <script type="text/javascript">
-                            alert('Modificacion exitosa');
-                            window.location = "ControladorRegistro.php?operacion=index.php";
-                        </script> <?php } else {
-                        ?>
-                        <script type="text/javascript">
-                            alert('Modificacion no exitosa');
-                            window.location = "ControladorRegistro.php?operacion=index.php";
-                        </script> <?php
-                    }
-
-                } else {
-                    ?>
-                    <script type="text/javascript">
-
-                        alert('Las claves no coinciden');
-                        window.location = "ControladorRegistro.php?operacion=index";
-                    </script>
-                    <?php
-                }
-
-            } else {
-                ?>
-                <script type="text/javascript">
-                    alert('La clave anterior no coincide');
-                    window.location = "ControladorRegistro.php?operacion=index"
-                </script> <?php
-
-            }
+            return;
 
         }
+        
+        header("Location: ControladorUsuarios.php?operacion=index&alert=sucessUp");
 
-        $sql = "UPDATE usuarios SET nombre='" . $nombre . "', correo='" . $correo . "',tipo_usuario='" . $tipo_usuario . "',pregunta='" . $pregunta . "',respuesta='" . $respuesta . "'WHERE id=" . $id_usuario;
-        $res = mysqli_num_rows($conex, $sql);
-        if ($res) { ?>
+        }catch( mysqli_sql_exception | Exception $e) {
 
-            ?>
-            <script type="text/javascript">
-                alert('Registro Modificado');
-                window.location = "ControladorRegistro.php?operacion=index.php";
-            </script> <?php } else {
-            ?>
-            <script type="text/javascript">
-                alert('Registro no modificado');
-                window.location = "ControladorRegistro.php?operacion=index.php";
-            </script> <?php
+           header("Location: ControladorUsuarios.php?operacion=index&alert=errorUp");
 
+        }finally{
+
+            mysqli_close($conex);
         }
 
     } //fin de la funcion
@@ -219,14 +174,14 @@ class ControladorRegistro
         
         if ($res) {
 
-            header("Location: ControladorRegistro.php?operacion=index&alert=rol");
+            header("Location: ControladorUsuarios.php?operacion=index&alert=rol");
 
             return;
         }
 
     }catch(Exception | mysqli_sql_exception $e) {
 
-        header("Location: ControladorRegistro.php?operacion=indexl&alert=error");
+        header("Location: ControladorUsuarios.php?operacion=indexl&alert=error");
 
     }finally{
 
@@ -248,14 +203,14 @@ class ControladorRegistro
         
         if ($res) {
 
-            header("Location: ControladorRegistro.php?operacion=index&alert=status");
+            header("Location: ControladorUsuarios.php?operacion=index&alert=status");
 
             return;
         }
 
     }catch(Exception | mysqli_sql_exception $e) {
 
-        header("Location: ControladorRegistro.php?operacion=indexl&alert=error");
+        header("Location: ControladorUsuarios.php?operacion=indexl&alert=error");
 
     }finally{
 
@@ -267,7 +222,7 @@ class ControladorRegistro
     {
         extract($_REQUEST);
 
-        header("Location: ../vista/categorias/registro/update_privileges.php?id=" . $id);
+        header("Location: ../vista/categorias/usuarios/update_privileges.php?id=" . $id);
 
     }
 
@@ -282,7 +237,7 @@ class ControladorRegistro
 
             if ($privi == null) {
 
-                header("Location: ../vista/categorias/registro/update_privileges.php?&alert=sin&id=" . $id);
+                header("Location: ../vista/categorias/usuarios/update_privileges.php?&alert=sin&id=" . $id);
 
                 return;
             }
@@ -293,7 +248,7 @@ class ControladorRegistro
 
             if (!$query_user) {
 
-                header("Location: ControladorRegistro.php?operacion=index&alert=erroruser");
+                header("Location: ControladorUsuarios.php?operacion=index&alert=erroruser");
 
                 return;
             }
@@ -310,7 +265,7 @@ class ControladorRegistro
 
             if(!$del){
 
-                header("Location: ControladorRegistro.php?operacion=index&alert=errorprivis");
+                header("Location: ControladorUsuarios.php?operacion=index&alert=errorprivis");
 
                 return;
             }
@@ -330,17 +285,17 @@ class ControladorRegistro
 
             if (!$query_privs) {
 
-                header("Location: ControladorRegistro.php?operacion=index&alert=errorprivs");
+                header("Location: ControladorUsuarios.php?operacion=index&alert=errorprivs");
 
                 return;
             }
 
-            header("Location: ControladorRegistro.php?operacion=index&alert=siprivis");
+            header("Location: ControladorUsuarios.php?operacion=index&alert=siprivis");
 
 
         } catch (mysqli_sql_exception | Exception $e) {
   
-           header("Location: ControladorRegistro.php?operacion=index&alert=error");
+           header("Location: ControladorUsuarios.php?operacion=index&alert=error");
 
         } finally {
 
@@ -353,7 +308,7 @@ class ControladorRegistro
     public static function controlador($operacion)
     {
 
-        $pro = new ControladorRegistro();
+        $pro = new ControladorUsuarios();
         switch ($operacion) {
 
             case 'index':
@@ -368,11 +323,11 @@ class ControladorRegistro
             case 'guardar':
                 $pro->guardar();
                 break;
-            case 'modificar':
-                $pro->modificar();
+            case 'Update':
+                $pro->Update();
                 break;
-            case 'guardar_modificacion':
-                $pro->guardar_modificacion();
+            case 'Save_Update':
+                $pro->Save_Update();
                 break;
 
             case 'Rol':
@@ -395,7 +350,7 @@ class ControladorRegistro
 
                 <script type="text/javascript">
                     alert("sin ruta, no existe");
-                    window.location = "ControladorRegistro.php?operacion=index";
+                    window.location = "ControladorUsuarios.php?operacion=index";
                 </script>
 
                 <?php
@@ -405,6 +360,6 @@ class ControladorRegistro
     }
 }
 
-ControladorRegistro::controlador($operacion);
+ControladorUsuarios::controlador($operacion);
 
 ?>

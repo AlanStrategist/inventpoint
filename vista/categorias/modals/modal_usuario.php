@@ -12,7 +12,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i></button>
-        <a class="btn btn-info" href='../../../controladores/ControladorRegistro.php?operacion=Status&id=<?=$data['id']?>&status=inactivo'><i class="fas fa-check"></i></a>
+        <a class="btn btn-info" href='../../../controladores/ControladorUsuarios.php?operacion=Status&id=<?=$data['id']?>&status=inactivo'><i class="fas fa-check"></i></a>
       </div>
     </div>
   </div>
@@ -32,7 +32,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i></button>
-        <a class="btn btn-info" href='../../../controladores/ControladorRegistro.php?operacion=Status&id=<?=$data['id']?>&status=activo'><i class="fas fa-check"></i></a>
+        <a class="btn btn-info" href='../../../controladores/ControladorUsuarios.php?operacion=Status&id=<?=$data['id']?>&status=activo'><i class="fas fa-check"></i></a>
       </div>
     </div>
   </div>
@@ -52,7 +52,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i></button>
-        <a class="btn btn-info" href='../../../controladores/ControladorRegistro.php?operacion=Rol&id=<?=$data['id']?>&rol=admin'><i class="fas fa-check"></i></a>
+        <a class="btn btn-info" href='../../../controladores/ControladorUsuarios.php?operacion=Rol&id=<?=$data['id']?>&rol=admin'><i class="fas fa-check"></i></a>
       </div>
     </div>
   </div>
@@ -72,7 +72,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i></button>
-        <a class="btn btn-info" href='../../../controladores/ControladorRegistro.php?operacion=Rol&id=<?=$data['id']?>&rol=empleado'><i class="fas fa-check"></i></a>
+        <a class="btn btn-info" href='../../../controladores/ControladorUsuarios.php?operacion=Rol&id=<?=$data['id']?>&rol=empleado'><i class="fas fa-check"></i></a>
       </div>
     </div>
   </div>

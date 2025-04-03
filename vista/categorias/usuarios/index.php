@@ -58,7 +58,11 @@ else if( isset($alert) && $alert == "rol"){ $al = new ClassAlert("Se ha cambiado
 
 else if( isset($alert) && $alert == "si"){ $al = new ClassAlert("Registro exitoso,Se ha registrado el usuario!<br>","Se han concedido los permisos","warning"); }
 
-else if( isset($alert) && $alert == "siprivis"){ $al = new ClassAlert("Agregaci&oacute;n exitosa de permisos!<br>","","warning"); }
+else if( isset($alert) && $alert == "sucessUp"){ $al = new ClassAlert("Agregaci&oacute;n exitosa de permisos!<br>","","primary"); }
+
+else if( isset($alert) && $alert == "errorUp"){ $al = new ClassAlert("Error en la modificaci&oacute;n!<br>","","danger"); }
+
+else if( isset($alert) && $alert == "siprivis"){ $al = new ClassAlert("Privilegios agregados exitosamente!<br>","","primary"); }
 
 
 ?>
@@ -83,9 +87,8 @@ else if( isset($alert) && $alert == "siprivis"){ $al = new ClassAlert("Agregaci&
                   <td>Nombre y Cédula</td>
                   <td>Tipo de usuario</td>
                   <td>Permisos del usuario</td>
-                  <td><i class="fas fa-thumbs-up"></i>
-                    <i class="fas fa-thumbs-down"></i>
-                  </td>
+                  <td>Estatus</td>
+                  <td>Modificar Datos de Usuario</td>
                 </thead>
 
                 <?php
@@ -116,7 +119,7 @@ else if( isset($alert) && $alert == "siprivis"){ $al = new ClassAlert("Agregaci&
                   
                   echo "</td>";
                   
-                  echo "<td > <a href='../../../controladores/ControladorRegistro.php?operacion=View_Privs&id=".$data['id']."'><i class='fas fa-2x fa-eye'></i> </a> </td>";
+                  echo "<td > <a href='../../../controladores/ControladorUsuarios.php?operacion=View_Privs&id=".$data['id']."'><i class='fas fa-2x fa-eye'></i> </a> </td>";
 
                   echo "<td>";
                   
@@ -133,6 +136,16 @@ else if( isset($alert) && $alert == "siprivis"){ $al = new ClassAlert("Agregaci&
                   <a href='#' data-toggle='modal' data-target='#H<?= $nam ?>'><i class='fas fa-2x fa-thumbs-up text-success ' title='Activar usuario'></i></a>
 
                   <?php }
+                
+                  echo '</td>';   
+
+                  echo "<td>"; 
+                  
+                  ?>
+
+                  <a href='../../../controladores/ControladorUsuarios.php?operacion=Update&id=<?=$data['id']?>'> <i class='fas fa-2x fa-pen'></i> </a></td>
+
+                  <?php
 
                   include '../modals/modal_usuario.php';
 

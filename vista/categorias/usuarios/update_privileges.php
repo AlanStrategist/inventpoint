@@ -79,7 +79,7 @@ try {
 
                 </thead>
 
-                <form action='../../../controladores/ControladorRegistro.php' method="post" name="myForm">  
+                <form action='../../../controladores/ControladorUsuarios.php' method="post" name="myForm">  
                 <?php
                 
                 $nam = 0;
