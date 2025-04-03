@@ -5,11 +5,14 @@ $nucleo = 'Usuarios';
 
 include '../../js/restric.php';
 
-if ( !($privis['usuarios'] == 1) ) { 
+if ( !has_privi($privs,"List","Producto") ) { 
 
-  header('../../../index.php?alert=inicia');
+  ?>
+  <script type="text/javascript">
+    window.location = "../home/home.php?alert=errorpriv"
+  </script>
 
-  exit;
+  <?php
 }
 
 try{
@@ -20,7 +23,12 @@ try{
 
 }catch(mysqli_sql_exception $e){
 
-  header('../../../index.php?alert=inicia');
+  ?>
+  <script type="text/javascript">
+    window.location = "../home/home.php?alert=errorpriv"
+  </script>
+
+  <?php
 
 }
 
@@ -129,10 +137,6 @@ try{
 
               <input type="hidden" name="tipo_usuario" value="empleado">
               <input type="hidden" name="estatus" value="activo">
-
-
-
-
 
               <input  type="hidden" name="operacion" value="guardar">
               <div class="col-md-8">

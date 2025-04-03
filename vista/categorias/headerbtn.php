@@ -69,7 +69,7 @@ while($privis = mysqli_fetch_array($rescata)){
 
 }finally {
 
-  mysqli_close($conex);
+  //mysqli_close($conex);
 
 }
 

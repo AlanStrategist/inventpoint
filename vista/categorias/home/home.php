@@ -9,6 +9,8 @@ include('../../../modelos/ClassAlert.php');
 
 if( isset($alert) && $alert == "nodolar"){ $al = new ClassAlert("Error en registro del dolar!<br>","","danger"); }
 
+elseif( isset($alert) && $alert == "errorpriv"){ $al = new ClassAlert("Este usuario no posee los permisos para ingresar a esa vista!<br>","Modifique los permisos en <a href='../../../controladores/ControladorRegistro.php?operacion=index'>aqui</a>","warning"); }
+
 $conex = $db->conectar();
 
 $que = "SELECT * FROM producto WHERE stock < 1"; //mostrar

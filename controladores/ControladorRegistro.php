@@ -9,30 +9,12 @@ class ControladorRegistro
     public function index()
     {
         extract($_REQUEST);
-        $autorizo = 'prueba';
 
-        if ($autorizo == '') {
-            ?>
-
-            <script type="text/javascript">
-                alert('No existe autorización para listar');
-                window.Location: '../vista/categorias/home/home.php'
-            </script>
-            <?php
-        } else {
-
-            $clave = 1;
-
-            if (isset($alerta)) {
-
-                header("Location: ../vista/categorias/usuarios/index.php?clave=" . $clave . "&alerta=" . $alerta);
-
-            } else {
-                header("Location: ../vista/categorias/usuarios/index.php?clave=" . $clave);
-
-            }
+        if (!isset($alert)) {
+            $alert = "";
         }
 
+        header("Location: ../vista/categorias/usuarios/index.php?alert=" . $alert);
     }
 
     public function registrar()
@@ -44,93 +26,93 @@ class ControladorRegistro
     {
         extract($_POST);
 
-        try{
+        try {
 
-        $db = new clasedb();
-        $conex = $db->conectar();
+            $db = new clasedb();
+            $conex = $db->conectar();
 
-        $nomexist = "SELECT * FROM usuarios WHERE correo ='" . $correo . "' OR cedula = " . $cedula;
-        $result = mysqli_query($conex, $nomexist);
-        $nombresbd = mysqli_num_rows($result);
+            $nomexist = "SELECT * FROM usuarios WHERE correo ='" . $correo . "' OR cedula = " . $cedula;
+            $result = mysqli_query($conex, $nomexist);
+            $nombresbd = mysqli_num_rows($result);
 
-        if ($nombresbd > 0) {
+            if ($nombresbd > 0) {
 
-            header("Location: ../vista/categorias/registro/registrar.php?alert=dup");
+                header("Location: ../vista/categorias/registro/registrar.php?alert=dup");
 
-            return;
-        } 
+                return;
+            }
 
-        if ($clave != $clave_repetir) {
+            if ($clave != $clave_repetir) {
 
-            header("Location: ../vista/categorias/registro/registrar.php?alert=nocon");
+                header("Location: ../vista/categorias/registro/registrar.php?alert=nocon");
 
-        }
+            }
 
-        $clave = hash('sha256', $clave);
+            $clave = hash('sha256', $clave);
 
-        //Insert user
+            //Insert user
 
-        $sql = "INSERT INTO usuarios VALUES (NULL,'" . $cedula . "','" . $correo . "','" . $nombre . "','" . $clave . "','" . $tipo_usuario . "','" . $estatus . "')";
+            $sql = "INSERT INTO usuarios VALUES (NULL,'" . $cedula . "','" . $correo . "','" . $nombre . "','" . $clave . "','" . $tipo_usuario . "','" . $estatus . "')";
 
-        $resultado = mysqli_query($conex, $sql);
+            $resultado = mysqli_query($conex, $sql);
 
-        if (!$resultado) {
+            if (!$resultado) {
 
-           header("Location: ControladorRegistro.php?operacion=index&alert=error");
+                header("Location: ControladorRegistro.php?operacion=index&alert=error");
 
-           return;
-        } 
-        
-        //Get User Id
+                return;
+            }
 
-        $sql_user = "SELECT id FROM usuarios WHERE cedula=".$cedula;
+            //Get User Id
 
-        $query_user = mysqli_query($conex, $sql_user);
+            $sql_user = "SELECT id FROM usuarios WHERE cedula=" . $cedula;
 
-        if(!$query_user){
+            $query_user = mysqli_query($conex, $sql_user);
 
-            header("Location: ControladorRegistro.php?operacion=index&alert=erroruser");
+            if (!$query_user) {
 
-            return;
-        }
+                header("Location: ControladorRegistro.php?operacion=index&alert=erroruser");
 
-        $data_user = mysqli_fetch_array($query_user);
+                return;
+            }
 
-        $id = $data_user["id"];
+            $data_user = mysqli_fetch_array($query_user);
 
-        //Insert privileges
-        $insert = "";
+            $id = $data_user["id"];
 
-        foreach ($privi as $key => $value) {
+            //Insert privileges
+            $insert = "";
 
-            $sql_2="INSERT INTO `usuarios_has_privileges`(`id`, `id_usuarios`, `id_privileges`) VALUES (NULL,".$id.",".$value.");";
+            foreach ($privi as $key => $value) {
 
-            $insert .= $sql_2;
+                $sql_2 = "INSERT INTO usuarios_has_privileges (id, id_usuarios, id_privileges) VALUES (NULL," . $id . "," . $value . ");";
 
-        }
+                $insert .= $sql_2;
 
-        $query_privs = mysqli_query($conex, $insert);
+            }
 
-        if (!$query_privs) {
-            
-            header("Location: ControladorRegistro.php?operacion=index&alert=errorprivs");
-            
-            return;
-        }
+            $query_privs = mysqli_multi_query($conex, $insert);
 
-        header("Location: ControladorRegistro.php?operacion=index&alert=si");
-        
-        
+            if (!$query_privs) {
+
+                header("Location: ControladorRegistro.php?operacion=index&alert=errorprivs");
+
+                return;
+            }
+
+            header("Location: ControladorRegistro.php?operacion=index&alert=si");
+
+
         } catch (mysqli_sql_exception | Exception $e) {
 
             header("Location: ControladorRegistro.php?operacion=index&alert=error");
 
-        }finally {
+        } finally {
 
             mysqli_close($conex);
-            
+
         }
-    } 
+    }
 
     public function modificar()
     {
@@ -226,40 +208,147 @@ class ControladorRegistro
     public function Rol()
     {
         extract($_REQUEST);
+
+        try{
+
         $db = new clasedb;
-        $conex = $db->conectar();
+        $conex = $db->conectar();   
         $sql = "UPDATE usuarios SET tipo_usuario='$rol' WHERE id=" . $id;
 
         $res = mysqli_query($conex, $sql);
+        
         if ($res) {
 
-            header("Location: ControladorRegistro.php?operacion=index&alerta=changerol&autorizo=autorizo");
+            header("Location: ControladorRegistro.php?operacion=index&alert=rol");
 
-        } else {
-
-            header("Location: ControladorRegistro.php?operacion=indexl&alerta=no&autorizo=autorizo");
+            return;
         }
+
+    }catch(Exception | mysqli_sql_exception $e) {
+
+        header("Location: ControladorRegistro.php?operacion=indexl&alert=error");
+
+    }finally{
+
+        mysqli_close($conex);
+    }
+
     }
     public function Status()
     {
         extract($_REQUEST);
+
+        try{
+
         $db = new clasedb;
-        $conex = $db->conectar();
-        $sql = "UPDATE usuarios SET estatus='$status' WHERE id=" . $id;
+        $conex = $db->conectar();   
+        $sql = "UPDATE usuarios SET estatus='$estatus' WHERE id=" . $id;
 
         $res = mysqli_query($conex, $sql);
-
+        
         if ($res) {
 
-            header("Location: ControladorRegistro.php?operacion=index&autorizo=autorizo&alerta=status");
+            header("Location: ControladorRegistro.php?operacion=index&alert=status");
 
-        } else {
-
-            header("location: ControladorRegistro.php?operacion=index&autorizo=autorizo&alerta=no");
+            return;
         }
-    } //mysqli_affected_rows($conex): Se utiliza para ver si ha habido un cambio
-    //especifico en el campo de una tabla. ejem, se hace una modificación y se
-    //inserta el mismo campo
+
+    }catch(Exception | mysqli_sql_exception $e) {
+
+        header("Location: ControladorRegistro.php?operacion=indexl&alert=error");
+
+    }finally{
+
+        mysqli_close($conex);
+    }
+    }
+
+    public function View_Privs()
+    {
+        extract($_REQUEST);
+
+        header("Location: ../vista/categorias/registro/update_privileges.php?id=" . $id);
+
+    }
+
+    public function Update_Privs()
+    {
+        extract($_REQUEST);
+
+        try {
+
+            $db = new clasedb();
+            $conex = $db->conectar();
+
+            if ($privi == null) {
+
+                header("Location: ../vista/categorias/registro/update_privileges.php?&alert=sin&id=" . $id);
+
+                return;
+            }
+
+            $sql_user = "SELECT id FROM usuarios WHERE id=" . $id;
+
+            $query_user = mysqli_query($conex, $sql_user);
+
+            if (!$query_user) {
+
+                header("Location: ControladorRegistro.php?operacion=index&alert=erroruser");
+
+                return;
+            }
+
+            $data_user = mysqli_fetch_array($query_user);
+
+            $id = $data_user["id"];
+
+            //Delete all privileges of user
+
+            $sql_del = "DELETE from usuarios_has_privileges where id_usuarios=".$id;
+
+            $del = mysqli_query($conex, $sql_del);
+
+            if(!$del){
+
+                header("Location: ControladorRegistro.php?operacion=index&alert=errorprivis");
+
+                return;
+            }
+            
+            //Insert privileges
+            $insert = "";
+
+            foreach ($privi as $key => $value) {
+
+                $sql_2 = "INSERT INTO usuarios_has_privileges(id, id_usuarios, id_privileges)VALUES(NULL," . $id . "," . $value . ");";
+                
+                $insert .= $sql_2;
+
+            }
+
+            $query_privs = mysqli_multi_query($conex, $insert);
+
+            if (!$query_privs) {
+
+                header("Location: ControladorRegistro.php?operacion=index&alert=errorprivs");
+
+                return;
+            }
+
+            header("Location: ControladorRegistro.php?operacion=index&alert=siprivis");
+
+
+        } catch (mysqli_sql_exception | Exception $e) {
+  
+           header("Location: ControladorRegistro.php?operacion=index&alert=error");
+
+        } finally {
+
+            mysqli_close($conex);
+
+        }
+    }
+
 
     public static function controlador($operacion)
     {
@@ -291,6 +380,13 @@ class ControladorRegistro
                 break;
             case 'Status':
                 $pro->Status();
+                break;
+            case 'View_Privs':
+                $pro->View_Privs();
+                break;
+
+            case 'Update_Privs':
+                $pro->Update_Privs();
                 break;
 
             default:
