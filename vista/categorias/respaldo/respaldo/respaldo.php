@@ -1,14 +1,20 @@
 <?php
-$host="localhost";
-$username="root";
-$password="";
-$database_name="motocentro";
 
-$conn=mysqli_connect($host,$username,$password,$database_name);
+include "../../../../modelos/clasedb.php";
 
-$tables=array();
+try{
+
+date_default_timezone_set('America/Caracas');
+
+$db = new clasedb();
+
+$conex = $db->conectar();
+
+$database_name='inventario';
+
 $sql="SHOW TABLES";
-$result=mysqli_query($conn,$sql);
+
+$result=mysqli_query($conex,$sql);
 
 while($row=mysqli_fetch_row($result)){
 $tables[]=$row[0];
@@ -17,12 +23,12 @@ $tables[]=$row[0];
 $backupSQL="";
 foreach($tables as $table){
 $query="SHOW CREATE TABLE $table";
-$result=mysqli_query($conn,$query);
+$result=mysqli_query($conex,$query);
 $row=mysqli_fetch_row($result);
 $backupSQL.="\n\n".$row[1].";\n\n";
 
 $query="SELECT * FROM $table";
-$result=mysqli_query($conn,$query);
+$result=mysqli_query($conex,$query);
 
 $columnCount=mysqli_num_fields($result);
 
@@ -47,8 +53,10 @@ $backupSQL.=");\n";
 $backupSQL.="\n";
 }
 
+/*
+
 if(!empty($backupSQL)){
-$backup_file_name=$database_name.'_backup.gz';
+$backup_file_name=$database_name.date('YmdH').'_backup.sql';
 $fileHandler=fopen($backup_file_name,'w+');
 $number_of_lines=fwrite($fileHandler,$backupSQL);
 fclose($fileHandler);
@@ -62,4 +70,15 @@ header('Cache-Control: must-revalidate');
 header('Pragma: public');
 header('Content-Length: '.filesize($backup_file_name));
 readfile($backup_file_name);
+}
+
+*/
+
+}catch(Exception $e){
+
+    echo ''.$e->getMessage().'';
+
+}finally{
+
+    mysqli_close($conex);
 }

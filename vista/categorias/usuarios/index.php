@@ -96,54 +96,47 @@ else if( isset($alert) && $alert == "siprivis"){ $al = new ClassAlert("Privilegi
                 $nam = 0;
 
                 foreach ($dat as $data) {
-
-                  echo "<tr>";
-                  echo "<td>".$data['correo']."</td>";
-                  echo "<td>".$data['nombre'] ?> <br> <?= $data['cedula']."</td>";
-                  echo "<td>";
-                  
-                  
-                  if ($data['tipo_usuario'] == 'admin') { ?>
-                    
-                    <a href='#' data-toggle='modal' data-target='#RolEm<?= $nam ?>'><i
-                        class='far fa-3x fa-user-headset text-danger' title='Administrador ¿Desea cambiar su Rol?'></i></a>
-                    
-                  <?php
-                  } elseif ($data['tipo_usuario'] == 'empleado') { ?>
-
-                    <a href='#' data-toggle='modal' data-target='#RolAd<?= $nam ?>'><i
-                        class='far fa-3x fa-user-hard-hat  text-info' title='Empleado ¿Desea cambiar su Rol?'></i></a>
-
-                  
-                  <?php }
-                  
-                  echo "</td>";
-                  
-                  echo "<td > <a href='../../../controladores/ControladorUsuarios.php?operacion=View_Privs&id=".$data['id']."'><i class='fas fa-2x fa-eye'></i> </a> </td>";
-
-                  echo "<td>";
-                  
-                  if ($data['estatus'] == 'activo') {
-
-                  if ($data['id'] != $_SESSION['id']) { ?>
-                      
-                    <a href='#' data-toggle='modal' data-target='#I<?= $nam ?>'><i class='fas fa-2x fa-thumbs-down text-danger' title='Inhabilitar usuario'></i></a>
-                  
-                  <?php }
-
-                  } elseif ($data['estatus'] == 'inactivo') { ?>
-
-                  <a href='#' data-toggle='modal' data-target='#H<?= $nam ?>'><i class='fas fa-2x fa-thumbs-up text-success ' title='Activar usuario'></i></a>
-
-                  <?php }
-                
-                  echo '</td>';   
-
-                  echo "<td>"; 
                   
                   ?>
 
-                  <a href='../../../controladores/ControladorUsuarios.php?operacion=Update&id=<?=$data['id']?>'> <i class='fas fa-2x fa-pen'></i> </a></td>
+                  <tr>
+                  <td><?=$data['correo']?></td>
+                  <td><?=$data['nombre']?> <br> <?=$data['cedula']?></td>
+                  
+                  <?php
+
+                  if($data['id'] != $_SESSION['id']){
+
+                  echo "<td>";
+                  echo $data['tipo_usuario'] == 'admin' ? "<a href='#' data-toggle='modal' data-target='#RolEm".$nam."'><i
+                  class='far fa-3x fa-user-headset text-danger' title='Administrador ¿Desea cambiar su Rol?'></i></a>"
+                  : "<a href='#' data-toggle='modal' data-target='#RolAd".$nam."'><i
+                  class='far fa-3x fa-user-hard-hat  text-info' title='Empleado ¿Desea cambiar su Rol?'></i></a>";
+                  ?></td>
+                  
+                  <td><a href='../../../controladores/ControladorUsuarios.php?operacion=View_Privs&id=".$data['id']."'><i class='fas fa-2x fa-eye'></i> </a></td>
+
+                  <?php
+                  echo "<td>";
+                  echo $data['estatus'] == "activo" ? "<a href='#' data-toggle='modal' data-target='#I".$nam."'><i class='fas fa-2x fa-thumbs-down text-danger' title='Inhabilitar usuario'></i></a>"
+                  : "<a href='#' data-toggle='modal' data-target='#H".$nam."'><i class='fas fa-2x fa-thumbs-up text-success ' title='Activar usuario'></i></a>";
+                  echo "</td>";
+
+                  }else{
+                    ?>
+                    
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <?php
+
+                  }        
+                    ?>
+                  
+                  <td>
+                    <a href='../../../controladores/ControladorUsuarios.php?operacion=Update&id=<?=$data['id']?>'> <i class='fas fa-2x fa-pen'></i> </a>
+                  </td>
 
                   <?php
 

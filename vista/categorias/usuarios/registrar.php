@@ -104,10 +104,32 @@ try{
                   <div class="invalid-feedback">¡Debe coincidir con el campo anterior!</div>
 
                 </div>
+              </div>
               
-               
-              <fieldset>
-              <h4 class="text-primary"> Permisos dentro del sistema</h4>
+              <h5>Pistas de recuperaci&oacute;n de usuario</h5>
+
+              <div class="col-md-12 pr-1">
+                <div class="form-group">
+                  <label class="text-primary" for="fhint">Pista #1</label>
+                  <input type="text" class="form-control input-lg" name="fhint"
+                  minlength="5" maxlength="15" placeholder="Nombre de mi perro" pattern="[0-9a-zA-Z\s]+" required="required">
+
+                  <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
+                  <div class="invalid-feedback">¡Debe coincidir con el campo anterior!</div>
+
+                  <label class="text-primary" for="fhint">Pista #2</label>
+                  <input type="text" class="form-control input-lg" name="shint"
+                  minlength="5" maxlength="15" placeholder="Nombre de mi Bisabuelo" pattern="[0-9a-zA-Z\s]+" required="required">
+
+                  <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
+                  <div class="invalid-feedback">¡Debe coincidir con el campo anterior!</div>
+
+                </div>
+              </div>
+
+              <hr>
+
+              <h5 class="text-primary"> Permisos dentro del sistema</h4>
               
               <table class="table">
                 <thead>
@@ -133,7 +155,7 @@ try{
 
 
               </table>
-             </fieldset> 
+             
 
               <input type="hidden" name="tipo_usuario" value="empleado">
               <input type="hidden" name="estatus" value="activo">

@@ -29,6 +29,9 @@ class ControladorLogin
 			case 'logout':
 				$login->logout();
 				break;
+			case 'view_mail':
+				$login->view_mail();
+				break;
 
 			default:
 
@@ -70,7 +73,7 @@ class ControladorLogin
 			}
 			catch (mysqli_sql_exception | Exception $e ) {
 				
-				header('Location: ../../index.php?alert=inicia');
+				header('Location: ../../index.php?alert=error');
 
 			}finally{
 
@@ -98,10 +101,46 @@ class ControladorLogin
 
 		}
 	}
+	public function view_mail()
+	{	
+
+		extract($_REQUEST);
+
+		try{
+
+			$db = new clasedb();
+
+			$conex = $db->conectar();
+
+			$sql = "SELECT id FROM usuarios WHERE correo='".$correo."'";
+
+			$res = mysqli_query($conex, $sql);
+			
+			if( !$res ){
+               
+				header("Location: ../vista/categorias/usuarios/recuperacion/correo.php?alert=noex");
+
+				return;
+			}
+
+			$us = mysqli_fetch_array($res);
+
+			header("Location: ../vista/categorias/usuarios/recuperacion/quiz.php?id=".$us['id']);
+			
+
+		}catch (Exception | mysqli_sql_exception $e){
+
+			header("Location: ../vista/categorias/usuarios/recuperacion/correo.php?alert=error");
+
+		}finally{
+
+			mysqli_close($conex);
+		}
+	}
 
 	public function olvido()
 	{
-		header('location:../vistas/recuperacion/correo.php');
+		header('location:../vista/categorias/usuarios/recuperacion/correo.php');
 
 	}//fin de la funcion olvido 
 

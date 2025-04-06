@@ -271,6 +271,17 @@ while($privis = mysqli_fetch_array($rescata)){
 
           <?php } ?>
 
+          <li>
+              <a id="sidebarDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fad fa-cogs"></i>
+                <p>Respaldo</p>
+                <div class="dropdown-menu" aria-labelledby="sidebarDropdownLink">
+                  <a class="dropdown-item" href="../respaldo/respaldo/respaldo.php">Respaldar Base de datos</a>
+                  <a class="dropdown-item" href="../respaldo/index_files.php">Restaurar Base de datos</a>           
+               </div>
+              </a>
+          </li>
+
           <li class="active-pro">
             <a href="https://www.instagram.com/romgodevelop1/">
               <i class="fad fa-external-link"></i>
