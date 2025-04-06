@@ -87,3 +87,17 @@ function limpiarCadena($valor) {
 	return $valor;
 }
 
+function process_and_hash($cadena) {
+   // Eliminar los espacios
+   $cadenaSinEspacios = str_replace(' ', '', $cadena);
+   // Convertir a mayúsculas
+   $cadenaMayus = strtoupper($cadenaSinEspacios);
+   // Hashear con SHA-256
+   $hash = hash('sha256', $cadenaMayus);
+   
+   return $hash;
+}
+
+
+
+

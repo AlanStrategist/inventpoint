@@ -29,7 +29,6 @@ try{
   </script>
 
   <?php
-
 }
 
 ?>
@@ -42,7 +41,7 @@ try{
           <h5 class="title">Nuevo Empleado</h5>
         </div>
         <div class="card-body">
-          <form action="../../../controladores/ControladorRegistro.php" class="needs-validation" name="form" method="post" novalidate>
+          <form action="../../../controladores/ControladorUsuarios.php" class="needs-validation" name="form" method="post" novalidate>
 
             <div class="row">
 
@@ -111,18 +110,32 @@ try{
               <div class="col-md-12 pr-1">
                 <div class="form-group">
                   <label class="text-primary" for="fhint">Pista #1</label>
-                  <input type="text" class="form-control input-lg" name="fhint"
-                  minlength="5" maxlength="15" placeholder="Nombre de mi perro" pattern="[0-9a-zA-Z\s]+" required="required">
+                  <input type="text" class="form-control input-lg" name="quiz1"
+                  minlength="5" maxlength="100" placeholder="Nombre de mi perro" pattern="[0-9a-zA-Z\s]+" required="required">
 
                   <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
-                  <div class="invalid-feedback">¡Debe coincidir con el campo anterior!</div>
+                  <div class="invalid-feedback">¡Debe tener un formato valido !</div>
+
+                  <label class="text-primary" for="shint">Respuesta #1</label>
+                  <input type="text" class="form-control input-lg" name="fhint"
+                  minlength="5" maxlength="15" placeholder="Firulays" pattern="[0-9a-zA-Z\s]+" required="required">
+
+                  <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
+                  <div class="invalid-feedback">¡Debe tener un formato valido !</div>
 
                   <label class="text-primary" for="fhint">Pista #2</label>
-                  <input type="text" class="form-control input-lg" name="shint"
-                  minlength="5" maxlength="15" placeholder="Nombre de mi Bisabuelo" pattern="[0-9a-zA-Z\s]+" required="required">
+                  <input type="text" class="form-control input-lg" name="quiz2"
+                  minlength="5" maxlength="100" placeholder="Nombre de mi bisabuelo" pattern="[0-9a-zA-Z\s]+" required="required">
 
                   <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
-                  <div class="invalid-feedback">¡Debe coincidir con el campo anterior!</div>
+                  <div class="invalid-feedback">¡Debe tener un formato valido !</div>
+
+                  <label class="text-primary" for="shint">Respuesta #2</label>
+                  <input type="text" class="form-control input-lg" name="shint"
+                  minlength="5" maxlength="15" placeholder="Eustaquio" pattern="[0-9a-zA-Z\s]+" required="required">
+
+                  <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
+                  <div class="invalid-feedback">¡Debe tener un formato valido !</div>
 
                 </div>
               </div>

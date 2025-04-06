@@ -1,5 +1,6 @@
 <?php
 include "../modelos/clasedb.php";
+include "./Utils.php";
 
 extract($_REQUEST);
 
@@ -35,15 +36,15 @@ class ControladorUsuarios
             $nombresbd = mysqli_num_rows($result);
 
             if ($nombresbd > 0) {
-
-                header("Location: ../vista/categorias/usuarios/registrar.php?alert=dup");
+     
+                header("Location: ControladorUsuarios.php?operacion=index&alert=dup");
 
                 return;
             }
 
             if ($clave != $clave_repetir) {
 
-                header("Location: ../vista/categorias/usuarios/registrar.php?alert=nocon");
+                header("ControladorUsuarios.php?operacion=index&alert=nocon");
 
             }
 
@@ -79,7 +80,26 @@ class ControladorUsuarios
 
             $id = $data_user["id"];
 
+            //Insert Hints
+
+            $fhint=limpiarCadena($fhint);
+            $shint=limpiarCadena($shint);
+
+            $fhint = process_and_hash($fhint);
+            $shint = process_and_hash($shint);
+
+            $sql_quiz = "INSERT INTO usuarios_preguntas(id, fhint, fanswer, shint, sanswer, id_usuarios) VALUES (NULL,'".$quiz1."','".$fhint."','".$quiz2."','".$shint."',".$id.")";
+
+            $res_quiz = mysqli_query($conex, $sql_quiz);
+
+            if (!$res_quiz) {
+
+                header("Location: ControladorUsuarios.php?operacion=index&alert=error");
+
+            }
+
             //Insert privileges
+           
             $insert = "";
 
             foreach ($privi as $key => $value) {
@@ -104,7 +124,8 @@ class ControladorUsuarios
 
         } catch (mysqli_sql_exception | Exception $e) {
 
-            header("Location: ControladorUsuarios.php?operacion=index&alert=error");
+            echo "". $e->getMessage() ."";
+           // header("Location: ControladorUsuarios.php?operacion=index&alert=error");
 
         } finally {
 
@@ -226,6 +247,60 @@ class ControladorUsuarios
 
     }
 
+    public function View_Quiz()
+    {
+        extract($_REQUEST);
+
+        try{
+
+            $db = new clasedb;
+
+            $conex = $db->conectar();
+
+            $res1 = limpiarCadena($res1);
+            $res2 = limpiarCadena($res2);
+
+            $res1=process_and_hash($res1);
+            $res2=process_and_hash($res2);
+
+            $sql = "SELECT fanswer,sanswer FROM usuarios_preguntas WHERE id_usuarios=".$id." AND fanswer='".$res1."'AND sanswer='".$res2."'";
+
+            $result = mysqli_query($conex, $sql);
+
+            if (!$result) {
+
+              header("Location: ../vista/categorias/usuarios/recuperacion/correo.php?alert=error");
+
+              return;
+              
+            }
+
+            $rows = mysqli_num_rows($result);
+
+            if ($rows > 0) {
+
+                header("Location: ../vista/categorias/usuarios/recuperacion/newpass.php?alert=good&id".$id);
+
+                return;
+            }
+
+            if(!isset($trys)){$trys=1;}
+
+            $trys++;
+
+            header("Location: ../vista/categorias/usuarios/recuperacion/quiz.php?alert=error&trys=".$trys."&id=".$id);
+
+        }catch(Exception | mysqli_sql_exception $e) {
+
+           header("Location: ../vista/categorias/usuarios/recuperacion/correo.php?alert=error");
+
+        }finally{
+
+            mysqli_close($conex);
+        }
+        
+    }
+
     public function Update_Privs()
     {
         extract($_REQUEST);
@@ -342,6 +417,10 @@ class ControladorUsuarios
 
             case 'Update_Privs':
                 $pro->Update_Privs();
+                break;
+
+            case 'View_Quiz':
+                $pro->View_Quiz();
                 break;
 
             default:
