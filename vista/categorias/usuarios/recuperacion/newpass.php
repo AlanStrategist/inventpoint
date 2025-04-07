@@ -5,6 +5,10 @@ include "../../../../modelos/ClassAlert.php";
 
 if( isset($alert) && $alert == "good"){  $al = new ClassAlert("Se ha respondido correctamente!<br>","Cree una nueva clave","primary"); }
 
+elseif( isset($alert) && $alert == "error"){  $al = new ClassAlert("Error al almacenar la contraseña!<br>","Intente nuevamente","warning"); }
+
+elseif( isset($alert) && $alert == "nocon"){  $al = new ClassAlert("Las contraseñas ingresadas no coinciden!<br>","Intente nuevamente","warning"); }
+
 if( !(isset($flag) && $flag == 1) ){
 
      header("Location: ../../../../index.php?alert=url");
@@ -112,7 +116,7 @@ if( !(isset($flag) && $flag == 1) ){
                 <span class="input-group-text text-danger"><i class="fas fa-question"></i></span>
               </div>
 
-              <input type="text" class="form-control text-center " name="res1" placeholder="Respuesta"
+              <input type="password" minlength="7" class="form-control text-center " name="pass" placeholder="Respuesta"
                 title='Coloque su respuesta' pattern="[0-9a-zA-Z\s]+" required="required">
 
             
@@ -126,14 +130,12 @@ if( !(isset($flag) && $flag == 1) ){
                 <span class="input-group-text text-danger"><i class="fas fa-question"></i></span>
               </div>
 
-              <input type="text" class="form-control text-center " name="res2" placeholder="Respuesta"
+              <input type="password" minlength="7" class="form-control text-center " name="repass" placeholder="Respuesta"
                 title='Coloque su respuesta' pattern="[0-9a-zA-Z\s]+" required="required">
-
-            
+           
             </div>
             <input type="hidden" name="id" value="<?=$id?>">
-            <input type="hidden" name="trys" value="<?=$trys?>">
-            <input type="hidden" name="operacion" value="View_Quiz">
+            <input type="hidden" name="operacion" value="Save_Pass">
 
             <div class="form-group">
 

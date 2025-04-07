@@ -7,6 +7,10 @@ include "../../../../modelos/ClassAlert.php";
 
 if(!isset($trys)){ $trys = 0;}
 
+if(!isset($id)){ 
+  
+  header("Location: ../../../../index.php?alert=errorquiz");  }
+
 try{
 
     if($trys >= 5){

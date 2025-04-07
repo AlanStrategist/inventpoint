@@ -390,6 +390,49 @@ class ControladorUsuarios
         }
     }
 
+    public function Save_Pass()
+    {
+        extract($_REQUEST);
+
+        try {
+
+            $db = new clasedb();
+            $conex = $db->conectar();
+
+            if($pass != $repass){
+
+                header("Location: ../vista/categorias/usuarios/recuperacion/newpass.php?alert=nocon&id=".$id."&flag=1");
+                
+                return;
+            }
+
+            $pass = hash("sha256", $pass);
+            
+            $sql = "UPDATE usuarios SET clave='".$pass."' WHERE id=".$id;
+
+            $query = mysqli_query($conex, $sql);
+
+            if (!$query ) {
+
+                header("Location: ../vista/categorias/usuarios/recuperacion/newpass.php?id=".$id."&alert=error&flag=1");
+                
+                return;
+            }
+
+            header("Location: ../index.php?alert=new");
+
+
+        } catch (mysqli_sql_exception | Exception $e) {
+
+            
+            header("Location: ../vista/categorias/usuarios/recuperacion/newpass.php?id=".$id."&alert=error&flag=1");
+                   
+        } finally {
+
+            mysqli_close($conex);
+
+        }
+    }
 
     public static function controlador($operacion)
     {
@@ -433,6 +476,10 @@ class ControladorUsuarios
             case 'View_Quiz':
                 $pro->View_Quiz();
                 break;
+
+            case 'Save_Pass':
+                 $pro->Save_Pass();
+                 break;    
 
             default:
                 ?>

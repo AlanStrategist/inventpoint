@@ -87,6 +87,9 @@
 
   else if( isset($alert) && $alert == "url"){ $al = new ClassAlert("Alerta m&aacute;xima!<br>","Se ha intentado vulnerar el sistema, llamen a la policia y al desarrollador","danger"); }
 
+  else if( isset($alert) && $alert == "new"){ $al = new ClassAlert("Inicie sesi&oacute;n con su nueva clave!<br>","","primary"); }
+
+
   ?>
 
   <div class="page-header clear-filter" filter-color="orange">
