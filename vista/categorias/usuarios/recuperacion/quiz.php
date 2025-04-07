@@ -2,6 +2,8 @@
 extract($_REQUEST);
 
 include "../../../../modelos/clasedb.php";
+include "../../../../modelos/ClassAlert.php";
+
 
 if(!isset($trys)){ $trys = 0;}
 
@@ -9,7 +11,7 @@ try{
 
     if($trys >= 5){
 
-        echo "Bloqueado por seguridad";
+        header("Location: ../../../../controladores/ControladorUsuarios.php?operacion=Status&estatus=inactivo&trys=".$trys."&id=".$id);
     }
 
     $db = new clasedb();
@@ -40,6 +42,7 @@ try{
 
 }
 
+if( isset($alert) && $alert == "error"){  $al = new ClassAlert("Error en las respuestas:".$trys."/5!<br>","Al llegar al limite de intentos será bloqueado el usuario y debera contactar al desarrollador para gestionar el desbloqueo","danger"); }
 ?>
 
 <!DOCTYPE html>
@@ -121,7 +124,7 @@ try{
           <div class="card-header">
 
             <label>
-              <h3>InventPoint <?=$trys?></h3>
+              <h3>InventPoint</h3>
             </label>
 
             <div class="d-flex justify-content-end social_icon">

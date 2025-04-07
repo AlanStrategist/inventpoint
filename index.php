@@ -81,6 +81,12 @@
 
   else if( isset($alert) && $alert == "errorv"){ $al = new ClassAlert("Error!<br>","El usuario ingresado no tiene un rol v&aacute;lido, Comuniquese con el desarrollador","danger"); }
 
+  else if( isset($alert) && $alert == "errorquiz"){ $al = new ClassAlert("Error!<br>","Error al obtener las preguntas del usuario, contacte al desarrollador","danger"); }
+
+  else if( isset($alert) && $alert == "lock"){ $al = new ClassAlert("Su usuario ha sido bloqueado!<br>","Se ha llegado al limite de intentos al responder las preguntas de seguridad del usuario, contacte al desarrollador","danger"); }
+
+  else if( isset($alert) && $alert == "url"){ $al = new ClassAlert("Alerta m&aacute;xima!<br>","Se ha intentado vulnerar el sistema, llamen a la policia y al desarrollador","danger"); }
+
   ?>
 
   <div class="page-header clear-filter" filter-color="orange">

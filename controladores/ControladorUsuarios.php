@@ -36,7 +36,7 @@ class ControladorUsuarios
             $nombresbd = mysqli_num_rows($result);
 
             if ($nombresbd > 0) {
-     
+
                 header("Location: ControladorUsuarios.php?operacion=index&alert=dup");
 
                 return;
@@ -82,13 +82,13 @@ class ControladorUsuarios
 
             //Insert Hints
 
-            $fhint=limpiarCadena($fhint);
-            $shint=limpiarCadena($shint);
+            $fhint = limpiarCadena($fhint);
+            $shint = limpiarCadena($shint);
 
             $fhint = process_and_hash($fhint);
             $shint = process_and_hash($shint);
 
-            $sql_quiz = "INSERT INTO usuarios_preguntas(id, fhint, fanswer, shint, sanswer, id_usuarios) VALUES (NULL,'".$quiz1."','".$fhint."','".$quiz2."','".$shint."',".$id.")";
+            $sql_quiz = "INSERT INTO usuarios_preguntas(id, fhint, fanswer, shint, sanswer, id_usuarios) VALUES (NULL,'" . $quiz1 . "','" . $fhint . "','" . $quiz2 . "','" . $shint . "'," . $id . ")";
 
             $res_quiz = mysqli_query($conex, $sql_quiz);
 
@@ -99,7 +99,7 @@ class ControladorUsuarios
             }
 
             //Insert privileges
-           
+
             $insert = "";
 
             foreach ($privi as $key => $value) {
@@ -124,8 +124,8 @@ class ControladorUsuarios
 
         } catch (mysqli_sql_exception | Exception $e) {
 
-            echo "". $e->getMessage() ."";
-           // header("Location: ControladorUsuarios.php?operacion=index&alert=error");
+            //echo "". $e->getMessage() ."";
+            header("Location: ControladorUsuarios.php?operacion=index&alert=error");
 
         } finally {
 
@@ -138,8 +138,8 @@ class ControladorUsuarios
     {
         extract($_REQUEST);
 
-        if($id == "" ){
-           
+        if ($id == "") {
+
             header("ControladorUsuarios.php?operacion=index&alert=errorUp");
         }
 
@@ -150,31 +150,31 @@ class ControladorUsuarios
     {
         extract($_POST);
 
-        try{
+        try {
 
-        $db = new clasedb();
+            $db = new clasedb();
 
-        $conex = $db->conectar();
+            $conex = $db->conectar();
 
-        $sql = "UPDATE usuarios SET nombre=' ".$nombre. " ',correo='".$correo."',cedula='".$cedula."' WHERE id=".$id;
+            $sql = "UPDATE usuarios SET nombre=' " . $nombre . " ',correo='" . $correo . "',cedula='" . $cedula . "' WHERE id=" . $id;
 
-        $res = mysqli_query($conex, $sql);
+            $res = mysqli_query($conex, $sql);
 
-        if ( !$res ) {
+            if (!$res) {
+
+                header("Location: ControladorUsuarios.php?operacion=index&alert=errorUp");
+
+                return;
+
+            }
+
+            header("Location: ControladorUsuarios.php?operacion=index&alert=sucessUp");
+
+        } catch (mysqli_sql_exception | Exception $e) {
 
             header("Location: ControladorUsuarios.php?operacion=index&alert=errorUp");
 
-            return;
-
-        }
-        
-        header("Location: ControladorUsuarios.php?operacion=index&alert=sucessUp");
-
-        }catch( mysqli_sql_exception | Exception $e) {
-
-           header("Location: ControladorUsuarios.php?operacion=index&alert=errorUp");
-
-        }finally{
+        } finally {
 
             mysqli_close($conex);
         }
@@ -185,58 +185,67 @@ class ControladorUsuarios
     {
         extract($_REQUEST);
 
-        try{
+        try {
 
-        $db = new clasedb;
-        $conex = $db->conectar();   
-        $sql = "UPDATE usuarios SET tipo_usuario='$rol' WHERE id=" . $id;
+            $db = new clasedb;
+            $conex = $db->conectar();
+            $sql = "UPDATE usuarios SET tipo_usuario='$rol' WHERE id=" . $id;
 
-        $res = mysqli_query($conex, $sql);
-        
-        if ($res) {
+            $res = mysqli_query($conex, $sql);
 
-            header("Location: ControladorUsuarios.php?operacion=index&alert=rol");
+            if ($res) {
 
-            return;
+                header("Location: ControladorUsuarios.php?operacion=index&alert=rol");
+
+                return;
+            }
+
+        } catch (Exception | mysqli_sql_exception $e) {
+
+            header("Location: ControladorUsuarios.php?operacion=indexl&alert=error");
+
+        } finally {
+
+            mysqli_close($conex);
         }
-
-    }catch(Exception | mysqli_sql_exception $e) {
-
-        header("Location: ControladorUsuarios.php?operacion=indexl&alert=error");
-
-    }finally{
-
-        mysqli_close($conex);
-    }
 
     }
     public function Status()
     {
         extract($_REQUEST);
 
-        try{
+        try {
 
-        $db = new clasedb;
-        $conex = $db->conectar();   
-        $sql = "UPDATE usuarios SET estatus='$estatus' WHERE id=" . $id;
+            $db = new clasedb;
+            $conex = $db->conectar();
+            $sql = "UPDATE usuarios SET estatus='$estatus' WHERE id=" . $id;
 
-        $res = mysqli_query($conex, $sql);
-        
-        if ($res) {
+            $res = mysqli_query($conex, $sql);
 
-            header("Location: ControladorUsuarios.php?operacion=index&alert=status");
+            //if go back to index and i coming from outside
 
-            return;
+            if(isset($trys)){
+
+                header('Location: ../index.php?alert=lock');
+
+                return;
+            }
+
+            if ($res) {
+
+                header("Location: ControladorUsuarios.php?operacion=index&alert=status");
+
+                return;
+            }
+
+        } catch (Exception | mysqli_sql_exception $e) {
+
+            header("Location: ControladorUsuarios.php?operacion=indexl&alert=error");
+
+        } finally {
+
+            mysqli_close($conex);
         }
-
-    }catch(Exception | mysqli_sql_exception $e) {
-
-        header("Location: ControladorUsuarios.php?operacion=indexl&alert=error");
-
-    }finally{
-
-        mysqli_close($conex);
-    }
     }
 
     public function View_Privs()
@@ -251,7 +260,7 @@ class ControladorUsuarios
     {
         extract($_REQUEST);
 
-        try{
+        try {
 
             $db = new clasedb;
 
@@ -260,45 +269,47 @@ class ControladorUsuarios
             $res1 = limpiarCadena($res1);
             $res2 = limpiarCadena($res2);
 
-            $res1=process_and_hash($res1);
-            $res2=process_and_hash($res2);
+            $res1 = process_and_hash($res1);
+            $res2 = process_and_hash($res2);
 
-            $sql = "SELECT fanswer,sanswer FROM usuarios_preguntas WHERE id_usuarios=".$id." AND fanswer='".$res1."'AND sanswer='".$res2."'";
+            $sql = "SELECT fanswer,sanswer FROM usuarios_preguntas WHERE id_usuarios=" . $id . " AND fanswer='" . $res1 . "'AND sanswer='" . $res2 . "'";
 
             $result = mysqli_query($conex, $sql);
 
             if (!$result) {
 
-              header("Location: ../vista/categorias/usuarios/recuperacion/correo.php?alert=error");
+                header("Location: ../vista/categorias/usuarios/recuperacion/correo.php?alert=error");
 
-              return;
-              
+                return;
+
             }
 
             $rows = mysqli_num_rows($result);
 
             if ($rows > 0) {
 
-                header("Location: ../vista/categorias/usuarios/recuperacion/newpass.php?alert=good&id".$id);
+                header("Location: ../vista/categorias/usuarios/recuperacion/newpass.php?flag=1&alert=good&id=" . $id);
 
                 return;
             }
 
-            if(!isset($trys)){$trys=1;}
+            if (!isset($trys)) {
+                $trys = 1;
+            }
 
             $trys++;
 
-            header("Location: ../vista/categorias/usuarios/recuperacion/quiz.php?alert=error&trys=".$trys."&id=".$id);
+            header("Location: ../vista/categorias/usuarios/recuperacion/quiz.php?alert=error&trys=" . $trys . "&id=" . $id);
 
-        }catch(Exception | mysqli_sql_exception $e) {
+        } catch (Exception | mysqli_sql_exception $e) {
 
-           header("Location: ../vista/categorias/usuarios/recuperacion/correo.php?alert=error");
+            header("Location: ../vista/categorias/usuarios/recuperacion/correo.php?alert=error");
 
-        }finally{
+        } finally {
 
             mysqli_close($conex);
         }
-        
+
     }
 
     public function Update_Privs()
@@ -334,24 +345,24 @@ class ControladorUsuarios
 
             //Delete all privileges of user
 
-            $sql_del = "DELETE from usuarios_has_privileges where id_usuarios=".$id;
+            $sql_del = "DELETE from usuarios_has_privileges where id_usuarios=" . $id;
 
             $del = mysqli_query($conex, $sql_del);
 
-            if(!$del){
+            if (!$del) {
 
                 header("Location: ControladorUsuarios.php?operacion=index&alert=errorprivis");
 
                 return;
             }
-            
+
             //Insert privileges
             $insert = "";
 
             foreach ($privi as $key => $value) {
 
                 $sql_2 = "INSERT INTO usuarios_has_privileges(id, id_usuarios, id_privileges)VALUES(NULL," . $id . "," . $value . ");";
-                
+
                 $insert .= $sql_2;
 
             }
@@ -369,8 +380,8 @@ class ControladorUsuarios
 
 
         } catch (mysqli_sql_exception | Exception $e) {
-  
-           header("Location: ControladorUsuarios.php?operacion=index&alert=error");
+
+            header("Location: ControladorUsuarios.php?operacion=index&alert=error");
 
         } finally {
 
