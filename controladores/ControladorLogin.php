@@ -112,7 +112,7 @@ class ControladorLogin
 
 			$conex = $db->conectar();
 
-			$sql = "SELECT id FROM usuarios WHERE correo='".$correo."'";
+			$sql = "SELECT id FROM usuarios WHERE correo='".$correo."' AND estatus='activo'";
 
 			$res = mysqli_query($conex, $sql);
 			

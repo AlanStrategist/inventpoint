@@ -7,12 +7,38 @@ if (!isLoged()) {
 	header('location:../../../index.php?alert=inicia');
 }
 
+date_default_timezone_set('America/Caracas');
+
+$hoy = date('Y-m-d');
+
 try {
 
 	$db = new clasedb();
 
 	$conex = $db->conectar();
+    
+	//View Expired
 
+	$sql_e = "SELECT expired FROM pays ORDER BY id DESC Limit 1";
+	
+	$res_e = mysqli_query($conex, $sql_e);
+   
+	$data=mysqli_fetch_array($res_e);
+
+	if ($data["expired"] <= $hoy ) {
+
+		header('location:../../../index.php?alert=error_venci');
+
+		return;
+
+
+	}  
+	
+
+
+
+	
+	//LogIn
 	$id_usuario = $_SESSION['id'];
 
 	$sql = "SELECT tipo_usuario FROM usuarios WHERE id=" . $_SESSION['id'] . " AND estatus='activo'";

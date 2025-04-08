@@ -42,56 +42,35 @@ if ($agarro > 0) {
               <table id="example" class="table">
 
                 <thead class="text-primary">
-                  <?php
+                  <th class='textAlignLeft'>Nombre </th>
+                  <th style='width:15em;'>Precio Unitario en $</th>
+                  <th style='width:15em;'>Cantidad</th>
+                  <th style='width:15em;'>Precio total en $</th>
+                  <th style='width:15em;'>Precio Unitario en BS</th>
+                  <th style='width:15em;'>Cliente</th>
+                  <th style='width:15em;'>Vendedor@</th>
 
-                  // our table heading
-                  echo "<tr>";
-                  echo "<th class='textAlignLeft'>Nombre </th>";
+                  <?php 
 
-                  echo "<th style='width:15em;'>Precio Unitario en $</th>";
-
-                  echo "<th style='width:15em;'>Cantidad</th>";
-                  echo "<th style='width:15em;'>Precio total en $</th>";
-                  echo "<th style='width:15em;'>Precio Unitario en BS</th>";
-                  echo "<th style='width:15em;'>Cliente</th>";
-                  echo "<th style='width:15em;'>Vendedor@</th>";
-
-                  echo "</tr>";
                   $total = 0;
                   $valor_cambio_final = 0;
+
                   while ($pedido = mysqli_fetch_array($respuesta)) {
 
-                    $cedula = 0;
                     $cedula = $pedido['cedula'];
 
-                    echo "<tr>";
-                    echo "<td>";
+                    ?> 
+                   <tr>
+                    <td><div class='product-nombre'><?= $pedido['nombre'] ?></div></td>
+                    <td><div class='product-nombre'><?= $pedido['precio_venta'] ?></div></td>
+                    <td><div class='product-nombre'><?= $pedido['quantity'] ?></div> </td>
+                    <td>&#36; <?=number_format($pedido['subtotal'], 2, '.', ',')?></td>
+                    <td>BS    <?=number_format($pedido['cambio'], 2, '.', ',')?></td>
+                    <td><div class='product-nombre'><?= $pedido['nombre_cliente'] ?> <br> <?= $pedido['cedula'] ?></div></td>
+                    <td><div class='product-nombre'><?= $pedido['nombre_usuario'] ?> <br><?= $pedido['correo'] ?></div></td>
+                  </tr>
 
-
-
-                    ?>
-                    <div class='product-nombre'><?= $pedido['nombre'] ?></div><?php
-                    echo "</td>";
-                    echo "<td>";
-                    ?>
-                    <div class='product-nombre'><?= $pedido['precio_venta'] ?></div><?php
-                    echo "</td>";
-
-
-
-
-
-
-
-                    echo "<td>";
-                    ?>
-                    <div class='product-nombre'><?= $pedido['quantity'] ?></div><?php
-                    echo "</td>";
-
-                    echo "<td>&#36;" . number_format($pedido['subtotal'], 2, '.', ',') . "</td>";
-
-                    echo "</td>";
-                    echo "<td>BS " . number_format($pedido['cambio'], 2, '.', ',') . "</td>";
+                  <?php 
 
                     $total += $pedido['subtotal'];
 
@@ -101,101 +80,30 @@ if ($agarro > 0) {
 
                     $valor_cambio_final += $valor_cambio;
 
-                    echo "<td>";
-
-                    ?>
-                    <div class='product-nombre'><?= $pedido['nombre_cliente'] ?> <br><?= $pedido['cedula'] ?></div><?php
-                     echo "</td>";
-
-
-
-
-                     echo "<td>";
-
-                     ?>
-                    <div class='product-nombre'><?= $pedido['nombre_usuario'] ?> <br><?= $pedido['correo'] ?></div><?php
-                     echo "</td>";
-                     echo "</tr>";
                   }
-                  //$porcentaje = 5 * $total / 100;
-
-                  $total_neto = $total;
-
-
-                  echo "<tr>";
-                 // echo "<td>";
-                 // echo "SubTotal:";
-                 // echo "</td>";
-                 //echo "<td>$" . number_format($total, 2, '.', ',') . "</td>";
                  
-                 // echo "<td>";
-                 // echo "Porcentaje Alexis José Romero:";
-                 // echo "</td>";
-                //echo "<td>$" . number_format($porcentaje, 2, '.', ',') . "</td>";
+                   $total_neto = $total;
 
+                  ?>
 
-
-                  echo "<td>";
-                  echo "Total $(USD):";
-                  echo "</td>";
-                  echo "<td>$" . number_format($total_neto, 2, '.', ',') . "</td>";
-                  echo "<td>";
-                  echo "</td>";
-
-
-                  $porcentaje_bol = 5 * $valor_cambio_final / 100;
-
-                  $total_neto_bol = $valor_cambio_final - $porcentaje_bol;
-
-
-                  echo "<tr>";
-                 // echo "<td>Subtotal BS " . number_format($valor_cambio_final, 2, '.', ',') . "</td>";
-                 
-                 // echo "<td>";
-                 // echo "Porcentaje Alexis José Romero: BS  " . number_format($porcentaje_bol, 2, '.', ',') . "</td>";
-
-
-
-                  echo "<td>";
-                  echo "Total BS:" . number_format($total_neto_bol, 2, '.', ',') . "</td>";
-                  echo "<td>";
-
-
-
-
-
-
-
-
-                  ?> <a href='pdf.php?cedula=<?= $cedula ?>' class='btn btn-success'> <?php
-
-
-
-
-
-
-                   echo "<i class='fad fa-file-pdf'></i><span class='glyphicon glyphicon-shopping-cart'></span> Imprimir";
-                   echo "</a>";
-
-                   echo "</a>";
-                   echo "</td>";
-
-                   echo "</tr>";
-                   echo "</table>";
-                   ?>
-
+                  <tr>
+                    <td>Total $(USD):</td>
+                    <td>$ <?=number_format($total_neto, 2, '.', ',')?></td>
+                    <td></td>
+                    <td>Total BS:<?=number_format($valor_cambio_final, 2, '.', ',')?></td>
+                    <td><a href='pdf.php?cedula=<?=$cedula?>' class='btn btn-success'> <i class='fad fa-file-pdf'></i><span class='glyphicon glyphicon-shopping-cart'></span>Imprimir</a></td>
+                   
+                  </table>                 
             </div>
           </div>
         </div>
       </div>
       <?php
-
-
 } else {
 
   echo "<br>";
   echo "<div class='alert alert-danger'>";
-  echo "<strong>No hay pagos realizado</strong>";
+  echo "<strong>No hay pagos realizadoa</strong>";
   echo "</div>";
 }
 

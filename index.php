@@ -66,7 +66,7 @@
 
   
   <?php 
-  
+    
   extract($_REQUEST);
 
   include('modelos/ClassAlert.php');
@@ -89,6 +89,7 @@
 
   else if( isset($alert) && $alert == "new"){ $al = new ClassAlert("Inicie sesi&oacute;n con su nueva clave!<br>","","primary"); }
 
+  else if( isset($alert) && $alert == "error_venci"){ $al = new ClassAlert("Ha vencido el plazo de uso!<br>","Contacte al desarrollador para seguir disfrutando del servicio","danger"); }
 
   ?>
 

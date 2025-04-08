@@ -452,9 +452,11 @@ class ControladorUsuarios
             case 'guardar':
                 $pro->guardar();
                 break;
+            
             case 'Update':
                 $pro->Update();
                 break;
+            
             case 'Save_Update':
                 $pro->Save_Update();
                 break;
@@ -482,15 +484,15 @@ class ControladorUsuarios
                  break;    
 
             default:
+                
                 ?>
-
-
                 <script type="text/javascript">
                     alert("sin ruta, no existe");
                     window.location = "ControladorUsuarios.php?operacion=index";
                 </script>
 
                 <?php
+                
                 break;
         }
 

@@ -7,7 +7,7 @@ $db = new clasedb();
 $conex = $db->conectar();
 
 /*Config of the hour*/
-date_default_timezone_set('America/Caracas');
+
 $hoy = date('Y-m-d');
 
 $off = "SELECT * FROM producto WHERE stock=0";
@@ -277,7 +277,7 @@ while($privis = mysqli_fetch_array($rescata)){
                 <p>Respaldo</p>
                 <div class="dropdown-menu" aria-labelledby="sidebarDropdownLink">
                   <a class="dropdown-item" href="../respaldo/respaldo/respaldo.php">Respaldar Base de datos</a>
-                  <a class="dropdown-item" href="../respaldo/index_files.php">Restaurar Base de datos</a>           
+                  <a class="dropdown-item" href="../respaldo/index_files.php">Lista de puntos de restauraci&oacute;n</a>           
                </div>
               </a>
           </li>

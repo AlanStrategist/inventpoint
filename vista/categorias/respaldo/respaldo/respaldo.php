@@ -53,7 +53,7 @@ $backupSQL.=");\n";
 $backupSQL.="\n";
 }
 
-/*
+
 
 if(!empty($backupSQL)){
 $backup_file_name=$database_name.date('YmdH').'_backup.sql';
@@ -71,8 +71,6 @@ header('Pragma: public');
 header('Content-Length: '.filesize($backup_file_name));
 readfile($backup_file_name);
 }
-
-*/
 
 }catch(Exception $e){
 
