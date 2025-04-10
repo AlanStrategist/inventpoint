@@ -31,9 +31,10 @@ $rowsen = mysqli_num_rows($credi);
 
 ?>
 
-<!-- Librerias para los charts -->
+ <!--Librerias para los charts --> 
 <script src="../../../modelos/Chart.js-2.9.3/dist/Chart.min.js"></script>
 <script src="../../../modelos/Chart.js-2.9.3/samples/utils.js"></script>
+
 <style>
   canvas {
     -moz-user-select: none;

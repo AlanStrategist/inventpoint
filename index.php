@@ -21,7 +21,7 @@
 
   <link href="vista/estilos/sss.css" rel="stylesheet">
 
-  <link href="vista/estilos/fontawesome/css/all.css" rel="stylesheet">
+  <link href="vista/estilos/fontawesome/css/all.min.css" rel="stylesheet">
 </head>
 
 <body class="offline-doc">

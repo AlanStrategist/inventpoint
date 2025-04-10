@@ -28,21 +28,20 @@ include '../modals/modal_conversor_empleado.php';
   </div>
 
 
-<!-- Only graphics -->
-<script src="../../../modelos/Chart.js-2.9.3/dist/Charts.min.js"></script>
+<!-- Only graphics 
+<script src="../../../modelos/Chart.js-2.9.3/dist/Chart.min.js"></script>
   <script src="../../../modelos/Chart.js-2.9.3/samples/utils.js"></script>
-<!-- Only graphics -->
+ Only graphics -->
 
 
 <script src="../../assets/js/core/bootstrap.bundle.min.js"></script>
 <script src="../../assets/js/core/popper.min.js"></script>
   <!-- <script src="../assets/js/core/bootstrap.min.js"></script> -->
  <script src="../../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-  <!-- Chart JS -->
-  <script src="../../assets/js/plugins/chartjs.min.js"></script>
-  <!--  Notifications Plugin    -->
-  <script src="../../assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Chart JS 
+  <script src="../../assets/js/plugins/chartjs.min.js"></script>-->
+  <!--  Notifications Plugin   
+  <script src="../../assets/js/plugins/bootstrap-notify.js"></script> -->
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
   <script src="../../assets/demo/demo.js"></script>
