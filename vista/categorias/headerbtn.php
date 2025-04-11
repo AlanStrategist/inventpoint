@@ -141,11 +141,11 @@ while($privis = mysqli_fetch_array($rescata)){
                   <a class="dropdown-item" href="../producto/registrar.php">Registrar nuevo producto</a>
 
                   <a class="dropdown-item"
-                    href="../../../controladores/controladorproducto.php?operacion=index&autorizo=autorizo">
+                    href="../../../controladores/ControladorProducto.php?operacion=index&autorizo=autorizo">
                     Listado de Productos</a>
                   <hr>
                   <a class="dropdown-item"
-                    href="../../../controladores/controladorproducto.php?operacion=stock&autorizo=autorizo">Listado de
+                    href="../../../controladores/ControladorProducto.php?operacion=stock&autorizo=autorizo">Listado de
                     productos con <br> <strong>Bajo Stock</strong></a>
 
                   <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal1" id="openModal11"
@@ -153,7 +153,7 @@ while($privis = mysqli_fetch_array($rescata)){
                       del dolar | USD</strong></a>
 
                   <a class="dropdown-item"
-                    href="../../../controladores/controladorconversor.php?operacion=index&autorizo=autorizo">Listar
+                    href="../../../controladores/ControladorConversor.php?operacion=index&autorizo=autorizo">Listar
                     valores ingresados</a>
 
                 </div>
@@ -175,13 +175,13 @@ while($privis = mysqli_fetch_array($rescata)){
                     <strong>Categorias</strong> <br>de Productos</a>
 
                   <a class="dropdown-item"
-                    href="../../../controladores/controladorcategoria.php?operacion=index&autorizo=autorizo">Lista de
+                    href="../../../controladores/ControladorCategoria.php?operacion=index&autorizo=autorizo">Lista de
                     Categorias</a>
 
                   <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal2" href="">Registrar
                     <strong>Ubicaciones</strong><br> para Productos</a>
                   <a class="dropdown-item"
-                    href="../../../controladores/controladorubicacion.php?operacion=index&autorizo=autorizo">Lista de
+                    href="../../../controladores/ControladorUbicacion.php?operacion=index&autorizo=autorizo">Lista de
                     ubicaciones</a>
                 </div>
               </a>
@@ -200,7 +200,7 @@ while($privis = mysqli_fetch_array($rescata)){
                 <div class="dropdown-menu" aria-labelledby="sidebarDropdownLink">
                   <a class="dropdown-item" href="../cliente/registrar.php">Registrar</a>
                   <a class="dropdown-item"
-                    href="../../../controladores/controladorcliente.php?operacion=index&autorizo=autorizo">Lista de
+                    href="../../../controladores/ControladorCliente.php?operacion=index&autorizo=autorizo">Lista de
                     Clientes</a>
 
                 </div>
@@ -213,7 +213,7 @@ while($privis = mysqli_fetch_array($rescata)){
                 <div class="dropdown-menu" aria-labelledby="sidebarDropdownLink">
 
                   <a class="dropdown-item" href="../car/productos.php">Realizar una venta</a>
-                  <a class="dropdown-item" href="../../../controladores/controladorpedido.php?operacion=factura">Ventas
+                  <a class="dropdown-item" href="../../../controladores/ControladorPedido.php?operacion=factura">Ventas
                     exitosas</a>
 
                   <a class="dropdown-item" href="../car/clienpagos.php">Ventas sin culminar</a>
@@ -450,7 +450,7 @@ while($privis = mysqli_fetch_array($rescata)){
 
                 <li class="nav-item dropdown">
                   <a class="nav-link"
-                    href="../../../controladores/controladorproducto.php?operacion=stock&autorizo=autorizo"
+                    href="../../../controladores/ControladorProducto.php?operacion=stock&autorizo=autorizo"
                     title="Productos Agotados">
                     <i class="far fa-3x fa-ghost" title="Productos Agotados"></i>
                     <p><?= $vac ?>

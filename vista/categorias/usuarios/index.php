@@ -114,7 +114,7 @@ else if( isset($alert) && $alert == "siprivis"){ $al = new ClassAlert("Privilegi
                   class='far fa-3x fa-user-hard-hat  text-info' title='Empleado ¿Desea cambiar su Rol?'></i></a>";
                   ?></td>
                   
-                  <td><a href='../../../controladores/ControladorUsuarios.php?operacion=View_Privs&id=".$data['id']."'><i class='fas fa-2x fa-eye'></i> </a></td>
+                  <td><a href='../../../controladores/ControladorUsuarios.php?operacion=View_Privs&id=<?=$data["id"]?>'><i class='fas fa-2x fa-eye'></i> </a></td>
 
                   <?php
                   echo "<td>";
