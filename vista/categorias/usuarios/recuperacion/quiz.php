@@ -72,7 +72,7 @@ if( isset($alert) && $alert == "error"){  $al = new ClassAlert("Error en las res
 
   <link href="../../../estilos/sss.css" rel="stylesheet">
 
-  <link href="../../../estilos/fontawesome/css/all.css" rel="stylesheet">
+  <link href="../../../estilos/fontawesome/css/all.min.css" rel="stylesheet">
 </head>
 
 <body class="offline-doc">
@@ -139,7 +139,7 @@ if( isset($alert) && $alert == "error"){  $al = new ClassAlert("Error en las res
             </div>
           </div>
           <!--para la configuracion de la posicion del formulario en pantalla -->
-          <form name="form3" action="../../../../controladores/controladorusuarios.php" method="POST" class="form-signin">
+          <form name="form3" action="../../../../controladores/ControladorUsuarios.php" method="POST" class="form-signin">
 
           <span><?=$row['fhint']?></span>
 
@@ -213,9 +213,9 @@ if( isset($alert) && $alert == "error"){  $al = new ClassAlert("Error en las res
   </footer>
   <!--   Core JS Files   -->
   <script src="../../../assets/js/core/jquery.min.js"></script>
-  <script src="../../../js/core/bootstrap.min.js"></script>
-  <script src="../../../js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+  <script src="../../../assets/js/core/bootstrap.min.js"></script>
+  <!--<script src="../../../js/plugins/perfect-scrollbar.jquery.min.js"></script>
+   Now Ui Dashboard DEMO methods, don't include it in your project! -->
   <script src="../../../assets/demo/demo.js"></script>
 </body>
 

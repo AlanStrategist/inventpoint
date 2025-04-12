@@ -110,7 +110,7 @@ if (isset($alert) && $alert == "noexiste") {
             </div>
           </div>
           <!--para la configuracion de la posicion del formulario en pantalla -->
-          <form name="form3" action="../../../../controladores/controladorlogin.php" method="POST" class="form-signin">
+          <form name="form3" action="../../../../controladores/ControladorLogin.php" method="POST" class="form-signin">
 
 
             <div class="input-group form-group col-lg-12">
