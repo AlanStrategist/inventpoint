@@ -120,7 +120,7 @@ if ($respuesta) {
                     echo "<td>BS  " . number_format($data['cambio'], 2, ',', '.') . "</td>";
                     ?>
 
-                      <form name="form<?=$chiguire?>" method="POST" action="../../../controladores/controladorcarrito.php">
+                      <form name="form<?=$chiguire?>" method="POST" action="../../../controladores/ControladorCarrito.php">
 
                         <input type="hidden" name="id" value="<?= $data['id'] ?>">
 

@@ -23,7 +23,7 @@
         <!-- Plasmar en este div con ajax -->
 
         <form name="form1" class="needs-validation" novalidate="novalidate" method="POST"
-          action="../../../controladores/controladorconversor.php">
+          action="../../../controladores/ControladorConversor.php">
 
           <div class="col-md-11">
 

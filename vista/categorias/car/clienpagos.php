@@ -101,7 +101,7 @@ if (!($valid > 0)) { ?>
                   echo $pedido['metodo'] == 'Debito' ? 'D&eacute;bito': $pedido['metodo'];
                   echo "</td>";
 
-                  echo "<td><a href='../../../controladores/controladorpedido.php?operacion=borrar&id=".$pedido['id_pedidos']."'><i title='Eliminar Item' class='fas fa-times'></i></a> </td>";
+                  echo "<td><a href='../../../controladores/ControladorPedido.php?operacion=borrar&id=".$pedido['id_pedidos']."'><i title='Eliminar Item' class='fas fa-times'></i></a> </td>";
                   echo "</tr>";
                 }
                 
@@ -120,7 +120,7 @@ if (!($valid > 0)) { ?>
                   echo "<tr>";
                   echo "<td>";
                   echo "<td><a href='pdf.php?cedula=<?= $cedula ?>' class='btn btn-success'><i class='fad fa-file-pdf'></i>Imprimir</a></td>";
-                  echo "<td><a href='../../../controladores/controladorpedido.php?operacion=notificar' class='btn btn-info'><i class='fad fa-check-double'></i>Guardar venta</a></td>";
+                  echo "<td><a href='../../../controladores/ControladorPedido.php?operacion=notificar' class='btn btn-info'><i class='fad fa-check-double'></i>Guardar venta</a></td>";
                   echo "</tr>";
                   echo "</table>";
 

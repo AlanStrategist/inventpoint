@@ -48,7 +48,7 @@ class ControladorLogin
 
 		if ($correo == "" || $clave == "") {
 
-			header("Location: ../index.php?vacio");
+			header("Location: ../index.php?alert=vacio");
 			
 			return;
 
@@ -61,6 +61,16 @@ class ControladorLogin
 			$sql = "SELECT * FROM usuarios WHERE correo='" . $correo . "' AND clave='" . $clave . "' AND estatus='activo'";
 
 			$res = mysqli_query($conex, $sql);
+			
+			$r = mysqli_num_rows($res);
+
+			if ($r <= 0) {
+
+				header('Location: ../index.php?alert=noexiste');
+
+				return;
+			}
+			
 			$tipo = mysqli_fetch_array($res);
 			
 			$_SESSION['id'] = $tipo['id'];
@@ -73,7 +83,7 @@ class ControladorLogin
 			}
 			catch (mysqli_sql_exception | Exception $e ) {
 				
-				header('Location: ../../index.php?alert=error');
+				header('Location: ../index.php?alert=noexiste');
 
 			}finally{
 

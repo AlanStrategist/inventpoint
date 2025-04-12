@@ -80,7 +80,7 @@ if ($clave == '') { ?>
 
                              ?>
                     <td><a title="Modificar"
-                        href="../../../controladores/controladorcategoria.php?operacion=modificar&id=<?= $data['id'] ?>"><i
+                        href="../../../controladores/ControladorCategoria.php?operacion=modificar&id=<?= $data['id'] ?>"><i
                           class="far fa-2x fa-pencil-alt"> </i></a>
 
                     </td>

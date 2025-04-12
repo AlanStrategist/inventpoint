@@ -12,7 +12,7 @@
       <div class="modal-body">
 
 
-        <form name="cate" class="needs-validation" method="POST" action="../../../controladores/controladorcategoria.php" novalidate>
+        <form name="cate" class="needs-validation" method="POST" action="../../../controladores/ControladorCategoria.php" novalidate>
 
 
 

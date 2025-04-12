@@ -12,7 +12,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i></button>
-        <a class="btn btn-info" href='../../../controladores/controladorproducto.php?operacion=Estatus&estatus=inhabilitado&id=<?=$data['id']?>'><i class="fas fa-check"></i></a>
+        <a class="btn btn-info" href='../../../controladores/ControladorProducto.php?operacion=Estatus&estatus=inhabilitado&id=<?=$data['id']?>'><i class="fas fa-check"></i></a>
       </div>
     </div>
   </div>
@@ -32,7 +32,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i></button>
-        <a class="btn btn-info" href='../../../controladores/controladorproducto.php?operacion=Estatus&estatus=habilitado&id=<?=$data['id']?>'><i class="fas fa-check"></i></a>
+        <a class="btn btn-info" href='../../../controladores/ControladorProducto.php?operacion=Estatus&estatus=habilitado&id=<?=$data['id']?>'><i class="fas fa-check"></i></a>
       </div>
     </div>
   </div>

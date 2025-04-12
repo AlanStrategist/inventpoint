@@ -32,7 +32,7 @@ $resub = mysqli_query($conex, $sql3);
         </div>
         <div class="card-body">
           <form method="POST" enctype="multipart/form-data" size="30"
-            action="../../../controladores/controladorproducto.php?operacion=guardar_modificacion">
+            action="../../../controladores/ControladorProducto.php?operacion=guardar_modificacion">
 
 
             <div class="row">

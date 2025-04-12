@@ -4,6 +4,7 @@ include("../../../modelos/clasedb.php");
 include "../../../controladores/Utils.php";
 
 if (!isLoged()) {
+	
 	header('location:../../../index.php?alert=inicia');
 }
 
@@ -27,16 +28,11 @@ try {
 
 	if ($data["expired"] <= $hoy ) {
 
-		header('location:../../../index.php?alert=error_venci');
+		header('Location:../../../index.php?alert=error_venci');
 
 		return;
 
-
 	}  
-	
-
-
-
 	
 	//LogIn
 	$id_usuario = $_SESSION['id'];
@@ -53,7 +49,9 @@ try {
 
 		if($tipo_usuario == "" | $tipo_usuario == null) { 
 
-			header('location:../../../index.php?alert=errorv');
+			header('Location:../../../index.php?alert=errorv');
+
+			return;
 		}
 
 		include '../headerbtn.php';
@@ -61,7 +59,7 @@ try {
 
 }catch( mysqli_sql_exception | Exception $e){
 
-	header('location:../../../index.php?alert=inicia');
+	header('Location:../../../index.php?alert=inicia');
 
 }finally{
 

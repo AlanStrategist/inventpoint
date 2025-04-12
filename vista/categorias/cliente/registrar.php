@@ -1,29 +1,26 @@
 <?php 
 $nucleo='Clientes';
 $title='Registrar Clientes';
-include('../../js/restric.php'); 
 
+include('../../js/restric.php'); 
 
 extract($_REQUEST);
 
+if( !has_privi($privs,"List","Cliente")){
 
-if ($privis['pedidos']==1) {
+  ?>
   
-}else{ ?>  
+  <script>
 
+    window.location = "../home/home.php?alert=sinprivis";
 
-  <script type="text/javascript">
-    window.location= "../home/home.php?alerta=sinprivis"
   </script>
 
   <?php
 
- }
-
-
+}
 
 ?>
-
 
 <div class="content">
   <div class="row">
@@ -33,7 +30,7 @@ if ($privis['pedidos']==1) {
           <h5 class="title">Registro de Cliente</h5>
         </div>
         <div class="card-body">
-          <form  enctype="multipart/form-data" class="needs-validation" method="POST" action="../../../controladores/controladorcliente.php" novalidate>
+          <form  enctype="multipart/form-data" class="needs-validation" method="POST" action="../../../controladores/ControladorCliente.php" novalidate>
 
             <div class="row">
               <div class="col-md-5 pr-1">

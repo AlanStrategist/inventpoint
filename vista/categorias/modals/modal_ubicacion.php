@@ -14,7 +14,7 @@
       
       <div class="modal-body">
         
-      <form name="form1" class="needs-validation" novalidate="novalidate" method="POST" action="../../../controladores/controladorubicacion.php">
+      <form name="form1" class="needs-validation" novalidate="novalidate" method="POST" action="../../../controladores/ControladorUbicacion.php">
         
       <div class="col-md-11">
       

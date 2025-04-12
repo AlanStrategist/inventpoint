@@ -39,7 +39,7 @@ $hoy = date('Y-m-d');
         </div>
         <div class="modal-body">
           <form name="formpavo" class='needs-validation' method='POST'
-            action='../../../controladores/controladorpedido.php' novalidate>
+            action='../../../controladores/ControladorPedido.php' novalidate>
 
 
             <input type="text" placeholder="Ejemplo:12109387" name="cedula" list="lista" class="form-control"

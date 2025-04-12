@@ -50,9 +50,11 @@ $resrows = mysqli_num_rows($reste);
 $privi = "SELECT p.id,p.nucleo,p.name FROM privileges p ,usuarios_has_privileges uh ,usuarios u WHERE u.id=".$_SESSION['id']." AND uh.id_usuarios = u.id AND p.id = uh.id_privileges;";
 $rescata = mysqli_query($conex, $privi);
 
-if (!$rescata) {
+$rows_privs = mysqli_num_rows($rescata);
 
-  header(" Location: ../../../index.php?alert=privs");
+if ($rows_privs <= 0) {
+
+  header(" Location: ../../../index.php?alert=error");
 
 } 
 
@@ -62,6 +64,7 @@ while($privis = mysqli_fetch_array($rescata)){
 
 }
 
+//echo $privi;
 
 }catch(mysqli_sql_exception | Exception $e) {
 
@@ -246,7 +249,7 @@ while($privis = mysqli_fetch_array($rescata)){
 
           }
 
-          if ( has_privi($privs,"List","Usuarios")) { ?>
+          if ( has_privi($privs,"List","Usuarios") ) { ?>
 
             <li>
 
@@ -262,9 +265,6 @@ while($privis = mysqli_fetch_array($rescata)){
                   <a class="dropdown-item"
                     href="../../../controladores/ControladorUsuarios.php?operacion=index">Lista de
                     usuarios</a>
-                  <hr>
-                  <a class="dropdown-item"
-                    href="../../../controladores/ControladorUsuarios.php?operacion=index">Olvido de Clave</a>
                 </div>
               </a>
             </li>
@@ -356,7 +356,7 @@ while($privis = mysqli_fetch_array($rescata)){
 
 
                   <a title="Salir del sistema" class="dropdown-item"
-                    href="../../../controladores/controladorlogin.php?operacion=logout"><i
+                    href="../../../controladores/ControladorLogin.php?operacion=logout"><i
                       class="far fa-2x fa-walking"></i><i class="far fa-2x fa-door-open"></i><strong>Cerrar
                       sesión</strong></a>
 

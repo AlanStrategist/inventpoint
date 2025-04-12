@@ -29,7 +29,11 @@ $cred = "SELECT * FROM pedidos WHERE fecha_credi='$hoy' AND metodo='Credito'"; /
 $credi = mysqli_query($conex, $cred);
 $rowsen = mysqli_num_rows($credi);
 
+if( isset($alert) && $alert == "sinprivis"){ $al = new ClassAlert("No tiene permiso de realizar esa acci&oacute;n!<br>","Contacte al desarrollador","primary"); }
+
 ?>
+
+
 
  <!--Librerias para los charts --> 
 <script src="../../../modelos/Chart.js-2.9.3/dist/Chart.min.js"></script>
@@ -66,6 +70,7 @@ $rowsen = mysqli_num_rows($credi);
         <?php } ?>
       
         <div class="row">
+          
 
           <div class="col-md-6">
             <div class="card card-chart">

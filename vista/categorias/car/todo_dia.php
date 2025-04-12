@@ -121,7 +121,7 @@ if ($valid > 0) {
                         <div class="modal-header">
 
                           <div class="modal-body">
-                            <form name="formpavo" method='POST' action='../../../controladores/controladorpedido.php'>
+                            <form name="formpavo" method='POST' action='../../../controladores/ControladorPedido.php'>
                               <h5 class="modal-title text-info" id="exampleModalLabel">Tipo de Pago <i
                                   class="fad  fa-coins"></i></h5>
                               <select name="metodo" class="form-control" id="metodo">
