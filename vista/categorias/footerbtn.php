@@ -6,13 +6,10 @@
 include '../modals/modal_categoria.php';
 include '../modals/modal_conversor.php';
 include '../modals/modal_ubicacion.php';
-include '../modals/modal_conversor_empleado.php';
+
 ?>
 
   <!--   Core JS Files   -->
-
-
-
       <footer class="footer">
         <div class=" container-fluid ">
 
