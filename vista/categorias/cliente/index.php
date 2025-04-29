@@ -6,83 +6,99 @@ include('../../../modelos/ClassAlert.php');
 
 extract($_REQUEST);
 
-if( isset($alert) && $alert == "exito"){ $al = new ClassAlert("Registro exitoso!<br>","Se registro el cliente exitosamente","primary"); }
+if (isset($alert) && $alert == "exito") {
+  $al = new ClassAlert("Registro exitoso!<br>", "Se registro el cliente exitosamente", "primary");
+} else if (isset($alert) && $alert == "error") {
+  $al = new ClassAlert("Error!<br>", "No se registraron los cambios", "danger");
+} else if (isset($alert) && $alert == "du") {
+  $al = new ClassAlert("Error!<br>", "La c&eacute;dula est&aacute; duplicada", "danger");
+}
 
-else if( isset($alert) && $alert == "error"){ $al = new ClassAlert("Error!<br>","No se registraron los cambios","danger"); }
+$lista = "SELECT * FROM cliente";
+$respuesta = mysqli_query($conex, $lista);
+$pruebo = mysqli_num_rows($respuesta);
 
-else if( isset($alert) && $alert == "du"){ $al = new ClassAlert("Error!<br>","La c&eacute;dula est&aacute; duplicada","danger"); }
+$pruebo = 0;
 
+if($pruebo == 0){
 
+  ?>
 
-if ($clave == '') { ?>
+  <script>
 
-  <script type="text/javascript">
-    alert('No se puede listar,no hay autorización');
-    window.location = "../home/home.php";
+    window.location = "../home/home.php?alert=noclient";
 
   </script>
 
+<?php
 
-<?php } else {
-
-  $lista = "SELECT * FROM cliente";
-  $respuesta = mysqli_query($conex, $lista);
-  $pruebo = mysqli_num_rows($respuesta);
-  ?>
-
-  <body>
-
-    <div class="content">
-      <div class="row">
-        <div class="col-md-12">
-        <?php  if(isset($al)){ echo $al->Show_Alert(); } ?>
-          <div class="card">
-            <div class="card-header">
-              <h4 class="card-title">Clientes Registrados</h4>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table id="example" class="table">
-
-                  <thead class="text-primary">
-
-
-                    <th>Nombre</th>
-                    <th>Teléfono </th>
-                    <th>Cédula</th>
-
-                  </thead>
-
-                  <?php
-
-                  while ($data = mysqli_fetch_array($respuesta)) {
-
-                    $cedula = 0;
-
-                    echo "<tr>";
-                    echo "<td>";
-
-                    ?>     <?= $data['nombre'] ?>    <?php
-                             echo "</td>";
-
-                             echo "<td>";
-
-                             ?>    <?= $data['telefono'] ?>    <?php
-                                     echo "</td>";
-
-                                     echo "<td>";
-                                     ?>C.I <?= $data['cedula'] ?>
-                    <?php
-                    echo "</td>";
-
-                  }
-
-}
+} 
 
 ?>
 
+<body>
+  <div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <?php if (isset($al)) { echo $al->Show_Alert(); } ?>
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Clientes Registrados</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table id="example" class="table">
 
+                <thead class="text-primary">
+                  <th>Nombre</th>
+                  <th>Teléfono </th>
+                  <th>Indentificaci&oacute;n</th>
+                </thead>
 
+                <?php
+
+                while ($data = mysqli_fetch_array($respuesta)) {
+
+                  ?>
+                  <tr>
+                  <td><?=$data['nombre']?></td>
+                  <td><?=$data['telefono']?></td>
+                  
+                  <?php
+
+                  $it = "";
+
+                  switch($data['tipo']){
+
+                    case "Venezolano":
+
+                      $it = "<span class='text-primary' title='Venezolano'>V-</span>";
+
+                      break;
+
+                    
+                    case "Extranjero":
+
+                      $it = "<span class='text-primary' title='Extranjero'>E-</span>";
+
+                      break;
+
+                    
+                    case "RIF":
+
+                      $it = "<span class='text-primary' title='Jur&iacute;dico'>J-</span>";
+
+                      break;  
+
+                  }
+
+                  ?>
+                  
+                  <td><?=$it?><?=$data['cedula']?></td>
+
+                <?php
+                  }    
+                ?>
 
               </table>
             </div>

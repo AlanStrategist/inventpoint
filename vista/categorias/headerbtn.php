@@ -43,7 +43,7 @@ if ($rows > 0) {
   $valor = $dolar->valor;
 }
 
-$sql5 = "SELECT DISTINCT producto.nombre,pedidos.quantity FROM pedidos,producto WHERE pedidos.metodo='Credito' AND pedidos.fecha_credi='$hoy' AND pedidos.product_id=producto.id ";
+$sql5 = "SELECT DISTINCT producto.nombre,pedidos.quantity FROM pedidos,producto WHERE pedidos.metodo='Credito' AND pedidos.product_id=producto.id ";
 $reste = mysqli_query($conex, $sql5);
 $resrows = mysqli_num_rows($reste);
 
@@ -221,15 +221,12 @@ while($privis = mysqli_fetch_array($rescata)){
 
                   <a class="dropdown-item" href="../car/clienpagos.php">Ventas sin culminar</a>
 
-                  <a class="dropdown-item" href="../factura/index.php">Facturas</a>
+                  <a class="dropdown-item" href="../factura/index.php">Recibos</a>
 
                   <hr>
 
                   <a class="dropdown-item" href="../car/todo_dia.php">Ver todos los <strong>créditos</strong></a>
-
-                  <a class="dropdown-item" href="../car/credito.php">Créditos para cancelar <strog>hoy</strog></a>
-
-
+                
                 </div>
               </a>
             </li>

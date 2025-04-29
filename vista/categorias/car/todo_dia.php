@@ -10,7 +10,7 @@ pe.fecha,
 pe.fecha_credi,
 pr.nombre,
 ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) AS precio_venta,
-ROUND(pr.precio + ( ( (pr.precio * pr.porcentaje) / 100) * " . $valor . "),2) AS cambio,
+ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100) ,2) * " . $valor . " AS cambio,
 pe.quantity,
 pe.metodo,
 c.cedula,
@@ -81,106 +81,83 @@ if ($valid > 0) {
 
                   $cedula = 0;
                   $cedula = $pedido['cedula'];
-                  $fac= $pedido['factura'];
-                  echo "<tr>";
-                  echo "<td>FAC00".$pedido['factura']."</td>";
-                  echo "<td>".$pedido['nombre']."</td>";
-                  echo "<td>&#36;" . number_format($pedido['precio_venta'], 2, '.', ',') . "</td>";
-                  echo "</td>";
-                  echo "<td>BS  " . number_format($pedido['cambio'], 2, '.', ',') . "</td>";
-                  echo "<td>".$pedido['quantity']."</td>";
-                  echo "<td>&#36;" . number_format($pedido['subtotal'], 2, '.', ',') . "</td>";
-                  echo "</td>";
-                  echo "<td>".$pedido['nombre_cliente'] ."<br>".$pedido['telefono']."</td>";
-                  echo "<td>Crédito</td>"; 
-                  echo "<td>".$pedido['fecha']."</td>";
-                  echo "<td>";
+                  $fac = $pedido['factura'];
+                  $total += $pedido['subtotal'];
+                  $valor_cambio = $pedido['cambio'] * $pedido['quantity'];
+                  $total_bs += $valor_cambio;
 
-                  if ($pedido['fecha_credi'] == $hoy) {
-
-                 
-                    echo "<strong>" . $pedido['fecha_credi'] . "</strong>";
-
-
-                  } else {
-                  
-                    echo $pedido['fecha_credi'];
-                  
-                  } 
-                  echo "</td>";
-
-                  echo "<td>";
                   ?>
 
-                  <a title="Registrar pago de este crédito" data-toggle="modal" data-target="#exampleModalcliente"><i
-                      class="fas fa-coins"> </i></a>
-                  <div class="modal fade" id="exampleModalcliente" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
+                  <tr>
+                    <td>FAC00<?= $pedido['factura'] ?></td>
+                    <td><?= $pedido['nombre'] ?></td>
+                    <td>&#36;<?= number_format($pedido['precio_venta'], 2, '.', ',') ?></td>
+                    </td>
+                    <td>BS <?= number_format($pedido['cambio'], 2, '.', ',') ?></td>
+                    <td><?= $pedido['quantity'] ?></td>
+                    <td>&#36;<?= number_format($pedido['subtotal'], 2, '.', ',') ?></td>
+                    </td>
+                    <td><?= $pedido['nombre_cliente'] . "<br>" . $pedido['telefono'] ?></td>
+                    <td>Crédito</td>
+                    <td><?= $pedido['fecha'] ?></td>
+                    <td>
+                      <?= $pedido['fecha_credi'] == $hoy ? "<strong>" . $pedido['fecha_credi'] . "</strong>" : $pedido['fecha_credi'] ?>
+                    </td>
+                    <td><a title="Registrar pago de este crédito" data-toggle="modal" data-target="#exampleModalcliente"><i
+                          class="fas fa-coins"> </i></a>
 
-                          <div class="modal-body">
-                            <form name="formpavo" method='POST' action='../../../controladores/ControladorPedido.php'>
-                              <h5 class="modal-title text-info" id="exampleModalLabel">Tipo de Pago <i
-                                  class="fad  fa-coins"></i></h5>
-                              <select name="metodo" class="form-control" id="metodo">
-                                <option value="Efectivo">Efectivo</option>
-                                <option value="Debito">Débito</option>
-                                <option value="Divisa">Divisa</option>
-                                <option value="Transferencia">Transferencia</option>
-                              </select>
+                      <div class="modal fade" id="exampleModalcliente" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
 
-                              <div class="modal-footer">
-                                <input type="hidden" name="operacion" value="aprobar">
-                                <input type="hidden" name="factura" value="<?=$pedido['factura']?>">
-                                <input class="btn btn-sm btn-success text-white" type="submit" value="Registrar Compra">
+                              <div class="modal-body">
+                                <form name="formpavo" method='POST' action='../../../controladores/ControladorPedido.php'>
+                                  <h5 class="modal-title text-info" id="exampleModalLabel">Tipo de Pago <i
+                                      class="fad  fa-coins"></i></h5>
+                                  <select name="metodo" class="form-control" id="metodo">
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Debito">Débito</option>
+                                    <option value="Divisa">Divisa</option>
+                                    <option value="Transferencia">Transferencia</option>
+                                  </select>
+                                  <div class="modal-footer">
+                                    <input type="hidden" name="operacion" value="aprobar">
+                                    <input type="hidden" name="factura" value="<?= $pedido['factura'] ?>">
+                                    <input class="btn btn-sm btn-success text-white" type="submit" value="Registrar Compra">
 
+                                  </div>
                               </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
+                      </form>                     
+                    </td>
+                  </tr>
 
-
-
-
-
-                    </form>
-
-
-
-                    <?php
-                    echo "</td>";
-                    echo "</tr>";
-
-                    $total += $pedido['subtotal'];
-
-
-                    $valor_cambio = $pedido['cambio'] * $pedido['quantity'];
-                    $total_bs += $valor_cambio;
-                }
+                        <?php  } 
 
 
 
 
                 echo "</table>";
-              
+
 } else {
 
   echo "<br>";
   echo "<div class='alert alert-danger'>";
-  echo "<strong>No hay ventas que mostrar <i class='fad fa-sad-tear'></i> </strong>";
+  echo "<strong>No hay creditos que mostrar <i class='fad fa-sad-tear'></i> </strong>";
   echo "</div>";
 }
 
 ?>
-                <script type="text/javascript">
-                  $(document).ready(function () {
-                    $('#example').DataTable();
-                  });
-                </script>
-                <?php
-                include '../footerbtn.php';
+                    <script type="text/javascript">
+                      $(document).ready(function () {
+                        $('#example').DataTable();
+                      });
+                    </script>
+                    <?php
+                    include '../footerbtn.php';
 
-                ?>
+                    ?>

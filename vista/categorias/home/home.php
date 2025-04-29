@@ -11,6 +11,10 @@ if( isset($alert) && $alert == "nodolar"){ $al = new ClassAlert("Error en regist
 
 elseif( isset($alert) && $alert == "errorpriv"){ $al = new ClassAlert("Este usuario no posee los permisos para ingresar a esa vista!<br>","Modifique los permisos en <a href='../../../controladores/ControladorRegistro.php?operacion=index'>aqui</a>","warning"); }
 
+elseif( isset($alert) && $alert == "sinprivis"){ $al = new ClassAlert("No tiene permiso de realizar esa acci&oacute;n!<br>","Contacte al desarrollador","primary"); }
+
+elseif( isset($alert) && $alert == "noclient"){ $al = new ClassAlert("Error al listar los clientes<br>","Puede que no haya clientes registrados","danger"); }
+
 $conex = $db->conectar();
 
 $que = "SELECT * FROM producto WHERE stock < 1"; //mostrar
@@ -25,11 +29,11 @@ $empleo = "SELECT * FROM usuarios WHERE tipo_usuario='empleado'"; //mostrar
 $empleo_sin = mysqli_query($conex, $empleo);
 $empleo_ac = mysqli_num_rows($empleo_sin);
 
-$cred = "SELECT * FROM pedidos WHERE fecha_credi='$hoy' AND metodo='Credito'"; //mostrar
+$cred = "SELECT * FROM pedidos WHERE metodo='Credito'"; //mostrar
 $credi = mysqli_query($conex, $cred);
 $rowsen = mysqli_num_rows($credi);
 
-if( isset($alert) && $alert == "sinprivis"){ $al = new ClassAlert("No tiene permiso de realizar esa acci&oacute;n!<br>","Contacte al desarrollador","primary"); }
+
 
 ?>
 
