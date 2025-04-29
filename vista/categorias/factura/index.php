@@ -25,7 +25,7 @@ $pruebo = mysqli_num_rows($respuesta);
                         <table id="example" class="table">
 
                             <thead class="text-primary">
-                                <th> # Factura</th>
+                                <th> # Recibo</th>
                                 <th> Fecha de emisi&oacute;n</th>
                                 <th> Ver detalles</th>
                             </thead>
@@ -37,7 +37,7 @@ $pruebo = mysqli_num_rows($respuesta);
                                 $cedula = 0;
 
                                 echo "<tr>";
-                                echo "<td>FAC000".$data["factura"]."</td>";
+                                echo "<td>REC000".$data["factura"]."</td>";
                                 echo "<td>".$data['fecha']. "</td>";
                                 echo "<td> <a title='Ver detalles' href='../../../controladores/ControladorPedido.php?operacion=details&id=".$data['factura']."'><i class='far fa-3x fa-eye'></i></a></td>";
                                 
