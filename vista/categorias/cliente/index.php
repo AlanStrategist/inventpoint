@@ -18,8 +18,6 @@ $lista = "SELECT * FROM cliente";
 $respuesta = mysqli_query($conex, $lista);
 $pruebo = mysqli_num_rows($respuesta);
 
-$pruebo = 0;
-
 if($pruebo == 0){
 
   ?>
