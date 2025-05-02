@@ -67,8 +67,7 @@ $hoy = date('Y-m-d');
               <option value="Efectivo">Efectivo BS</option>
               <option value="Debito">Débito</option>
               <option value="Divisa">Divisa</option>
-              <option value="Transferencia">Transferencia</option>
-              <option value="Credito">Credito</option>
+              <option value="Transferencia">Transferencia</option>             
             </select>
             <hr>
             <h5>

@@ -103,7 +103,7 @@ if ($agarro > 0) {
 
   echo "<br>";
   echo "<div class='alert alert-danger'>";
-  echo "<strong>No hay pagos realizadoa</strong>";
+  echo "<strong>No hay ventas el dia de hoy</strong>";
   echo "</div>";
 }
 

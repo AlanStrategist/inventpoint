@@ -42,7 +42,7 @@ $pruebo = mysqli_num_rows($respuesta);
             <table id="example" class="table">
 
               <thead class="text-primary">
-                <th> # Factura</th>
+                <th> # Recibo</th>
                 <th>Nombre del producto</th>
                 <th>Unit. Precio</th>
                 <th>Cantidad</th>
@@ -63,7 +63,7 @@ $pruebo = mysqli_num_rows($respuesta);
                 $cedula = 0;
 
                 echo "<tr>";
-                echo "<td>FAC00".$data["factura"]."</td>";
+                echo "<td>REC000".$data["factura"]."</td>";
                 echo "<td>".$data['nombre_product']."</td>";
                 echo "<td>USD : ".$data['precio_venta']." <br> BS : ". number_format($data['cambio'], 2, ',', '.') ." </td>";
                 echo "<td>".$data['quantity']."</td>";

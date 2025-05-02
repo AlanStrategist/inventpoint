@@ -42,12 +42,12 @@ if (!($valid > 0)) { ?>
 
   <br>
   <div class='alert alert-danger'>
-  <strong>No hay ventas que mostrar <i class='fad fa-sad-tear'></i> </strong>
+  <strong>No hay ventas pendientes <i class='fad fa-smile'></i> </strong>
   </div>
 
 <?php
 
-}
+}else{
 
   //start table
   ?>
@@ -71,6 +71,8 @@ if (!($valid > 0)) { ?>
                   <th class="textAlignLeft">Precio unitario en Bs</th>
                   <th class="textAlignLeft">Cliente</th>
                   <th class="textAlignLeft">Método de Pago</th>
+                  <th class="textAlignLeft">Remover</th>
+                  
                 </thead>
 
                 <?php
@@ -78,61 +80,55 @@ if (!($valid > 0)) { ?>
                 $total = 0;
                 $total_bs = 0;
                 $cedula = 0;
+               
                 while ($pedido = mysqli_fetch_array($respuesta)) {
 
                   $cedula = $pedido['cedula'];
 
-                  echo "<tr>";
-                  echo "<td><div class='product-nombre'>".$pedido['nombre']."</div></td>";
-                  echo "<td> <div class='product-nombre'>".$pedido['precio_venta']."</div></td>";           
-                  echo "<td><div class='product-nombre'>".$pedido['quantity']."</div></td>";
-                  echo "<td>&#36;" . number_format($pedido['subtotal'], 2, '.', ',') . "</td>";
-                  echo "</td>";
-                  echo "<td>BS " . number_format($pedido['cambio'], 2, '.', ',') . "</td>";
-                  
-                  
+                  ?>
+                  <tr>
+                  <td><div class='product-nombre'><?=$pedido['nombre']?></div></td>
+                  <td> <div class='product-nombre'><?=$pedido['precio_venta']?></div></td>           
+                  <td><div class='product-nombre'><?=$pedido['quantity']?></div></td>
+                  <td>&#36;<?=number_format($pedido['subtotal'], 2, '.', ',')?></td>
+                  <td>BS<?=number_format($pedido['cambio'], 2, '.', ',')?></td>         
+                  <td><div class='product-nombre'><?=$pedido['nombre_cliente']?><br><?=$pedido['telefono']?></td>                 
+                  <td><div class='product-nombre'>
+                  <?php echo $pedido['metodo'] == 'Debito' ? 'D&eacute;bito': $pedido['metodo']; ?>
+                  </td>
+                  <td><a href='../../../controladores/ControladorPedido.php?operacion=borrar&id=<?=$pedido['id_pedidos']?>'><i title='Eliminar Item' class='fas fa-2x fa-times'></i></a> </td>
+                  </tr>
+
+                  <?php
+
                   $total += $pedido['subtotal'];
                   $valor_cambio = $pedido['cambio'] * $pedido['quantity'];
                   $total_bs += $valor_cambio;
-
-                  echo "<td><div class='product-nombre'>".$pedido['nombre_cliente']."<br>".$pedido['telefono']."</td>";
-                 
-                  echo "<td><div class='product-nombre'>";
-                  echo $pedido['metodo'] == 'Debito' ? 'D&eacute;bito': $pedido['metodo'];
-                  echo "</td>";
-
-                  echo "<td><a href='../../../controladores/ControladorPedido.php?operacion=borrar&id=".$pedido['id_pedidos']."'><i title='Eliminar Item' class='fas fa-times'></i></a> </td>";
-                  echo "</tr>";
-                }
+                 } ?>
                 
-                echo "</table>";
-                ?>
+              </table>
+                
                 <table class="table">
                   <tr>
-                    <td class="text-primary">Total(USD)</td>
-                    <td class="text-primary"><strong> Total(BS)</strong></td>
+                    <td class="text-primary">
+                      <strong>Total(USD) <?=number_format($total, 2, '.', ',')?>$</strong></td>
+                    <td class="text-primary">
+                      <strong>Total(BS) <?=number_format($total_bs, 2, '.', ',')?> BS</strong>
+                    </td>
                   </tr>
-                  <?php
-                  echo "<tr>";
-                  echo "<td>USD " . number_format($total, 2, '.', ',') . "</td>";
-                  echo "<td>BS " . number_format($total_bs, 2, '.', ',') . "</td>";
-                  echo "</tr>";
-                  echo "<tr>";
-                  echo "<td>";
-                  echo "<td><a href='pdf.php?cedula=<?= $cedula ?>' class='btn btn-success'><i class='fad fa-file-pdf'></i>Imprimir</a></td>";
-                  echo "<td><a href='../../../controladores/ControladorPedido.php?operacion=notificar' class='btn btn-info'><i class='fad fa-check-double'></i>Guardar venta</a></td>";
-                  echo "</tr>";
-                  echo "</table>";
+                  <tr>                  
+                   <td><a href='pdf.php?cedula=<?= $cedula ?>' class='btn btn-success'><i class='fad fa-file-pdf'></i>Imprimir</a></td>
+                   <td><a href='../../../controladores/ControladorPedido.php?operacion=notificar' class='btn btn-info'><i class='fad fa-check-double'></i>Guardar venta</a></td>
+                  </tr>
+                </table>
 
+<?php } ?>
 
-
-?>
                   <script type="text/javascript">
                     $(document).ready(function () {
                       $('#example').DataTable();
                     });
                   </script>
+                  
                   <?php
-                  include '../footerbtn.php';
-
-                  ?>
+                  include '../footerbtn.php'; ?>

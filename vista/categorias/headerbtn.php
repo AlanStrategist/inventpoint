@@ -43,7 +43,7 @@ if ($rows > 0) {
   $valor = $dolar->valor;
 }
 
-$sql5 = "SELECT DISTINCT producto.nombre,pedidos.quantity FROM pedidos,producto WHERE pedidos.metodo='Credito' AND pedidos.product_id=producto.id ";
+$sql5 = "SELECT DISTINCT pedidos.factura FROM pedidos WHERE pedidos.metodo='Credito'";
 $reste = mysqli_query($conex, $sql5);
 $resrows = mysqli_num_rows($reste);
 
@@ -403,7 +403,7 @@ while($privis = mysqli_fetch_array($rescata)){
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
-                  <i class="far fa-3x fa-credit-card" title="créditos del dia"></i>
+                  <i class="far fa-3x fa-credit-card" title="Cuentas por cobrar"></i>
                   <p>
                     <?= $resrows ?>
                     <!-- Quiere decir ue cuando esta pantala completa,no se muestra, de lo contrario,si <span class="d-lg-none d-md-block">
@@ -424,7 +424,7 @@ while($privis = mysqli_fetch_array($rescata)){
 
                     while ($dato = mysqli_fetch_array($reste)) {
 
-                      echo " <a class='dropdown-item' href='../car/todo_dia.php'><i class='far fa-3x fa-shopping-cart'></i>" . $dato['nombre'] . " <strong class='text-primary'>x</strong> " . $dato['quantity'] . "</a>";
+                      echo " <a class='dropdown-item' href='../car/todo_dia.php'><i class='far fa-3x fa-shopping-cart'></i>REC000".$dato['factura'] . "</a>";
 
                     } ?>
 

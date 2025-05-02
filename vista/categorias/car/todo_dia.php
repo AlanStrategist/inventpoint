@@ -48,7 +48,7 @@ if ($valid > 0) {
 
                 <thead class="text-primary">
 
-                  <th class="textAlignLeft"># Factura</th>
+                  <th class="textAlignLeft"># Recibo</th>
 
                   <th class="textAlignLeft">Nombre del producto</th>
 
@@ -89,7 +89,7 @@ if ($valid > 0) {
                   ?>
 
                   <tr>
-                    <td>FAC00<?= $pedido['factura'] ?></td>
+                    <td>REC000<?= $pedido['factura'] ?></td>
                     <td><?= $pedido['nombre'] ?></td>
                     <td>&#36;<?= number_format($pedido['precio_venta'], 2, '.', ',') ?></td>
                     </td>
@@ -135,23 +135,20 @@ if ($valid > 0) {
                       </form>                     
                     </td>
                   </tr>
+                <?php  } ?>
 
-                        <?php  } 
+              </table>
 
+<?php } else {
 
+  ?>
 
+  <br>
+  <div class='alert alert-danger'>
+  <strong>No hay creditos que mostrar <i class='fad fa-sad-tear'></i> </strong>
+  </div>
 
-                echo "</table>";
-
-} else {
-
-  echo "<br>";
-  echo "<div class='alert alert-danger'>";
-  echo "<strong>No hay creditos que mostrar <i class='fad fa-sad-tear'></i> </strong>";
-  echo "</div>";
-}
-
-?>
+  <?php } ?>
                     <script type="text/javascript">
                       $(document).ready(function () {
                         $('#example').DataTable();

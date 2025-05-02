@@ -44,8 +44,8 @@ class ControladorPedido
 
 			}
 			
-
-
+			//Verifies method credito with no date
+			
 			$cliente = mysqli_fetch_object($response);
 			$id_cliente = $cliente->id;
 			//traigo el id del cliente
@@ -86,6 +86,7 @@ class ControladorPedido
 							$sql2 = "INSERT INTO `pedidos` (`id`,`factura`, `id_usuario`, `product_id`,`cliente_id`, `modified`,`estatus`,`quantity`,`metodo`,`fecha`,`fecha_credi`) VALUES (NULL," . $facNum . "," . $data['user_id'] . ",'" . $data['product_id'] . "','" . $id_cliente . "',CURRENT_TIMESTAMP,'pago','" . $data['quantity'] . "','" . $metodo . "',CURRENT_DATE,NULL)";
 
 						} else {
+							
 							$metodo = 'Credito';
 
 							$sql2 = "INSERT INTO `pedidos` (`id`, `factura`,`id_usuario`, `product_id`,`cliente_id`, `modified`,`estatus`,`quantity`,`metodo`,`fecha`,`fecha_credi`) VALUES (NULL," . $facNum . "," . $data['user_id'] . ",'" . $data['product_id'] . "','" . $id_cliente . "',CURRENT_TIMESTAMP,'credito','" . $data['quantity'] . "','Credito',CURRENT_DATE,'" . $fecha_credi . "')";
@@ -233,7 +234,7 @@ class ControladorPedido
 
 		//Remove item of the sale
 
-		$sql = "DELETE FROM pedidos WHERE product_id=" . $rows['product_id'];
+		$sql = "DELETE FROM pedidos WHERE id=" . $id;
 
 		$res = mysqli_query($conex, $sql);
 
