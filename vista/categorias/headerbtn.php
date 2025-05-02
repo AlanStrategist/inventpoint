@@ -193,7 +193,7 @@ while($privis = mysqli_fetch_array($rescata)){
 
           }
 
-          if ( has_privi($privs,"List","Pedidos")) {
+          if ( has_privi($privs,"List","Cliente")) {
             ?>
 
             <li>
@@ -209,6 +209,9 @@ while($privis = mysqli_fetch_array($rescata)){
                 </div>
               </a>
             </li>
+          <?php } ?> 
+
+          <?php if( has_privi($privs,"List","Pedidos")){ ?>
             <li>
               <a id="sidebarDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fad fa-cash-register"></i>

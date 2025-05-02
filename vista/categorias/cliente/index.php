@@ -14,6 +14,21 @@ if (isset($alert) && $alert == "exito") {
   $al = new ClassAlert("Error!<br>", "La c&eacute;dula est&aacute; duplicada", "danger");
 }
 
+if ( !has_privi($privs,"List","Cliente")) {
+
+  ?>
+
+  <script>
+
+    window.location = "../home/home.php?alert=sinprivis";
+
+  </script>
+
+<?php
+ 
+
+}
+
 $lista = "SELECT * FROM cliente";
 $respuesta = mysqli_query($conex, $lista);
 $pruebo = mysqli_num_rows($respuesta);

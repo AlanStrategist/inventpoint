@@ -16,7 +16,7 @@ pe.metodo,
 c.cedula,
 c.telefono,
 c.nombre AS nombre_cliente,
-ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100) * pe.quantity,2) AS subtotal
+ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) * pe.quantity AS subtotal
 
 FROM pedidos pe,producto pr,cliente c 
 
