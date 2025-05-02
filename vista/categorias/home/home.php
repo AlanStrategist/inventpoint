@@ -29,16 +29,7 @@ $empleo = "SELECT * FROM usuarios WHERE tipo_usuario='empleado'"; //mostrar
 $empleo_sin = mysqli_query($conex, $empleo);
 $empleo_ac = mysqli_num_rows($empleo_sin);
 
-$cred = "SELECT * FROM pedidos WHERE metodo='Credito'"; //mostrar
-$credi = mysqli_query($conex, $cred);
-$rowsen = mysqli_num_rows($credi);
-
-
-
 ?>
-
-
-
  <!--Librerias para los charts --> 
 <script src="../../../modelos/Chart.js-2.9.3/dist/Chart.min.js"></script>
 <script src="../../../modelos/Chart.js-2.9.3/samples/utils.js"></script>
@@ -58,42 +49,29 @@ $rowsen = mysqli_num_rows($credi);
 
       <?php  if(isset($al)){ echo $al->Show_Alert(); } ?>
 
-      <!-- Content Row -->
-      <div class="row">
-
-        <?php if ($rowsen > 0) { ?>
-
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Tienes <?= $rowsen ?> créditos pendientes </strong>
+      <!-- Content Row -->  
+        <?php if ($resrows > 0) { ?>
+          <div class="row">
+          <div class="col-lg-12 alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Tienes <?= $resrows ?> créditos pendientes que no han sido cancelados en la fecha propuesta</strong>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-
               <span aria-hidden="true">&times;</span>
-
             </button>
+          </div>
           </div>
         <?php } ?>
       
         <div class="row">
-          
-
           <div class="col-md-6">
             <div class="card card-chart">
               <div class="card-header">
-                <h5 class="card-category">Estadisticas de ventas</h5>
+                <!--<h5 class="card-category">Estadisticas de ventas</h5> -->
                 <h4 class="card-title">Los productos mas vendidos</h4>
               </div>
               <div class="card-body">
                 <div class="chart-area">
-
-
-
                   <canvas id="myChart"></canvas>
-
                   <?php include '../../js/graficas/pie.php' ?>
-
-
-
-
                 </div>
               </div>
               <div class="card-footer">
@@ -104,14 +82,11 @@ $rowsen = mysqli_num_rows($credi);
             </div>
           </div>
 
-
-
-
           <div class="col-md-6">
             <div class="card card-chart">
               <div class="card-header">
-                <h5 class="card-category">Estadisticas de ventas</h5>
-                <h4 class="card-title">Método de pago mas usado</h4>
+                <!--<h5 class="card-category">Estadisticas de ventas</h5> -->
+                <h4 class="card-title">Método de pago mas usados</h4>
               </div>
               <div class="card-body">
                 <div class="chart-area">
@@ -131,26 +106,18 @@ $rowsen = mysqli_num_rows($credi);
           </div>
 
         </div>
-
-
-        <div class="row">
-
-          <div class="col-md-12 ">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-category">Estadisticas de ventas</h5>
-                <h4 class="card-title">Compradores mas leales</h4>
+           
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card card-chart">
+                <div class="card-header">
+                  <!--<h5 class="card-category">Estadisticas de ventas</h5> -->
+                  <h4 class="card-title">Compradores mas leales</h4>
               </div>
               <div class="card-body">
                 <div class="chart-area">
-
-
-
                   <canvas id="myChart3"></canvas>
-
                   <?php include '../../js/graficas/polar.php' ?>
-
-
                 </div>
               </div>
               <div class="card-footer">
@@ -158,8 +125,10 @@ $rowsen = mysqli_num_rows($credi);
                   <i class="fas fa-clock"></i> Historial de ventas
                 </div>
               </div>
+             </div>
             </div>
           </div>
+          
 
 
 </main>
