@@ -1,0 +1,35 @@
+# InventPoint
+
+InventPoint is a web-based inventory management system designed to help businesses efficiently track, manage, and organize their inventory. Built with PHP and MySQL, it provides a user-friendly interface and robust features to streamline inventory operations.
+
+## Features
+
+- **Inventory Tracking**: Monitor stock levels, product details, and categories.
+- **Real-Time Updates**: Get instant updates on inventory changes.
+- **User Management**: Role-based access control for administrators and staff.
+- **Reports and Analytics**: Generate detailed reports to analyze inventory trends.
+- **Search and Filter**: Quickly find products using advanced search and filtering options.
+- **Multi-Location Support**: Manage inventory across multiple locations.
+- **Notifications**: Alerts for low stock or critical inventory levels.
+
+## Installation
+
+1. Clone the repository to your local machine.
+2. Place the project in the `htdocs` folder of your XAMPP installation.
+3. Start Apache and MySQL from the XAMPP control panel.
+4. Import the database schema from the `database.sql` file into your MySQL server.
+5. Configure the database connection in the `config.php` file.
+6. Access the application via `http://localhost/inventpoint`.
+
+## Requirements
+
+- XAMPP (PHP 7.4+ and MySQL)
+- Web browser (Chrome, Firefox, etc.)
+
+## Contribution
+
+Feel free to contribute to this project by submitting issues or pull requests. Follow the coding standards and include detailed documentation for any new features.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
