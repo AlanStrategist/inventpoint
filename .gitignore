@@ -5,7 +5,8 @@
 /vista/js/vendor/
 /vista/js/graficas/
 /vista/js/js/
-/vista/js/boostrap.min.js
+/vista/js/bootstrap.min.js
+/vista/js/datatables1.js
 /vista/js/jquery4.3.1.js
 /vista/estilos/
 /vista/assets/
