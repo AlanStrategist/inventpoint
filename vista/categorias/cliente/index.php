@@ -12,9 +12,12 @@ if (isset($alert) && $alert == "exito") {
   $al = new ClassAlert("Error!<br>", "No se registraron los cambios", "danger");
 } else if (isset($alert) && $alert == "du") {
   $al = new ClassAlert("Error!<br>", "La c&eacute;dula est&aacute; duplicada", "danger");
+} else if (isset($alert) && $alert == "modi") {
+  $al = new ClassAlert("Modificaci&oacute;n exitosa", "", "warning");
 }
 
-if ( !has_privi($privs,"List","Cliente")) {
+
+if (!has_privi($privs, "List", "Cliente")) {
 
   ?>
 
@@ -24,16 +27,22 @@ if ( !has_privi($privs,"List","Cliente")) {
 
   </script>
 
-<?php
- 
+  <?php
+
 
 }
 
-$lista = "SELECT * FROM cliente";
-$respuesta = mysqli_query($conex, $lista);
-$pruebo = mysqli_num_rows($respuesta);
+try {
 
-if($pruebo == 0){
+  $lista = "SELECT * FROM cliente";
+  $respuesta = mysqli_query($conex, $lista);
+  $pruebo = mysqli_num_rows($respuesta);
+
+  if ($pruebo == 0) {
+    throw new Exception("No hay cluientes registrados");
+  }
+
+} catch (Exception $e) {
 
   ?>
 
@@ -43,9 +52,13 @@ if($pruebo == 0){
 
   </script>
 
-<?php
+  <?php
 
-} 
+} finally {
+
+  mysqli_close($conex);
+
+}
 
 ?>
 
@@ -53,7 +66,9 @@ if($pruebo == 0){
   <div class="content">
     <div class="row">
       <div class="col-md-12">
-        <?php if (isset($al)) { echo $al->Show_Alert(); } ?>
+        <?php if (isset($al)) {
+          echo $al->Show_Alert();
+        } ?>
         <div class="card">
           <div class="card-header">
             <h4 class="card-title">Clientes Registrados</h4>
@@ -66,6 +81,7 @@ if($pruebo == 0){
                   <th>Nombre</th>
                   <th>Teléfono </th>
                   <th>Indentificaci&oacute;n</th>
+                  <th>Acciones</th>
                 </thead>
 
                 <?php
@@ -74,43 +90,48 @@ if($pruebo == 0){
 
                   ?>
                   <tr>
-                  <td><?=$data['nombre']?></td>
-                  <td><?=$data['telefono']?></td>
-                  
-                  <?php
+                    <td><?= $data['nombre'] ?></td>
+                    <td><?= $data['telefono'] ?></td>
 
-                  $it = "";
+                    <?php
 
-                  switch($data['tipo']){
+                    $it = "";
 
-                    case "Venezolano":
+                    switch ($data['tipo']) {
 
-                      $it = "<span class='text-primary' title='Venezolano'>V-</span>";
+                      case "Venezolano":
 
-                      break;
+                        $it = "<span class='text-primary' title='Venezolano'>V-</span>";
 
-                    
-                    case "Extranjero":
+                        break;
 
-                      $it = "<span class='text-primary' title='Extranjero'>E-</span>";
 
-                      break;
+                      case "Extranjero":
 
-                    
-                    case "RIF":
+                        $it = "<span class='text-primary' title='Extranjero'>E-</span>";
 
-                      $it = "<span class='text-primary' title='Jur&iacute;dico'>J-</span>";
+                        break;
 
-                      break;  
 
-                  }
+                      case "RIF":
 
-                  ?>
-                  
-                  <td><?=$it?><?=$data['cedula']?></td>
+                        $it = "<span class='text-primary' title='Jur&iacute;dico'>J-</span>";
 
-                <?php
-                  }    
+                        break;
+
+                    }
+
+                    ?>
+
+                    <td><?= $it ?><?= $data['cedula'] ?></td>
+                    <td class="text-primary">
+                      <a href="../../../controladores/ControladorCliente.php?operacion=update&id=<?= $data['id'] ?>"
+                        title="Modificar" class="btn btn-primary btn-link btn-sm"><i class="fas fa-pen"></i></a>
+                    </td>
+
+
+                    <?php
+                }
                 ?>
 
               </table>
@@ -121,6 +142,7 @@ if($pruebo == 0){
 </body>
 
 </html>
+
 <script type="text/javascript">
   $(document).ready(function () {
     $('#example').DataTable();

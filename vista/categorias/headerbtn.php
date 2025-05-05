@@ -203,7 +203,7 @@ while($privis = mysqli_fetch_array($rescata)){
                 <div class="dropdown-menu" aria-labelledby="sidebarDropdownLink">
                   <a class="dropdown-item" href="../cliente/registrar.php">Registrar</a>
                   <a class="dropdown-item"
-                    href="../../../controladores/ControladorCliente.php?operacion=index&autorizo=autorizo">Lista de
+                    href="../../../controladores/ControladorCliente.php?operacion=index">Lista de
                     Clientes</a>
 
                 </div>

@@ -24,16 +24,14 @@ $pruebo = mysqli_num_rows($respuesta);
 if ($clave == '' || $pruebo < 0 || $valor == 0) { ?>
 
   <script type=text/javascript>
-  alert('Error al generar el listado');
-  window.location=../home/home.php;
+    alert('Error al generar el listado');
+    window.location=../home/home.php;
 
-    </script>
+      </script>
 
 
 <?php } else {
   ?>
-
-
 
   <body>
 
@@ -78,29 +76,13 @@ if ($clave == '' || $pruebo < 0 || $valor == 0) { ?>
 
                     $porc = $data['precio'] * $data['porcentaje'] / 100;
                     $precio_venta = $porc + $data['precio'];
-
-
                     ?>
-
-
                     <tr>
-                      <td>
-
-                        <?= $data['cod_barra'] ?>
-
-                      </td>
-
-                      <td>
-
-                        <?= $data['nombre'] ?>
-
-                      </td>
-
-                      <td>
-
-                        <?= number_format($data['precio'], 2, '.', ',') ?> $
+                      <td><?= $data['cod_barra'] ?></td>
+                      <td><?= $data['nombre']?></td>
+                      <td><?= number_format($data['precio'], 2, '.', ',')?> $
                         <hr>
-                        <?= number_format($data['precio'] * $valor, 2, ',', '.') ?> Bs
+                      <?= number_format($data['precio'] * $valor, 2, ',', '.') ?> Bs
 
                       </td>
 
@@ -159,17 +141,17 @@ if ($clave == '' || $pruebo < 0 || $valor == 0) { ?>
                           <a title='Habilitado ¿Desea inhabilitar?' data-toggle="modal" data-target="#inha<?= $nam ?>"
                             href=''><i class='far fa-2x fa-eye text-success'></i></a>
 
-                        <?php
+                          <?php
 
 
                         } elseif ($data['estatus'] == 'inhabilitado') {
 
                           ?>
 
-                          <a title='Inhabilitado ¿Desea habilitar?' data-toggle="modal" data-target="#ha<?= $nam ?>" href=''><i
-                              class='far fa-2x fa-eye-slash text-danger'></i></a>
+                          <a title='Inhabilitado ¿Desea habilitar?' data-toggle="modal" data-target="#ha<?= $nam ?>"
+                            href=''><i class='far fa-2x fa-eye-slash text-danger'></i></a>
 
-                        <?php
+                          <?php
                         }
 
                         ?>

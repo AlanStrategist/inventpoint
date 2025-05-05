@@ -1,6 +1,15 @@
-
 <?php
+
 include "../modelos/clasedb.php";
+include './Utils.php';
+
+if(!isLoged()){
+    
+    header("Location: ../index.php?alert=inicia");
+    
+    exit();
+}
+
 extract($_REQUEST);
 
 class ControladorCliente
@@ -8,76 +17,110 @@ class ControladorCliente
     public function index()
     {
         extract($_REQUEST);
+        
+        $loc = isset($alert) ? "Location: ../vista/categorias/cliente/index.php?&alert=" . $alert : "Location: ../vista/categorias/cliente/index.php";
 
-        if ($autorizo == '') {
-            ?>
-
-        <script type="text/javascript">
-            alert('No existe autorización para listar');
-            window.Location:'../vista/categorias/home/home.php'
-        </script>
-    <?php
-} else {
-
-            $clave = 1;
-
-            if (isset($alert)) {
-
-                header("Location: ../vista/categorias/cliente/index.php?clave=" . $clave . "&alert=" . $alert);
-
-            } else {
-                header("Location: ../vista/categorias/cliente/index.php?clave=" . $clave);
-
-            }
-        }
-
+        header($loc);
+        
     }
 
     public function registrar()
-    {
+    {   
+
+
         header("Location: ../vista/cliente/cliente/registrar.php"); //redireccionar a la siguiente dirección
     }
 
     public function guardar()
     {
-        session_start();
-
-        if (empty($_SESSION['id'])) {
-            header("Location: ../index.php?alerta=inicia");
-        } else {
-            $id_usuario = $_SESSION['id'];
-
-        }
         extract($_POST);
 
-        $db    = new clasedb();
+        try{
+
+        $db = new clasedb();
         $conex = $db->conectar();
 
-        $nomexist  = "SELECT * FROM cliente WHERE cedula='" . $cedula . "'";
-        $result    = mysqli_query($conex, $nomexist);
+        $nomexist = "SELECT * FROM cliente WHERE cedula='" . $cedula . "'";
+        $result = mysqli_query($conex, $nomexist);
         $nombresbd = mysqli_num_rows($result);
 
         if ($nombresbd > 0) {
 
-            header("Location: ControladorCliente.php?operacion=index&alert=du&autorizo=autorizo");
+            header("Location: ControladorCliente.php?operacion=index&alert=du");
 
-        } else {
+            return;
 
-            $sql = "INSERT INTO `cliente`(`id`, `nombre`, `tipo`, `cedula`, `telefono`, `id_usuario`) VALUES (NULL,'$nombre','$tipo','$cedula','$telefono','$id_usuario')";
+        } 
 
-            $resultado = mysqli_query($conex, $sql);
+        $sql = "INSERT INTO `cliente`(`id`, `nombre`, `tipo`, `cedula`, `telefono`, `id_usuario`) VALUES (NULL,'$nombre','$tipo','$cedula','$telefono','$id_usuario')";
 
-            if ($resultado) {
+        $resultado = mysqli_query($conex, $sql);
 
-                header("Location: ControladorCliente.php?operacion=index&alert=exito&autorizo=autorizo");
+        if (!$resultado) {
 
-            } else {
+            header("Location: ControladorCliente.php?operacion=index&alert=error");
 
-               header("Location: ControladorCliente.php?operacion=index&alert=error&autorizo=autorizo");
-            }
-        }
+            return;
+
+        } 
+        
+        header("Location: ControladorCliente.php?operacion=index&alert=exito");
+
+        }catch(Exception $e){
+
+            header("Location: ControladorCliente.php?operacion=index&alert=error");
+
+        }finally{
+
+            mysqli_close($conex);
+
+        }   
     }
-   
+
+
+    public function update()
+    {
+        extract($_REQUEST);
+
+        header("Location: ../vista/categorias/cliente/modificar.php?id=".$id."");
+
+    }
+
+    public function save_update()
+    {
+        extract($_POST);
+
+        try{
+
+        $db = new clasedb();
+        $conex = $db->conectar();
+
+        $sql = "UPDATE cliente SET nombre='$nombre', tipo='$tipo', cedula='$cedula', telefono='$telefono' WHERE id='$id'";
+
+        $resultado = mysqli_query($conex, $sql);
+
+        if (!$resultado) {
+
+            header("Location: ControladorCliente.php?operacion=index&alert=error");
+
+            return;
+
+        } 
+        
+        header("Location: ControladorCliente.php?operacion=index&alert=exito");
+
+        }catch(Exception $e){
+
+            header("Location: ControladorCliente.php?operacion=index&alert=error");
+
+        }finally{
+
+            mysqli_close($conex);
+
+        }   
+        
+    }
+
 
     public static function controlador($operacion)
     {
@@ -86,25 +129,34 @@ class ControladorCliente
         switch ($operacion) {
 
             case 'index':
-
                 $pro->index();
                 break;
 
             case 'registrar':
                 $pro->registrar();
                 break;
+            
             case 'guardar':
                 $pro->guardar();
                 break;
+            
+            case 'update':
+                $pro->update();
+                break;
+
+            case 'save_update':
+                $pro->save_update();
+                break;
+
             default:
                 ?>
 
-		<script type="text/javascript">
-			alert("sin ruta, no existe");
-			window.location="ControladorCliente.php?operacion=index";
-		</script>
-	<?php
-break;
+                <script type="text/javascript">
+                    alert("sin ruta, no existe");
+                    window.location = "ControladorCliente.php?operacion=index";
+                </script>
+                <?php
+                break;
         }
 
     }
