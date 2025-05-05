@@ -190,7 +190,7 @@ class ControladorPedido
 		$conex = $db->conectar();
 
 		//tomo la cantidad y la repongo en el stock
-		$query = "SELECT pedidos.factura,.pedidos.product_id,pedidos.quantity FROM pedidos WHERE id=$id";
+		$query = "SELECT pedidos.factura,pedidos.product_id,pedidos.quantity FROM pedidos WHERE id=$id";
 
 		$ros = mysqli_query($conex, $query);
 		$count = mysqli_num_rows($ros);
@@ -252,6 +252,8 @@ class ControladorPedido
 		}
 					
 	} catch (mysqli_sql_exception | Exception $e) {	
+
+		
 
 		header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
 
