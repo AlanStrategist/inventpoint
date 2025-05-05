@@ -15,6 +15,8 @@ elseif( isset($alert) && $alert == "sinprivis"){ $al = new ClassAlert("No tiene 
 
 elseif( isset($alert) && $alert == "noclient"){ $al = new ClassAlert("Error al listar los clientes<br>","Puede que no haya clientes registrados","danger"); }
 
+elseif( isset($alert) && $alert == "noreci"){ $al = new ClassAlert("No hay recibos emitidos<br>","No se han realizado ventas","danger"); }
+
 $conex = $db->conectar();
 
 $que = "SELECT * FROM producto WHERE stock < 1"; //mostrar

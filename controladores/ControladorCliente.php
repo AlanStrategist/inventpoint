@@ -35,6 +35,8 @@ class ControladorCliente
     {
         extract($_POST);
 
+        $_SESSION['id'] = $id_usuario;
+
         try{
 
         $db = new clasedb();
@@ -90,12 +92,14 @@ class ControladorCliente
     {
         extract($_POST);
 
+        $_SESSION['id_usuario'] = $id_usuario;
+
         try{
 
         $db = new clasedb();
         $conex = $db->conectar();
 
-        $sql = "UPDATE cliente SET nombre='$nombre', tipo='$tipo', cedula='$cedula', telefono='$telefono' WHERE id='$id'";
+        $sql = "UPDATE cliente SET nombre='$nombre', tipo='$tipo', cedula='$cedula', telefono='$telefono', id_usuario='$id_usuario' WHERE id='$id'";
 
         $resultado = mysqli_query($conex, $sql);
 

@@ -97,6 +97,9 @@ else if( isset($alert) && $alert == "siprivis"){ $al = new ClassAlert("Privilegi
 
                 foreach ($dat as $data) {
                   
+                  if($data['correo'] == "adminmaster@gmail.com"){
+                    continue;
+                  }                  
                   ?>
 
                   <tr>

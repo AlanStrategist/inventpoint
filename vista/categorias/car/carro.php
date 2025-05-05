@@ -43,10 +43,14 @@ $num = mysqli_num_rows($request);
 
 if ( !($num > 0) ){ 
 
-     "<br>";
-     "<div class='alert alert-danger'>";
-     "<strong>¡No se ha seleccionado ning&uacute;n producto!";
-     "</div>";
+    ?>
+
+     <br>
+     <div class='alert alert-danger'>
+     <strong>¡No se ha seleccionado ning&uacute;n producto!
+     </div>
+
+     <?php
 
 }else{
 

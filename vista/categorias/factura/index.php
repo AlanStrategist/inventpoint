@@ -5,11 +5,32 @@ $title = 'Facturas';
 
 include('../../js/restric.php');
 
+try{
 
 $lista = "SELECT pe.factura,pe.modified AS fecha FROM pedidos pe WHERE pe.estatus = 'facturado' GROUP BY pe.factura ORDER BY pe.factura";
 
 $respuesta = mysqli_query($conex, $lista);
 $pruebo = mysqli_num_rows($respuesta);
+
+if($pruebo == 0){
+    
+    throw new Exception("No hay recibos emitidos");
+}
+
+
+}catch (Exception $e) {
+    
+   ?>
+
+  <script>
+
+    window.location = "../home/home.php?alert=noreci";
+
+  </script>
+
+  <?php
+}
+
 
 ?>
 
