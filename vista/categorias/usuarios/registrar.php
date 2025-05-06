@@ -85,7 +85,7 @@ try{
                 <div class="form-group">
                   <label class="text-primary" for="Clave">Clave</label>
                   <input type="password" class="form-control input-lg" name="clave"
-                  minlength="5" maxlength="15" placeholder="*********" pattern="[0-9a-zA-Z\s]+" required="required">
+                  minlength="5" maxlength="15" placeholder="*********"  pattern="^[a-zA-Z0-9 !@#$%^&*()_+=\[\]{};':&quot;\\|,.<>\/?]*$" required="required">
 
                   <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
                   <div class="invalid-feedback">¡Ingrese una contraseña válida!</div>
@@ -97,7 +97,7 @@ try{
                 <div class="form-group">
                   <label class="text-primary" for="repeat">Repita la clave</label>
                   <input type="password" class="form-control input-lg" name="clave_repetir"
-                  minlength="5" maxlength="15" placeholder="Repita contraseña" pattern="[0-9a-zA-Z\s]+" required="required">
+                  minlength="5" maxlength="15" placeholder="Repita contraseña"  pattern="^[a-zA-Z0-9 !@#$%^&*()_+=\[\]{};':&quot;\\|,.<>\/?]*$" required="required">
 
                   <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
                   <div class="invalid-feedback">¡Debe coincidir con el campo anterior!</div>

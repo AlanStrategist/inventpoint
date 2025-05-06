@@ -54,6 +54,7 @@ class ControladorLogin
 
 		} else {
 			
+		
 			$clave = hash('sha256', $clave);
 
 			try{

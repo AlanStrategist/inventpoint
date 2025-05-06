@@ -138,13 +138,9 @@
               </div>
 
               <input type="password" id="password" class="form-control text-center" name="clave"
-                placeholder="Contraseña" required="required" minlength="1" maxlength="15" title="Mostrar Contraseña">
+                placeholder="Contraseña" required="required" minlength="8" pattern="^[a-zA-Z0-9 !@#$%^&*()_+=\[\]{};':&quot;\\|,.<>\/?]*$" title="Mostrar Contraseña">
                
             </div>
-
-
-
-
 
             <!--Esto no va
   <div class="row align-items-center remember">

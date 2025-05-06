@@ -6,7 +6,7 @@ $nucleo = 'usuarios';
 include('../../js/restric.php');
 include("../../../modelos/ClassAlert.php");
 
-if (!has_privi($privs, "List", "Producto")) {
+if (!has_privi($privs, "List", "Usuarios")) {
 
   ?>
   <script type="text/javascript">
@@ -116,9 +116,16 @@ else if( isset($alert) && $alert == "siprivis"){ $al = new ClassAlert("Privilegi
                   : "<a href='#' data-toggle='modal' data-target='#RolAd".$nam."'><i
                   class='far fa-3x fa-user-hard-hat  text-info' title='Empleado ¿Desea cambiar su Rol?'></i></a>";
                   ?></td>
-                  
-                  <td><a href='../../../controladores/ControladorUsuarios.php?operacion=View_Privs&id=<?=$data["id"]?>'><i class='fas fa-2x fa-eye'></i> </a></td>
+                   
+                   
+                  <?php if (has_privi($privs, "AddPrivs", "Usuarios")) {
 
+                    ?>
+
+                  <td><a href='../../../controladores/ControladorUsuarios.php?operacion=View_Privs&id=<?=$data["id"]?>'><i class='fas fa-2x fa-eye'></i> </a></td> 
+
+                  <?php }else{ echo "<td></td>"; }   ?>
+                  
                   <?php
                   echo "<td>";
                   echo $data['estatus'] == "activo" ? "<a href='#' data-toggle='modal' data-target='#I".$nam."'><i class='fas fa-2x fa-thumbs-down text-danger' title='Inhabilitar usuario'></i></a>"
