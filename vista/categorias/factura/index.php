@@ -7,7 +7,7 @@ include('../../js/restric.php');
 
 try{
 
-$lista = "SELECT pe.factura,pe.modified AS fecha FROM pedidos pe WHERE pe.estatus = 'facturado' GROUP BY pe.factura ORDER BY pe.factura";
+$lista = "SELECT pe.factura, MAX(pe.modified) AS fecha FROM pedidos pe WHERE pe.estatus = 'facturado' GROUP BY pe.factura ORDER BY pe.factura";
 
 $respuesta = mysqli_query($conex, $lista);
 $pruebo = mysqli_num_rows($respuesta);
