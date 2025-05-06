@@ -21,7 +21,7 @@ $data = mysqli_fetch_array($res);
         <div class="card-body">
 
           <form method="POST" class="needs-validation" enctype="multipart/form-data" size="30"
-            action="../../../controladores/controladorubicacion.php?operacion=guardar_modificacion" novalidate>
+            action="../../../controladores/ControladorUbicacion.php?operacion=guardar_modificacion" novalidate>
             <div class="row">
               <div class="col-md-5 pr-1">
                 <div class="form-group">

@@ -1,5 +1,16 @@
 <?php
+
+include "./Utils.php";
+
+if(!isLoged()){
+	
+	header("Location: ../index.php?alert=inicia");
+	
+	exit();
+}
+
 include("../modelos/clasedb.php");
+
 extract($_REQUEST);
 
 
@@ -9,31 +20,11 @@ class ControladorUbicacion
 	{
 		extract($_REQUEST);
 
-		if ($autorizo == '') {
-			?>
+		$loc = isset($alert) ? "Location: ../vista/categorias/ubicacion/index.php?alert=" . $alert : "Location: ../vista/categorias/ubicacion/index.php";
 
-			<script type="text/javascript">
-				alert('No existe autorización para listar');
-				window.Location: '../vista/categorias/home/home.php'
-			</script>
-			<?php
-		} else {
-
-			$clave = 1;
-
-			if (isset($alert)) {
-
-				header("Location: ../vista/categorias/ubicacion/index.php?clave=" . $clave . "&alert=" . $alert);
-
-			} else {
-				header("Location: ../vista/categorias/ubicacion/index.php?clave=" . $clave);
-
-			}
-		}
+		header($loc);
 
 	}
-
-
 	public function guardar()
 	{
 		session_start();
@@ -53,22 +44,17 @@ class ControladorUbicacion
 		$result = mysqli_query($conex, $nomexist);
 		$nombresbd = mysqli_num_rows($result);
 
-
-
 		if ($nombresbd > 0) {
 
 			header("Location: ./ControladorUbicacion.php?operacion=index&autorizo=autorizo&alert=du");
 			//si el nombre esta duplicado
 		} else {
 
-
 			$sql = "INSERT INTO `ubicacion` (`id`, `nombre`) VALUES (NULL, '$nombre');";
 
 			$resultado = mysqli_query($conex, $sql);
 
 			if ($resultado) {
-
-
 
 				header("Location: ControladorUbicacion.php?operacion=index&alert=exito&autorizo=autorizo");
 
@@ -108,11 +94,11 @@ class ControladorUbicacion
 
 		if ($resultado) {
 
-			header("Location: ControladorUbicacion.php?operacion=index&alert=modisi&autorizo=autorizo")
+			header("Location: ControladorUbicacion.php?operacion=index&alert=modisi")
 			;		 #
 		} else {
 
-			header("Location: ControladorUbicacion.php?operacion=index&alert=modino&autorizo=autorizo");
+			header("Location: ControladorUbicacion.php?operacion=index&alert=modino");
 		}
 	}
 
