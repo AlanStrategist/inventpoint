@@ -20,18 +20,18 @@ else if( isset($alert) && $alert == "culm"){ $al = new ClassAlert("No se ha real
 
 $sql7 = "SELECT DISTINCT pe.id AS id_pedidos,
  pr.nombre,
- ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) AS precio_venta,
+ pe.pay_price AS precio_venta,
  pe.quantity,
  pe.metodo,
  c.cedula,
  c.telefono,
  c.nombre AS nombre_cliente,
- ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) * pe.quantity AS subtotal,
- ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) * " . $valor . " AS cambio 
+ pe.pay_price * pe.quantity AS subtotal,
+ pe.pay_price * d.valor AS cambio 
  
- FROM pedidos pe,producto pr,cliente c 
+ FROM pedidos pe,producto pr,cliente c, dolar d
  
- WHERE pe.estatus='pago' AND pe.cliente_id=c.id AND pe.product_id=pr.id";
+ WHERE pe.estatus='pago' AND pe.cliente_id=c.id AND pe.product_id=pr.id AND d.id = pe.id_dolar";
 
 
 $respuesta = mysqli_query($conex, $sql7);

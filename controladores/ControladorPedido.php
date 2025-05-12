@@ -30,7 +30,24 @@ class ControladorPedido
 
 			return;
 		} 
-		    #verify sales without end
+		   
+		//Verifies Dolar Price
+		
+		$sql_dolar = "SELECT * FROM dolar ORDER BY id DESC LIMIT 1";
+		$res_dolar = mysqli_query($conex, $sql_dolar);
+
+		if (!$res_dolar) {
+
+			header("Location: ../vista/categorias/car/carro.php?alert=error_dol");
+
+			return;
+		}
+
+		$dolar = mysqli_fetch_object($res_dolar);
+		$id_dolar = $dolar->id;
+		
+		
+		   #verify sales without end
 
 		    $sql_has_p = "SELECT * FROM pedidos WHERE estatus='pago'"; 
 			$qu = mysqli_query($conex, $sql_has_p);
@@ -83,13 +100,13 @@ class ControladorPedido
 
 					if ($fecha_credi == '') {
 
-							$sql2 = "INSERT INTO `pedidos` (`id`,`factura`, `id_usuario`, `product_id`,`cliente_id`, `modified`,`estatus`,`quantity`,`metodo`,`fecha`,`fecha_credi`) VALUES (NULL," . $facNum . "," . $data['user_id'] . ",'" . $data['product_id'] . "','" . $id_cliente . "',CURRENT_TIMESTAMP,'pago','" . $data['quantity'] . "','" . $metodo . "',CURRENT_DATE,NULL)";
+							$sql2 = "INSERT INTO `pedidos`(`id`, `factura`, `id_usuario`, `product_id`, `cliente_id`, `id_dolar`, `pay_price`, `modified`, `ref`, `estatus`, `quantity`, `metodo`, `fecha`, `fecha_credi`) VALUES (NULL," . $facNum . "," . $data['user_id'] . ",'" . $data['product_id'] . "','" . $id_cliente . "',".$id_dolar.",".$data['precio_venta'].",CURRENT_TIMESTAMP,NULL,'pago','" . $data['quantity'] . "','" . $metodo . "',CURRENT_DATE,NULL)";
 
 						} else {
 							
 							$metodo = 'Credito';
 
-							$sql2 = "INSERT INTO `pedidos` (`id`, `factura`,`id_usuario`, `product_id`,`cliente_id`, `modified`,`estatus`,`quantity`,`metodo`,`fecha`,`fecha_credi`) VALUES (NULL," . $facNum . "," . $data['user_id'] . ",'" . $data['product_id'] . "','" . $id_cliente . "',CURRENT_TIMESTAMP,'credito','" . $data['quantity'] . "','Credito',CURRENT_DATE,'" . $fecha_credi . "')";
+							$sql2 = "INSERT INTO `pedidos`(`id`, `factura`, `id_usuario`, `product_id`, `cliente_id`, `id_dolar`, `pay_price`, `modified`, `ref`, `estatus`, `quantity`, `metodo`, `fecha`, `fecha_credi`) VALUES (NULL," . $facNum . "," . $data['user_id'] . ",'" . $data['product_id'] . "','" . $id_cliente . "',".$id_dolar.",".$data['precio_venta'].",CURRENT_TIMESTAMP,NULL,'credito','" . $data['quantity'] . "','Credito',CURRENT_DATE,'" . $fecha_credi . "')";
 						}
 
 						$fino = mysqli_query($conex, $sql2);

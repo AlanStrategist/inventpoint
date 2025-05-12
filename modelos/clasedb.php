@@ -1,17 +1,31 @@
-<?php 
+<?php
 /**
  * 
  */
-class clasedb 
+class clasedb
 {
 	private $db;
 
 	public function conectar()
 	{
-		//$this->db=mysqli_connect("localhost", "root", "", "inventario") or die ("No se pudo conectar con Mysql");
-		
-		$this->db=mysqli_connect("localhost", "root", "", "inventario") or die ("No se pudo conectar con Mysql");
-		return $this->db;
+		try {
+
+			$this->db = mysqli_connect("localhost", "root", "", "inventario") or die("No se pudo conectar con Mysql");
+
+			if ($this->db->connect_error) {
+
+				// Si hay un error de conexión, redirigir al index.php con un mensaje de error
+
+				header("Location: ../index.php?alert=db");
+
+			}
+
+			return $this->db;
+
+		} catch (Exception $e) {
+			// Manejo de excepciones
+			header("Location: ../index.php?alert=db");
+		}
 
 	}
 

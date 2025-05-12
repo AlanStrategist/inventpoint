@@ -39,7 +39,7 @@ try {
   $pruebo = mysqli_num_rows($respuesta);
 
   if ($pruebo == 0) {
-    throw new Exception("No hay cluientes registrados");
+    throw new Exception("No hay clientes registrados");
   }
 
 } catch (Exception $e) {
@@ -56,7 +56,7 @@ try {
 
 } finally {
 
-  mysqli_close($conex);
+  //mysqli_close($conex);
 
 }
 
@@ -82,6 +82,7 @@ try {
                   <th>Teléfono </th>
                   <th>Indentificaci&oacute;n</th>
                   <th>Acciones</th>
+                  <th>Recibos</th>
                 </thead>
 
                 <?php
@@ -123,13 +124,13 @@ try {
 
                     ?>
 
-                    <td><?= $it ?><?= $data['cedula'] ?></td>
+                    <td><?= $it?><?=$data['cedula'] ?></td>
                     <td class="text-primary">
                       <a href="../../../controladores/ControladorCliente.php?operacion=update&id=<?= $data['id'] ?>"
                         title="Modificar" class="btn btn-primary btn-link btn-sm"><i class="fas fa-pen"></i></a>
                     </td>
-
-
+                    <td><a href="../../../controladores/ControladorCliente.php?operacion=rec_client&id=<?= $data['id']?>"
+                        title="Ver todos los recibos de este cliente" class="btn btn-primary btn-link btn-sm"><i class="fas fa-receipt"></i></td>
                     <?php
                 }
                 ?>

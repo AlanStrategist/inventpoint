@@ -123,6 +123,16 @@ class ControladorCliente
 
         }   
         
+    } 
+    
+    public function rec_client()
+    {
+        $id = $_REQUEST['id'];
+
+        $loc = isset($id) ? "Location: ../vista/categorias/cliente/rec_client.php?id=" . $id : "Location: ../vista/categorias/cliente/index.php?alert=error";
+    
+        header($loc);
+
     }
 
 
@@ -151,6 +161,10 @@ class ControladorCliente
             case 'save_update':
                 $pro->save_update();
                 break;
+
+            case 'rec_client':
+                $pro->rec_client();
+                break;    
 
             default:
                 ?>

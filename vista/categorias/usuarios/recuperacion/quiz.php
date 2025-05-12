@@ -133,7 +133,7 @@ if( isset($alert) && $alert == "error"){  $al = new ClassAlert("Error en las res
 
             <div class="d-flex justify-content-end social_icon">
 
-              <span><img class="img rounded-circle" src="../../../icos/logo.webp" width="60" height="60" fill="none"
+              <span><img class="img rounded-circle" src="../../../icos/logo.png" width="60" height="60" fill="none"
                   stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"></span>
             </div>

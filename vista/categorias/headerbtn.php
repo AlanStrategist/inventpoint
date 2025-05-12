@@ -85,7 +85,7 @@ while($privis = mysqli_fetch_array($rescata)){
 <head>
   <meta charset="utf-8" />
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="icon" href="../../icos/logo.webp">
+  <link rel="icon" type="icon" href="../../icos/logo.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>InventPoint- <?= $title ?>
   </title>
@@ -115,7 +115,7 @@ while($privis = mysqli_fetch_array($rescata)){
       -->
       <div class="logo">
         <a href="#" class="simple-text logo-mini">
-          <img class="img rounded-circle" src="../../icos/logo.webp" width="40" height="40" fill="none"
+          <img class="img rounded-circle" src="../../icos/logo.png" width="40" height="40" fill="none"
             stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true"
             class="mr-2" viewBox="0 0 24 24" focusable="false"> </a>
         <a href="../home/home.php" class="simple-text logo-normal" title="Incio">
@@ -205,7 +205,7 @@ while($privis = mysqli_fetch_array($rescata)){
                   <a class="dropdown-item"
                     href="../../../controladores/ControladorCliente.php?operacion=index">Lista de
                     Clientes</a>
-
+                  
                 </div>
               </a>
             </li>

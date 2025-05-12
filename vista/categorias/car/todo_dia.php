@@ -9,14 +9,14 @@ pe.factura,
 pe.fecha,
 pe.fecha_credi,
 pr.nombre,
-ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) AS precio_venta,
 ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100) ,2) * " . $valor . " AS cambio,
+pe.pay_price AS precio_venta,
 pe.quantity,
 pe.metodo,
 c.cedula,
 c.telefono,
 c.nombre AS nombre_cliente,
-ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) * pe.quantity AS subtotal
+pe.pay_price * pe.quantity AS subtotal
 
 FROM pedidos pe,producto pr,cliente c 
 
