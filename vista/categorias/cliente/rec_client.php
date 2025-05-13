@@ -4,7 +4,8 @@ $title = 'Lista de Clientes';
 include '../../js/restric.php';
 include('../../../modelos/ClassAlert.php');
 
-extract($_REQUEST);
+$alert = isset($_GET['alert']) ? $_GET['alert'] : "";
+$id = isset($_GET['id']) ? $_GET['id'] : "";
 
 if (isset($alert) && $alert == "exito") {
   $al = new ClassAlert("Registro exitoso!<br>", "Se registro el cliente exitosamente", "primary");
@@ -16,8 +17,7 @@ if (isset($alert) && $alert == "exito") {
   $al = new ClassAlert("Modificaci&oacute;n exitosa", "", "warning");
 }
 
-
-if (!has_privi($privs, "List", "Cliente")) {
+if (!has_privi($privs, "List", "Cliente") && !has_privi($privs, "List", "Pedidos")) {
 
   ?>
 
@@ -34,12 +34,13 @@ if (!has_privi($privs, "List", "Cliente")) {
 
 try {
 
-  $lista = "SELECT * FROM cliente";
+  $lista = "SELECT p.factura, c.nombre from cliente c, pedidos p WHERE c.id = p.cliente_id AND c.id= $id AND p.estatus = 'facturado' ";
+  
   $respuesta = mysqli_query($conex, $lista);
   $pruebo = mysqli_num_rows($respuesta);
 
   if ($pruebo == 0) {
-    throw new Exception("No hay clientes registrados");
+    throw new Exception("No hay compras de este cliente");
   }
 
 } catch (Exception $e) {
@@ -82,7 +83,7 @@ try {
                   <th>Teléfono </th>
                   <th>Indentificaci&oacute;n</th>
                   <th>Acciones</th>
-                  <!--<th>Recibos</th>-->
+                  <th>Recibos</th>
                 </thead>
 
                 <?php
@@ -129,8 +130,8 @@ try {
                       <a href="../../../controladores/ControladorCliente.php?operacion=update&id=<?= $data['id'] ?>"
                         title="Modificar" class="btn btn-primary btn-link btn-sm"><i class="fas fa-pen"></i></a>
                     </td>
-                    <!--<td><a href="../../../controladores/ControladorCliente.php?operacion=rec_client&id=$data['id']?>"
-                        title="Ver todos los recibos de este cliente" class="btn btn-primary btn-link btn-sm"><i class="fas fa-receipt"></i></td>-->
+                    <td><a href="../../../controladores/ControladorCliente.php?operacion=rec_client&id=<?= $data['id']?>"
+                        title="Ver todos los recibos de este cliente" class="btn btn-primary btn-link btn-sm"><i class="fas fa-receipt"></i></td>
                     <?php
                 }
                 ?>

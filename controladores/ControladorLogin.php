@@ -3,7 +3,8 @@
 session_start();
 
 include('../modelos/clasedb.php');
-extract($_REQUEST);
+include './Utils.php';
+$operacion=$_POST['operacion'];
 
 class ControladorLogin
 {
@@ -42,27 +43,51 @@ class ControladorLogin
 	public function loguear()
 	{
 
-		extract($_POST);
+		$correo = $_POST['correo'];
+		$clave = $_POST['clave'];
+
 		$db = new clasedb();
 		$conex = $db->conectar();
+
+		// Validar que los campos no estén vacíos
 
 		if ($correo == "" || $clave == "") {
 
 			header("Location: ../index.php?alert=vacio");
-			
+
 			return;
 
-		} else {
-			
+		}
 		
-			$clave = hash('sha256', $clave);
+		$cor = limpiarCadena($correo);
+		$cla = limpiarCadena($clave);
 
-			try{
-			
+		if($cor != $correo || $cla != $clave){
+
+			header("Location: ../index.php?alert=error");
+
+			return;
+
+		}
+				
+		// Validar que el correo tenga un formato válido
+		
+		if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+
+			header("Location: ../index.php?alert=correo");
+
+			return;
+
+		}
+	
+		$clave = hash('sha256', $clave);
+
+		try {
+
 			$sql = "SELECT * FROM usuarios WHERE correo='" . $correo . "' AND clave='" . $clave . "' AND estatus='activo'";
 
 			$res = mysqli_query($conex, $sql);
-			
+
 			$r = mysqli_num_rows($res);
 
 			if ($r <= 0) {
@@ -71,27 +96,23 @@ class ControladorLogin
 
 				return;
 			}
-			
+
 			$tipo = mysqli_fetch_array($res);
-			
+
 			$_SESSION['id'] = $tipo['id'];
 			$_SESSION['logueado'] = 'Si';
 
-			$loc = $tipo['tipo_usuario'] == "admin" ? "Location: ../vista/categorias/home/home.php":"Location: ../vista/categorias/cliente/registrar.php";
+			$loc = $tipo['tipo_usuario'] == "admin" ? "Location: ../vista/categorias/home/home.php" : "Location: ../vista/categorias/cliente/registrar.php";
 
 			header($loc);
-			
-			}
-			catch (mysqli_sql_exception | Exception $e ) {
-				
-				header('Location: ../index.php?alert=noexiste');
 
-			}finally{
+		} catch (mysqli_sql_exception | Exception $e) {
 
-				mysqli_close($conex);
+			header('Location: ../index.php?alert=noexiste');
 
-			}
+		} finally {
 
+			mysqli_close($conex);
 
 		}
 
@@ -113,22 +134,22 @@ class ControladorLogin
 		}
 	}
 	public function view_mail()
-	{	
+	{
 
 		extract($_REQUEST);
 
-		try{
+		try {
 
 			$db = new clasedb();
 
 			$conex = $db->conectar();
 
-			$sql = "SELECT id FROM usuarios WHERE correo='".$correo."' AND estatus='activo'";
+			$sql = "SELECT id FROM usuarios WHERE correo='" . $correo . "' AND estatus='activo'";
 
 			$res = mysqli_query($conex, $sql);
-			
-			if( !$res ){
-               
+
+			if (!$res) {
+
 				header("Location: ../vista/categorias/usuarios/recuperacion/correo.php?alert=noex");
 
 				return;
@@ -136,14 +157,14 @@ class ControladorLogin
 
 			$us = mysqli_fetch_array($res);
 
-			header("Location: ../vista/categorias/usuarios/recuperacion/quiz.php?id=".$us['id']);
-			
+			header("Location: ../vista/categorias/usuarios/recuperacion/quiz.php?id=" . $us['id']);
 
-		}catch (Exception | mysqli_sql_exception $e){
+
+		} catch (Exception | mysqli_sql_exception $e) {
 
 			header("Location: ../vista/categorias/usuarios/recuperacion/correo.php?alert=error");
 
-		}finally{
+		} finally {
 
 			mysqli_close($conex);
 		}
@@ -219,7 +240,7 @@ class ControladorLogin
 				alert('Los campos de clave nueva no deben estar vacios');
 				window.location = "../vista/recuperacion/clave_nueva.php?id_usuario=" + id_usuario;
 			</script>
-		<?php
+			<?php
 		} else {
 
 

@@ -10,24 +10,26 @@ extract($_REQUEST);
 $lista = "SELECT DISTINCT pe.id AS id_pedidos,
  pe.factura,
  pr.nombre AS nombre_product,
- ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) AS precio_venta,
+ pe.pay_price AS precio_venta,
  pe.quantity,
  pe.metodo,
  pe.modified,
  c.cedula,
  c.nombre AS nombre_cliente,
- ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) * pe.quantity AS subtotal,
- ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100) ) * " . $valor . " AS cambio ,
+ pe.pay_price * pe.quantity AS subtotal,
+ pe.pay_price * d.valor AS cambio ,
  u.nombre AS nombre_usuario 
  
  
- FROM pedidos pe,producto pr,cliente c,usuarios u 
+ FROM dolar d,pedidos pe,producto pr,cliente c,usuarios u 
  
  WHERE pe.estatus='facturado' AND
  pe.cliente_id=c.id AND
  pe.product_id=pr.id AND
  pe.factura=".$id." AND
- pe.id_usuario = u.id ";
+ pe.id_usuario = u.id AND
+ pe.id_dolar = d.id";
+ 
 
 $respuesta = mysqli_query($conex, $lista);
 $pruebo = mysqli_num_rows($respuesta);
