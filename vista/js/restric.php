@@ -58,8 +58,8 @@ try {
 	}
 
 }catch( mysqli_sql_exception | Exception $e){
-
-	header('Location:../../../index.php?alert=inicia');
+	echo "Error: " . $e->getMessage();
+	//header('Location:../../../index.php?alert=inicia');
 
 }finally{
 

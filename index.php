@@ -134,7 +134,7 @@
             <div class="input-group form-group col-lg-12">
 
               <div class="input-group-prepend">
-                <span class="input-group-text text-danger"><i class="fas fa-key "></i></span>
+                <span class="input-group-text text-danger"><i class="fas fa-key"></i></span>
               </div>
 
               <input type="password" id="password" class="form-control text-center" name="clave"
@@ -142,13 +142,7 @@
                
             </div>
 
-            <!--Esto no va
-  <div class="row align-items-center remember">
-            <input type="radio" name="tipo_usuario"  value="admin" title="admin">Administrador
-          </div> -->
-            <!-- <div class="row align-items-center remember">
-            <input type="radio" name="tipo_usuario" placeholder="Contraseña" required="required" value="cliente" title="cliente">Cliente
-          </div> -->
+
 
 
             <input type="hidden" name="operacion" value="login">

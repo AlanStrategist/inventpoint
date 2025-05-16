@@ -30,7 +30,7 @@ if( !has_privi($privs,"List","Cliente")){
           <h5 class="title">Registro de Cliente</h5>
         </div>
         <div class="card-body">
-          <form  enctype="multipart/form-data" class="needs-validation" method="POST" action="../../../controladores/ControladorCliente.php" novalidate>
+          <form class="needs-validation" method="POST" action="../../../controladores/ControladorCliente.php" novalidate>
 
             <div class="row">
               <div class="col-md-5 pr-1">

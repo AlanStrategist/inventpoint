@@ -23,14 +23,6 @@ $que = "SELECT * FROM producto WHERE stock < 1"; //mostrar
 $strong = mysqli_query($conex, $que);
 $reg = mysqli_num_rows($strong);
 
-$admin = "SELECT * FROM usuarios WHERE tipo_usuario='admin'"; //mostrar
-$gato_sin = mysqli_query($conex, $admin);
-$admin_ac = mysqli_num_rows($gato_sin);
-
-$empleo = "SELECT * FROM usuarios WHERE tipo_usuario='empleado'"; //mostrar
-$empleo_sin = mysqli_query($conex, $empleo);
-$empleo_ac = mysqli_num_rows($empleo_sin);
-
 ?>
  <!--Librerias para los charts --> 
 <script src="../../../modelos/Chart.js-2.9.3/dist/Chart.min.js"></script>
@@ -73,7 +65,7 @@ $empleo_ac = mysqli_num_rows($empleo_sin);
               <div class="card-body">
                 <div class="chart-area">
                   <canvas id="myChart"></canvas>
-                  <?php include '../../js/graficas/pie.php' ?>
+                  <?php //include '../../js/graficas/pie.php' ?>
                 </div>
               </div>
               <div class="card-footer">
@@ -95,7 +87,7 @@ $empleo_ac = mysqli_num_rows($empleo_sin);
 
                   <canvas id="myChart2"></canvas>
 
-                  <?php include '../../js/graficas/dona.php'; ?>
+                  <?php //include '../../js/graficas/dona.php'; ?>
 
                 </div>
               </div>
@@ -119,7 +111,7 @@ $empleo_ac = mysqli_num_rows($empleo_sin);
               <div class="card-body">
                 <div class="chart-area">
                   <canvas id="myChart3"></canvas>
-                  <?php include '../../js/graficas/polar.php' ?>
+                  <?php //include '../../js/graficas/polar.php' ?>
                 </div>
               </div>
               <div class="card-footer">

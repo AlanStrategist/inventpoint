@@ -6,7 +6,7 @@ function GetFac() : int{
 
    $db = new clasedb();
    $conex = $db->conectar();
-   $sql_get_last_id ="SELECT MAX(factura) as last FROM pedidos";
+   $sql_get_last_id ="SELECT MAX(factura) as last FROM facturas";
    
    try{
    
@@ -37,7 +37,7 @@ function GetFac() : int{
 }
 
 function isLoged() : bool{
-
+  
    session_start();
 
    if(isset($_SESSION["id"]) && $_SESSION["logueado"] == "Si"){ 

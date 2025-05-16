@@ -43,9 +43,9 @@ if ($rows > 0) {
   $valor = $dolar->valor;
 }
 
-$sql5 = "SELECT DISTINCT pedidos.factura FROM pedidos WHERE pedidos.metodo='Credito'";
+$sql5 = "SELECT DISTINCT f.factura FROM facturas f WHERE f.estatus='Credito'";
 $reste = mysqli_query($conex, $sql5);
-$resrows = mysqli_num_rows($reste);
+$resrows = mysqli_num_rows($reste); 
 
 $privi = "SELECT p.id,p.nucleo,p.name FROM privileges p ,usuarios_has_privileges uh ,usuarios u WHERE u.id=".$_SESSION['id']." AND uh.id_usuarios = u.id AND p.id = uh.id_privileges;";
 $rescata = mysqli_query($conex, $privi);
@@ -219,9 +219,7 @@ while($privis = mysqli_fetch_array($rescata)){
                 <div class="dropdown-menu" aria-labelledby="sidebarDropdownLink">
 
                   <a class="dropdown-item" href="../car/productos.php">Realizar una venta</a>
-                  <a class="dropdown-item" href="../../../controladores/ControladorPedido.php?operacion=factura">Ventas
-                    exitosas</a>
-
+                
                   <a class="dropdown-item" href="../car/clienpagos.php">Ventas sin culminar</a>
 
                   <a class="dropdown-item" href="../factura/index.php">Recibos</a>
@@ -229,7 +227,8 @@ while($privis = mysqli_fetch_array($rescata)){
                   <hr>
 
                   <a class="dropdown-item" href="../car/todo_dia.php">Ver todos los <strong>créditos</strong></a>
-                
+                  <!--<a class="dropdown-item" href="../../../controladores/ControladorCredito.php?operacion=List_Client">Cr&eacute;ditos por cliente</strong></a>-->
+                   
                 </div>
               </a>
             </li>

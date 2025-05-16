@@ -24,7 +24,9 @@ class clasedb
 
 		} catch (Exception $e) {
 			// Manejo de excepciones
-			header("Location: ../index.php?alert=db");
+			
+			echo "Error: " . $e->getMessage();
+			//header("Location: ../index.php?alert=db");
 		}
 
 	}

@@ -7,16 +7,21 @@ if(!isLoged()){
     
     header("Location: ../index.php?alert=inicia");
     
-    exit();
+    return;
 }
 
-extract($_REQUEST);
+if(isset($_GET['operacion']) || isset($_POST['operacion'])){
+    
+    $operacion = $_GET['operacion'] == "" ? $_POST['operacion'] : $_GET['operacion']; 
+
+}
+
 
 class ControladorCliente
 {
     public function index()
     {
-        extract($_REQUEST);
+        isset($_GET['alert']) ? $alert = $_GET['alert'] : $alert = "";
         
         $loc = isset($alert) ? "Location: ../vista/categorias/cliente/index.php?&alert=" . $alert : "Location: ../vista/categorias/cliente/index.php";
 
@@ -26,8 +31,6 @@ class ControladorCliente
 
     public function registrar()
     {   
-
-
         header("Location: ../vista/cliente/cliente/registrar.php"); //redireccionar a la siguiente dirección
     }
 
@@ -35,8 +38,8 @@ class ControladorCliente
     {
         extract($_POST);
 
-        $_SESSION['id'] = $id_usuario;
-
+        $id_usuario = $_SESSION['id'];
+         
         try{
 
         $db = new clasedb();
@@ -65,11 +68,16 @@ class ControladorCliente
             return;
 
         } 
+
         
         header("Location: ControladorCliente.php?operacion=index&alert=exito");
+    
 
         }catch(Exception $e){
 
+      
+        //echo $e->getMessage();
+        
             header("Location: ControladorCliente.php?operacion=index&alert=error");
 
         }finally{
@@ -92,7 +100,7 @@ class ControladorCliente
     {
         extract($_POST);
 
-        $_SESSION['id_usuario'] = $id_usuario;
+        $id_usuario = $_SESSION['id'];
 
         try{
 
@@ -115,6 +123,8 @@ class ControladorCliente
 
         }catch(Exception $e){
 
+            //echo $e->getMessage();
+         
             header("Location: ControladorCliente.php?operacion=index&alert=error");
 
         }finally{

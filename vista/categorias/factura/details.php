@@ -7,28 +7,26 @@ include('../../js/restric.php');
 
 extract($_REQUEST);
 
-$lista = "SELECT DISTINCT pe.id AS id_pedidos,
- pe.factura,
- pr.nombre AS nombre_product,
- pe.pay_price AS precio_venta,
- pe.quantity,
- pe.metodo,
- pe.modified,
- c.cedula,
- c.nombre AS nombre_cliente,
- pe.pay_price * pe.quantity AS subtotal,
- pe.pay_price * d.valor AS cambio ,
- u.nombre AS nombre_usuario 
- 
- 
- FROM dolar d,pedidos pe,producto pr,cliente c,usuarios u 
- 
- WHERE pe.estatus='facturado' AND
- pe.cliente_id=c.id AND
- pe.product_id=pr.id AND
- pe.factura=".$id." AND
- pe.id_usuario = u.id AND
- pe.id_dolar = d.id";
+$lista = "SELECT DISTINCT f.id AS id_facturas,
+f.factura,
+pr.nombre AS nombre_product,
+pe.pay_price AS precio_venta,
+pe.quantity,
+f.metodo,
+f.date AS modified,
+c.cedula,
+c.nombre AS nombre_cliente,
+pe.pay_price * pe.quantity AS subtotal,
+pe.pay_price * d.valor AS cambio ,
+u.nombre AS nombre_usuario,
+d.valor as dolar 
+FROM facturas f,dolar d,pedidos pe,producto pr,cliente c,usuarios u 
+WHERE pe.id_facturas = f.id AND 
+f.factura=$fac AND
+f.id_cliente=c.id AND
+pe.product_id= pr.id AND
+f.id_usuarios = u.id AND
+f.id_dolar = d.id;";
  
 
 $respuesta = mysqli_query($conex, $lista);
@@ -66,7 +64,7 @@ $pruebo = mysqli_num_rows($respuesta);
               
               $total = 0;
               $totalBS = 0;
-
+              $metodo = "";              
               while ($data = mysqli_fetch_array($respuesta)) {
 
                 $cedula = 0;
@@ -85,7 +83,8 @@ $pruebo = mysqli_num_rows($respuesta);
 
                 $total += $data["subtotal"];
                 $totalBS += $data['cambio'] * $data['quantity'];
-
+                $metodo = $data['metodo'];
+             
               }  ?>
             
             </table>
@@ -96,6 +95,38 @@ $pruebo = mysqli_num_rows($respuesta);
                 <td class="text-primary"><b>Total</b> USD <?=number_format($total, 2, '.', ',')?></td>
             
             </table>
+
+            <?php
+            if( $metodo == "Abonos"){
+
+              $abonos = "SELECT * FROM credits WHERE id_factura = $id";
+              $respuestaAbonos = mysqli_query($conex, $abonos);            
+              ?>
+              <h4 class="card-title">Detalles de Abonos</h4>
+              <table class="table">
+                <thead class="text-primary">
+                  <th>Fecha</th>
+                  <th>Metodo</th>
+                  <th>Monto</th>
+                </thead>
+                <?php
+                while ($dataAbonos = mysqli_fetch_array($respuestaAbonos)) {
+
+                  ?>
+                  <tr>
+                  <td><?=$dataAbonos['fecha']?></td> 
+                  <td><?=$dataAbonos['metodo']?></td>                               
+                  <td>USD <?=number_format($dataAbonos['amount'], 2, '.', ',')?></td>
+                  </tr>
+
+                  <?php
+                 
+                }
+                ?>
+              </table>            
+          <?php  }
+
+            ?>
 
           </div>
         </div>

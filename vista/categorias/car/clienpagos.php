@@ -19,19 +19,25 @@ else if( isset($alert) && $alert == "donefac"){ $al = new ClassAlert("Pedido cre
 else if( isset($alert) && $alert == "culm"){ $al = new ClassAlert("No se ha realizado la venta!<br>","Existen a&uacute;n ventas sin culminar","warning"); }
 
 $sql7 = "SELECT DISTINCT pe.id AS id_pedidos,
- pr.nombre,
- pe.pay_price AS precio_venta,
- pe.quantity,
- pe.metodo,
- c.cedula,
- c.telefono,
- c.nombre AS nombre_cliente,
- pe.pay_price * pe.quantity AS subtotal,
- pe.pay_price * d.valor AS cambio 
- 
- FROM pedidos pe,producto pr,cliente c, dolar d
- 
- WHERE pe.estatus='pago' AND pe.cliente_id=c.id AND pe.product_id=pr.id AND d.id = pe.id_dolar";
+pe.id_facturas AS id_factura,
+pr.nombre,
+pr.id AS id_producto,
+pe.pay_price AS precio_venta,
+pe.quantity, 
+f.metodo,
+c.cedula,
+c.telefono,
+c.nombre AS nombre_cliente,
+pe.pay_price * pe.quantity AS subtotal,
+pe.pay_price * d.valor AS cambio 
+
+FROM pedidos pe,producto pr,cliente c, dolar d, facturas f
+
+ WHERE f.estatus='Pendiente' AND 
+ f.id_cliente=c.id AND 
+ pe.product_id=pr.id AND 
+ d.id = f.id_dolar AND
+ f.id = pe.id_facturas";
 
 
 $respuesta = mysqli_query($conex, $sql7);
@@ -80,7 +86,7 @@ if (!($valid > 0)) { ?>
                 $total = 0;
                 $total_bs = 0;
                 $cedula = 0;
-               
+                $id_factura = 0;
                 while ($pedido = mysqli_fetch_array($respuesta)) {
 
                   $cedula = $pedido['cedula'];
@@ -96,7 +102,7 @@ if (!($valid > 0)) { ?>
                   <td><div class='product-nombre'>
                   <?php echo $pedido['metodo'] == 'Debito' ? 'D&eacute;bito': $pedido['metodo']; ?>
                   </td>
-                  <td><a href='../../../controladores/ControladorPedido.php?operacion=borrar&id=<?=$pedido['id_pedidos']?>'><i title='Eliminar Item' class='fas fa-2x fa-times'></i></a> </td>
+                  <td><a href='../../../controladores/ControladorPedido.php?operacion=borrar&product_id=<?=$pedido['id_producto']?>&fac=<?=$pedido['id_factura']?>&cost=<?=$pedido['precio_venta']?>&q=<?=$pedido['quantity']?>&pedidos_id=<?=$pedido['id_pedidos']?>'><i title='Eliminar Item' class='fas fa-2x fa-times'></i></a> </td>
                   </tr>
 
                   <?php
@@ -104,6 +110,7 @@ if (!($valid > 0)) { ?>
                   $total += $pedido['subtotal'];
                   $valor_cambio = $pedido['cambio'] * $pedido['quantity'];
                   $total_bs += $valor_cambio;
+                  $id_factura = $pedido['id_factura'];
                  } ?>
                 
               </table>
@@ -118,7 +125,7 @@ if (!($valid > 0)) { ?>
                   </tr>
                   <tr>                  
                    <td><a href='pdf.php?cedula=<?= $cedula ?>' class='btn btn-success'><i class='fad fa-file-pdf'></i>Imprimir</a></td>
-                   <td><a href='../../../controladores/ControladorPedido.php?operacion=notificar' class='btn btn-info'><i class='fad fa-check-double'></i>Guardar venta</a></td>
+                   <td><a href='../../../controladores/ControladorPedido.php?operacion=notificar&id_f=<?=$id_factura?>' class='btn btn-info'><i class='fad fa-check-double'></i>Guardar venta</a></td>
                   </tr>
                 </table>
 

@@ -7,7 +7,7 @@ include('../../js/restric.php');
 
 try{
 
-$lista = "SELECT pe.factura, MAX(pe.modified) AS fecha FROM pedidos pe WHERE pe.estatus = 'facturado' GROUP BY pe.factura ORDER BY pe.factura";
+$lista = "SELECT f.id,f.factura,f.total, MAX(f.date) AS fecha FROM facturas f WHERE f.estatus = 'Facturado' GROUP BY f.factura ORDER BY f.factura";
 
 $respuesta = mysqli_query($conex, $lista);
 $pruebo = mysqli_num_rows($respuesta);
@@ -48,24 +48,37 @@ if($pruebo == 0){
                             <thead class="text-primary">
                                 <th> # Recibo</th>
                                 <th> Fecha de emisi&oacute;n</th>
+                                <th> Total</th>
                                 <th> Ver detalles</th>
                             </thead>
 
                             <?php
 
-                            while ($data = mysqli_fetch_array($respuesta)) {
+                            $total = 0;
 
-                                $cedula = 0;
-
-                                echo "<tr>";
-                                echo "<td>REC000".$data["factura"]."</td>";
-                                echo "<td>".$data['fecha']. "</td>";
-                                echo "<td> <a title='Ver detalles' href='../../../controladores/ControladorPedido.php?operacion=details&id=".$data['factura']."'><i class='far fa-3x fa-eye'></i></a></td>";
+                            while ($data = mysqli_fetch_array($respuesta)) {                           
                                 
+                                $total += $data['total'];
+                                ?>
+
+                                <tr>
+                                <td>REC000<?=$data["factura"]?></td>
+                                <td><?=$data['total']?></td> 
+                                <td><?=$data['fecha']?></td>
+                                <td><a title='Ver detalles' href='../../../controladores/ControladorPedido.php?operacion=details&fac=<?=$data['factura']?>&id=<?=$data['id']?>'><i class='far fa-3x fa-eye'></i></a></td>
+                                
+                                <?php
                             }
 
                             ?>
                        </table>
+
+                       <table class="table">                         
+                            <tr>
+                                <td class="text-success">Total Facturado:&#36;<?=$total?></td> 
+                            </tr>
+                        </table>
+
                     </div>
                 </div>
             </div>

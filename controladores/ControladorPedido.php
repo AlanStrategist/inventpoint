@@ -5,7 +5,10 @@ extract($_REQUEST);
 include("../modelos/clasedb.php");
 include "Utils.php";
 
-if(!isLoged()){	header(" Location: ../index.php?alert=inicia "); return; }
+if (!isLoged()) {
+	header(" Location: ../index.php?alert=inicia ");
+	return;
+}
 
 class ControladorPedido
 {
@@ -15,149 +18,192 @@ class ControladorPedido
 
 		$id_usuario = $_SESSION['id'];
 
-		try{
+		try {
 
-		$db = new clasedb();
-		$conex = $db->conectar();
+			$db = new clasedb();
+			$conex = $db->conectar();
 
-		$sql23 = "SELECT * FROM cliente WHERE cedula=" . $cedula . "";
-		$response = mysqli_query($conex, $sql23);
-		$porsi = mysqli_num_rows($response);
+			$sql23 = "SELECT * FROM cliente WHERE cedula=" . $cedula . "";
+			$response = mysqli_query($conex, $sql23);
+			$porsi = mysqli_num_rows($response);
 
-		if ($porsi == 0) { 
-			
-			header("Location: ../vista/categorias/car/carro.php?alert=cedula");
+			if ($porsi == 0) {
 
-			return;
-		} 
-		   
-		//Verifies Dolar Price
-		
-		$sql_dolar = "SELECT * FROM dolar ORDER BY id DESC LIMIT 1";
-		$res_dolar = mysqli_query($conex, $sql_dolar);
+				header("Location: ../vista/categorias/car/carro.php?alert=cedula");
 
-		if (!$res_dolar) {
+				return;
+			}
 
-			header("Location: ../vista/categorias/car/carro.php?alert=error_dol");
+			$cliente = mysqli_fetch_object($response);
+			$id_cliente = $cliente->id;
+			//traigo el id del cliente
 
-			return;
-		}
+			//Verifies Dolar Price
 
-		$dolar = mysqli_fetch_object($res_dolar);
-		$id_dolar = $dolar->id;
-		
-		
-		   #verify sales without end
+			$sql_dolar = "SELECT * FROM dolar ORDER BY id DESC LIMIT 1";
+			$res_dolar = mysqli_query($conex, $sql_dolar);
 
-		    $sql_has_p = "SELECT * FROM pedidos WHERE estatus='pago'"; 
+			if (!$res_dolar) {
+
+				header("Location: ../vista/categorias/car/carro.php?alert=error_dol");
+
+				return;
+			}
+
+			$dolar = mysqli_fetch_object($res_dolar);
+			$id_dolar = $dolar->id;
+
+			#verify sales without end
+			$sql_has_p = "SELECT id FROM facturas WHERE estatus='Pendiente'";
 			$qu = mysqli_query($conex, $sql_has_p);
-		    $num = mysqli_num_rows($qu);
+			$num = mysqli_num_rows($qu);
 
-			if( $num > 0) {
-				
+			if ($num > 0) {
+
 				header("Location: ../vista/categorias/car/clienpagos.php?alert=culm");
 
 				return;
 
 			}
-			
-			//Verifies method credito with no date
-			
-			$cliente = mysqli_fetch_object($response);
-			$id_cliente = $cliente->id;
-			//traigo el id del cliente
 
 			//pido todos los datos de los productos del carrito segun el usuario y calculo la cantidad en existencia
 
 			$sql = "SELECT DISTINCT cm.product_id,cm.user_id,cm.quantity,p.nombre,
-			ROUND(p.precio + ( (p.precio * p.porcentaje) / 100),2) AS precio_venta,
-			p.stock,(p.stock-cm.quantity) AS restante 
+		ROUND(p.precio + ( (p.precio * p.porcentaje) / 100),2) AS precio_venta,
+		p.stock,(p.stock-cm.quantity) AS restante 
 
-			FROM cart_menu cm,producto p,usuarios u,cliente c 
+		FROM cart_menu cm,producto p,usuarios u,cliente c 
 
-			WHERE cm.user_id=u.id AND cm.product_id=p.id";
+		WHERE cm.user_id=u.id AND cm.product_id=p.id";
 
 			$respuesta = mysqli_query($conex, $sql);
 
 			if (!$respuesta) {
-				
+
 				header("Location: ../vista/categorias/car/carro.php?alert=error");
-				
+
 				return;
 			}
 
-				$facNum = GetFac();
+			//Get the invoice number
 
-				while ($data = mysqli_fetch_array($respuesta)) {
+			$facNum = GetFac();
 
-					if ($data['restante'] < 0) { 
-						
-						header("Location: ../vista/categorias/car/carro.php?alert=nostock");
-						
-						return;
-					
-					}
+			// Get total amount and array of products, and data of the sell
 
-					if ($fecha_credi == '') {
+			$total = 0;
 
-							$sql2 = "INSERT INTO `pedidos`(`id`, `factura`, `id_usuario`, `product_id`, `cliente_id`, `id_dolar`, `pay_price`, `modified`, `ref`, `estatus`, `quantity`, `metodo`, `fecha`, `fecha_credi`) VALUES (NULL," . $facNum . "," . $data['user_id'] . ",'" . $data['product_id'] . "','" . $id_cliente . "',".$id_dolar.",".$data['precio_venta'].",CURRENT_TIMESTAMP,NULL,'pago','" . $data['quantity'] . "','" . $metodo . "',CURRENT_DATE,NULL)";
+			$data = array();
 
-						} else {
-							
-							$metodo = 'Credito';
+			while ($dat = mysqli_fetch_array($respuesta)) {
 
-							$sql2 = "INSERT INTO `pedidos`(`id`, `factura`, `id_usuario`, `product_id`, `cliente_id`, `id_dolar`, `pay_price`, `modified`, `ref`, `estatus`, `quantity`, `metodo`, `fecha`, `fecha_credi`) VALUES (NULL," . $facNum . "," . $data['user_id'] . ",'" . $data['product_id'] . "','" . $id_cliente . "',".$id_dolar.",".$data['precio_venta'].",CURRENT_TIMESTAMP,NULL,'credito','" . $data['quantity'] . "','Credito',CURRENT_DATE,'" . $fecha_credi . "')";
-						}
+				$data[] = $dat;
 
-						$fino = mysqli_query($conex, $sql2);
+				if ($dat['restante'] < 0) {
 
-						if (!$fino) {
+					header("Location: ../vista/categorias/car/carro.php?alert=nostock");
 
-							header("Location: ../vista/categorias/car/carro.php?alert=error");
+					return;
 
-							return;
-
-						}
-
-						$sql3 = "UPDATE producto SET stock=" . $data['restante'] . " WHERE `id`=" . $data['product_id'] . "";
-
-						$pavo = mysqli_query($conex, $sql3);
-
-							if (!$pavo) {
-
-								header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
-
-								return;
-							}
 				}
-							
 
-							//Vacio el carrito
+				$total += $dat['precio_venta'] * $dat['quantity'];
 
-							$sql4 = "DELETE FROM cart_menu WHERE  `user_id`=" . $id_usuario . "";
+			}
 
-							$res = mysqli_query($conex, $sql4);
+			//Insert into the table facturas
 
-							if (!$res) {
+			$sql_fac = !isset($fecha_credi) ? "INSERT INTO `facturas`(`id`, `factura`, `total`, `id_cliente`, `id_dolar`,`id_usuarios`, `metodo`, `estatus`, `ref`,`date`,`fecha_credi`) 
+		
+		VALUES (NULL," . $facNum . "," . $total . "," . $id_cliente . "," . $id_dolar . "," . $id_usuario . ",'" . $metodo . "','Pendiente','',CURRENT_TIMESTAMP(),NULL)" :
 
-								header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
+				"INSERT INTO `facturas`(`id`, `factura`, `total`, `id_cliente`, `id_dolar`,`id_usuarios`, `metodo`, `estatus`, `ref`,`date`,`fecha_credi`) VALUES 
+		
+		(NULL," . $facNum . "," . $total . "," . $id_cliente . "," . $id_dolar . "," . $id_usuario . ",'Abonos','Credito','',CURRENT_TIMESTAMP(),'$fecha_credi')";
 
-								return;
-							}
+			$fino = mysqli_query($conex, $sql_fac);
 
-							$loc = $metodo == 'Credito' ? "Location: ../vista/categorias/car/todo_dia.php?alert=credit" : "Location: ../vista/categorias/car/clienpagos.php?alert=pedido"; 
-							
-							header($loc);
+			if (!$fino) {
 
-		}catch(mysqli_sql_exception | Exception $e) {
+				header("Location: ../vista/categorias/car/carro.php?alert=error");
+
+				return;
+
+			}
+
+			//Get the id of the invoice
+
+			$sql = "SELECT id FROM facturas WHERE factura=" . $facNum . "";
+			$res = mysqli_query($conex, $sql);
+
+			if (!$res) {
+
+				header("Location: ../vista/categorias/car/carro.php?alert=error");
+
+				return;
+
+			}
+
+			$rows = mysqli_fetch_array($res);
+			$id_factura = $rows['id'];
+
+			//Insert into the table pedidos by product
+
+			foreach ($data as $d) {
+
+				$sql_ped = "INSERT INTO `pedidos`(`id`, `id_facturas`, `product_id`, `pay_price`, `quantity`) 
 			
+			    VALUES (NULL," . $id_factura . "," . $d['product_id'] . "," . $d['precio_venta'] . "," . $d['quantity'] . ")";
+
+				$res_ped = mysqli_query($conex, $sql_ped);
+
+				if (!$res_ped) {
+
+					header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
+
+					return;
+				}
+
+				$sql3 = "UPDATE producto SET stock=" . $d['restante'] . " WHERE `id`=" . $d['product_id'] . "";
+
+				$pavo = mysqli_query($conex, $sql3);
+
+				if (!$pavo) {
+
+					header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
+
+					return;
+				}
+
+			}
+			//Vacio el carrito
+
+			$sql4 = "DELETE FROM cart_menu WHERE  `user_id`=" . $id_usuario . "";
+
+			$res = mysqli_query($conex, $sql4);
+
+			if (!$res) {
+
+				header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
+
+				return;
+			}
+
+			$loc = $fecha_credi != '' ? "Location: ../vista/categorias/car/todo_dia.php?alert=credit" : "Location: ../vista/categorias/car/clienpagos.php?alert=pedido";
+
+			header($loc);
+
+		} catch (mysqli_sql_exception | Exception $e) {
+
+			//echo $e->getMessage();	
+
 			header("Location: ../vista/categorias/car/carro.php?alert=no");
-		}
-		finally{
+
+		} finally {
 
 			mysqli_close($conex);
 		}
-		
+
 
 	}//fin de la funcion
 
@@ -166,31 +212,31 @@ class ControladorPedido
 		extract($_REQUEST);
 		extract($_POST);
 
-		try{
+		try {
 
-		$db = new clasedb();
-		
-		$conex = $db->conectar();
-		
-		$sql = "UPDATE pedidos SET metodo='$metodo', estatus='pago', fecha=CURRENT_DATE WHERE factura=".$factura;
+			$db = new clasedb();
 
-		$res = mysqli_query($conex, $sql) or die;
-		
-		if (!$res) {
+			$conex = $db->conectar();
 
-		header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
-			
-		return;
+			$sql = "UPDATE pedidos SET metodo='$metodo', estatus='pago', fecha=CURRENT_DATE WHERE factura=" . $factura;
 
-		}
+			$res = mysqli_query($conex, $sql) or die;
 
-		header("Location: ../vista/categorias/car/clienpagos.php?alert=donefac");
+			if (!$res) {
 
-		}catch(mysqli_sql_exception | Exception $e) {
+				header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
+
+				return;
+
+			}
+
+			header("Location: ../vista/categorias/car/clienpagos.php?alert=donefac");
+
+		} catch (mysqli_sql_exception | Exception $e) {
 
 			header("Location: ../vista/categorias/car/clienpagos.php?alert=error");
 
-		}finally{
+		} finally {
 
 			mysqli_close($conex);
 
@@ -201,119 +247,132 @@ class ControladorPedido
 	{
 		extract($_REQUEST);
 
-		try{
+		try {
 
-		$db = new clasedb();
-		$conex = $db->conectar();
+			$db = new clasedb();
+			$conex = $db->conectar();
 
-		//tomo la cantidad y la repongo en el stock
-		$query = "SELECT pedidos.factura,pedidos.product_id,pedidos.quantity FROM pedidos WHERE id=$id";
+			//tomo la cantidad y el producto y lo resto de la factura
 
-		$ros = mysqli_query($conex, $query);
-		$count = mysqli_num_rows($ros);
+			$sql = "SELECT total FROM facturas WHERE id=" . $fac;
 
-		if (!($count > 0)) {
+			$sql_factura = mysqli_query($conex, $sql);
 
-			header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
+			if (!$sql_factura) {
 
-			return;
+				header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
 
-		}
+				return;
 
-		$rows = mysqli_fetch_array($ros);
+			}
 
-		$sql2 = "SELECT producto.stock FROM producto WHERE id=" . $rows['product_id'];
+			$rows = mysqli_fetch_array($sql_factura);
 
-		$rus = mysqli_query($conex, $sql2);
+			$total = $rows['total'] - ($q * $cost);
 
-		if (!$rus) {
-			
-			header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
+			//Update the total of the invoice
 
-			return;
+			$sql_up = "UPDATE facturas SET total=$total WHERE id=" . $fac;
+			$res = mysqli_query($conex, $sql_up);
 
-		}
+			if (!$res) {
 
-		$rows2 = mysqli_fetch_array($rus);
+				header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
 
-		$stock = $rows['quantity'] + $rows2['stock'];
+				return;
 
-		$sql3 = "UPDATE producto SET stock=$stock WHERE id=" . $rows['product_id'];
+			}
 
-		$ras = mysqli_query($conex, $sql3);
+			//Remove item of the invoice
 
-		if (!$ras) {
+			$sql_rem = "DELETE FROM pedidos WHERE product_id=" . $product_id . " AND id_facturas=" . $fac;
 
-			header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
+			$res = mysqli_query($conex, $sql_rem);
 
-			return;
-		}
+			if (!$res) {
 
-		//Remove item of the sale
+				header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
 
-		$sql = "DELETE FROM pedidos WHERE id=" . $id;
+				return;
 
-		$res = mysqli_query($conex, $sql);
+			}
 
-		if (!$res) {
+			//Update the stock of the product
 
-			header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
+			$sql2 = "SELECT producto.stock FROM producto WHERE id=" . $product_id;
 
-			return;
+			$rus = mysqli_query($conex, $sql2);
 
-		}else{
-			
+			if (!$rus) {
+
+				header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
+
+				return;
+
+			}
+
+			$rows2 = mysqli_fetch_array($rus);
+
+			$stock = $q + $rows2['stock'];
+
+			$sql3 = "UPDATE producto SET stock=$stock WHERE id=" . $product_id;
+
+			$ras = mysqli_query($conex, $sql3);
+
+			if (!$ras) {
+
+				header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
+
+				return;
+			}
+
 			header("Location: ../vista/categorias/car/clienpagos.php?alert=deletevent");
-			
+
 			return;
+
+
+		} catch (mysqli_sql_exception | Exception $e) {
+
+			echo $e->getMessage();
+
+			//header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
+
+		} finally {
+
+			mysqli_close($conex);
+
 		}
-					
-	} catch (mysqli_sql_exception | Exception $e) {	
-
-		
-
-		header("Location: ../vista/categorias/car/clienpagos.php?alert=errorven");
-
-	}finally{
-
-		mysqli_close($conex);
-
-	}
 
 	}
 
 	public function notificar()
 	{
-		
 		extract($_REQUEST);
-		extract($_POST);
 
-		$id_usuario = $_SESSION['id'];
+		try {
 
-		try{
+			$db = new clasedb();
+			$conex = $db->conectar();
 
-		$db = new clasedb();
-		$conex = $db->conectar();
+			$sql = "UPDATE facturas SET estatus='Facturado' WHERE id=$id_f";
 
-		$estatus = "facturado";
+			$res = mysqli_query($conex, $sql) or die;
 
-		$sql = "UPDATE pedidos SET estatus='$estatus' WHERE id_usuario='$id_usuario'";
+			if (!$res) {
 
-		$res = mysqli_query($conex, $sql) or die;
-		
-		if (!$res) {
-		
+				header("Location: ../vista/categorias/car/productos.php?alert=errorven");
+
+				return;
+
+			}
+
+			header("Location: ../vista/categorias/car/productos.php?alert=save");
+
+		} catch (mysqli_sql_exception | Exception $e) {
+
 			header("Location: ../vista/categorias/car/productos.php?alert=errorven");
 
-			return;
-
-		}
-
-		header("Location: ../vista/categorias/car/productos.php?alert=save");
-
-		}catch (mysqli_sql_exception | Exception $e) {
-
-		}finally{
+		} finally {
 
 			mysqli_close($conex);
 		}
@@ -324,17 +383,12 @@ class ControladorPedido
 
 		header("Location: ../vista/categorias/car/metodo.php?id=" . $id);
 	}
-
-	public function factura()
+	public function details()
 	{
-		header("Location: ../vista/categorias/car/facturado.php");
-	}
-
-	public function details(){
 
 		extract($_REQUEST);
 
-		header("Location: ../vista/categorias/factura/details.php?id=".$id."");
+		header("Location: ../vista/categorias/factura/details.php?fac=".$fac."&id=" . $id . "");
 
 	}
 
@@ -349,10 +403,10 @@ class ControladorPedido
 				$pro->aprobar();
 				break;
 
-			case 'guardar':  
+			case 'guardar':
 				$pro->guardar();
 				break;
-			
+
 			case 'notificar':
 				$pro->notificar();
 				break;
@@ -371,7 +425,7 @@ class ControladorPedido
 
 			case 'details': //Show all invoices
 				$pro->details();
-				break;	
+				break;
 
 			default:
 				?>
@@ -386,4 +440,4 @@ class ControladorPedido
 	}
 }
 ControladorPedido::controlador($operacion);
- ?>
+?>
