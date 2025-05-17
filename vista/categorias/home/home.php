@@ -65,7 +65,7 @@ $reg = mysqli_num_rows($strong);
               <div class="card-body">
                 <div class="chart-area">
                   <canvas id="myChart"></canvas>
-                  <?php //include '../../js/graficas/pie.php' ?>
+                  <?php include '../../js/graficas/pie.php' ?>
                 </div>
               </div>
               <div class="card-footer">
@@ -75,33 +75,10 @@ $reg = mysqli_num_rows($strong);
               </div>
             </div>
           </div>
-
-          <div class="col-md-6">
-            <div class="card card-chart">
-              <div class="card-header">
-                <!--<h5 class="card-category">Estadisticas de ventas</h5> -->
-                <h4 class="card-title">Método de pago mas usados</h4>
-              </div>
-              <div class="card-body">
-                <div class="chart-area">
-
-                  <canvas id="myChart2"></canvas>
-
-                  <?php //include '../../js/graficas/dona.php'; ?>
-
-                </div>
-              </div>
-              <div class="card-footer">
-                <div class="stats">
-                  <i class="fas fa-clock"></i> Historial de ventas
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
+         
+        
            
-          <div class="row">
+          
             <div class="col-md-6">
               <div class="card card-chart">
                 <div class="card-header">
@@ -111,7 +88,7 @@ $reg = mysqli_num_rows($strong);
               <div class="card-body">
                 <div class="chart-area">
                   <canvas id="myChart3"></canvas>
-                  <?php //include '../../js/graficas/polar.php' ?>
+                  <?php include '../../js/graficas/polar.php' ?>
                 </div>
               </div>
               <div class="card-footer">
@@ -121,7 +98,9 @@ $reg = mysqli_num_rows($strong);
               </div>
              </div>
             </div>
-          </div>
+
+            </div>
+         
           
 
 

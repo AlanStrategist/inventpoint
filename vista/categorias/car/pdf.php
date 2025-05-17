@@ -7,76 +7,58 @@ include("../../../modelos/clasedb.php");
 
 if(!isLoged()){ header('../index.php?alert=inicia'); }
 
-
-
 $db = new clasedb();
 
 $conex = $db->conectar();
 
-#found the dolar value
+try{
 
-$sql4 = "SELECT * FROM `dolar` ORDER BY `dolar`.`valor` DESC";
-
-$res4 = mysqli_query($conex, $sql4);
-$rows = mysqli_num_rows($res4);
-
-if ($rows > 0) {
-  $dolar = mysqli_fetch_object($res4);
-  $valor = $dolar->valor;
-} else { ?>
-  <script type="text/javascript">
-
-    window.location = 'clienpagos.php?errordolar'
-
-  </script>
-
-
-<?php }
-
-
-$sql2 = "SELECT
-pe.modified,
-pe.metodo,
+$sql= "SELECT DISTINCT pe.id AS id_pedidos,
+pe.id_facturas AS id_factura,
+pr.nombre as nombre_item,
+pr.id AS id_producto,
+pe.pay_price AS precio_venta,
+pe.quantity, 
+f.metodo,
+f.date AS modified,
+c.cedula,
 c.nombre,
-c.telefono, 
-c.cedula 
+c.telefono,
+c.nombre AS nombre_cliente,
+pe.pay_price * pe.quantity AS subtotal,
+pe.pay_price * d.valor AS cambio 
 
-FROM pedidos pe,cliente c
+FROM pedidos pe,producto pr,cliente c, dolar d, facturas f
 
-WHERE pe.estatus='pago' AND pe.cliente_id=c.id";
-
-
-$sql = "SELECT pe.quantity,
- pe.modified,
- pe.metodo,
- pe.pay_price AS precio_venta, 
- c.nombre,
- c.telefono, 
- c.cedula, 
- pe.pay_price * pe.quantity AS subtotal, 
- pr.nombre AS nombre_item, 
- pe.pay_price * d.valor AS cambio 
- 
- FROM pedidos pe,producto pr,cliente c, dolar d
- 
- WHERE pe.estatus='pago' AND pe.cliente_id=c.id AND pe.product_id=pr.id";
+ WHERE f.estatus='Pendiente' AND 
+ f.id_cliente=c.id AND 
+ pe.product_id=pr.id AND 
+ f.id_usuarios = ".$_SESSION['id']." AND
+ d.id = f.id_dolar AND
+ f.id = pe.id_facturas";
 
 $res = mysqli_query($conex, $sql);
-$rows = mysqli_num_rows($res);
 
-$res2 = mysqli_query($conex, $sql2);
-$rows2 = mysqli_num_rows($res2);
+if (!$res) {
+  throw new Exception("Error en la consulta SQL: " . mysqli_error($conex));
+}
+
+$data= array();
+
+while ($datos = mysqli_fetch_array($res)) {
+
+  $data[] = $datos;
+
+$nombre = $datos['nombre'];
+$cedula = $datos['cedula'];
+$telefono = $datos['telefono'];
+$modified = $datos['modified'];
+$metodo = $datos['metodo'];
+
+}
 
 
-$cliente = mysqli_fetch_object($res2);
-$nombre = $cliente->nombre;
-$cedula = $cliente->cedula;
-$telefono = $cliente->telefono;
-$modified = $cliente->modified;
-$metodo = $cliente->metodo;
 
-
-if ($rows > 0 || $rows2 > 0) {
 
 
   $pdf = new FPDF($orientation = 'P', $unit = 'mm', array(45, 350));
@@ -121,7 +103,7 @@ if ($rows > 0 || $rows2 > 0) {
   $pdf->setX(1);
   $pdf->Cell(3, $textypos, 'CANT-NOMBRE                                        PRECIO($)      TOTAL($)');
 
-  while ($datos = mysqli_fetch_array($res)) {
+  foreach($data as $datos) {
 
     $total = $datos['precio_venta'] * $datos['quantity'];
     $total_neto += $total;
@@ -162,15 +144,16 @@ if ($rows > 0 || $rows2 > 0) {
 
   $pdf->Output('' . $nombre . ' #' . $modified . '.pdf', 'd');
 
+ }catch (Exception $e) {
 
-} else { ?>
+  ?>
 
   <script type="text/javascript">
 
-    window.location = 'clienpagos.php?errorgen'
+    window.location = './clienpagos.php?alert=errorgen'
 
   </script>
 
-<?php }
-
+  <?php
+}
 ?>

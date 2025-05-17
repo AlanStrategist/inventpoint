@@ -7,6 +7,8 @@ include('../../js/restric.php');
 
 extract($_REQUEST);
 
+try{
+
 $lista = "SELECT DISTINCT f.id AS id_facturas,
 f.factura,
 pr.nombre AS nombre_product,
@@ -32,7 +34,18 @@ f.id_dolar = d.id;";
 $respuesta = mysqli_query($conex, $lista);
 $pruebo = mysqli_num_rows($respuesta);
 
+}catch (mysqli_sql_exception | Exception $e) {
+    
+   ?>
 
+  <script>
+
+    window.location = "../home/home.php?alert=noreci";
+
+  </script>
+
+  <?php
+}
 ?>
 
 <div class="content">

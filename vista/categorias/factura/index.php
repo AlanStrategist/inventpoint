@@ -63,8 +63,8 @@ if($pruebo == 0){
 
                                 <tr>
                                 <td>REC000<?=$data["factura"]?></td>
-                                <td><?=$data['total']?></td> 
                                 <td><?=$data['fecha']?></td>
+                                <td><?=$data['total']?></td> 
                                 <td><a title='Ver detalles' href='../../../controladores/ControladorPedido.php?operacion=details&fac=<?=$data['factura']?>&id=<?=$data['id']?>'><i class='far fa-3x fa-eye'></i></a></td>
                                 
                                 <?php

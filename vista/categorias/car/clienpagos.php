@@ -37,6 +37,7 @@ FROM pedidos pe,producto pr,cliente c, dolar d, facturas f
  f.id_cliente=c.id AND 
  pe.product_id=pr.id AND 
  d.id = f.id_dolar AND
+ f.id_usuarios = ".$_SESSION['id']." AND
  f.id = pe.id_facturas";
 
 
