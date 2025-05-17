@@ -7,7 +7,8 @@ include '../../js/restric.php';
 $sql7 = "SELECT pr.nombre,
 pe.pay_price AS precio_venta,
 pe.quantity,
-pe.modified,
+f.date as modified,
+f.factura,
 u.correo, 
 c.cedula,
 c.nombre AS nombre_cliente,
@@ -15,13 +16,15 @@ u.nombre AS nombre_usuario,
 pe.pay_price * pe.quantity AS subtotal,
 pe.pay_price * d.valor AS cambio 
 
-FROM pedidos pe ,cliente c,producto pr,usuarios u , dolar d
+FROM pedidos pe ,cliente c,producto pr,usuarios u , dolar d, facturas f
 
 WHERE pe.product_id=pr.id AND 
-pe.cliente_id= c.id AND 
-pe.estatus='facturado' AND 
-pe.id_usuario=u.id AND 
-pe.id_dolar=d.id AND pe.fecha= CURRENT_DATE";
+f.id_cliente= c.id AND 
+f.estatus='Facturado' AND 
+f.id_usuarios=u.id AND 
+f.id_dolar=d.id AND 
+DATE(f.date)=CURRENT_DATE AND
+pe.id_facturas=f.id";
 
 $respuesta = mysqli_query($conex, $sql7);
 $agarro = mysqli_num_rows($respuesta);

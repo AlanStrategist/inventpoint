@@ -63,39 +63,40 @@ try {
   $pdf->setX(4);
   $pdf->Cell(5, $textypos, 'CANT-NOMBRE             UND        SUB-TOTAL ');
 
-  $methods = ["Divisa", "Efectivo", "Debito", "Transferencia"];
+  $methods = ["Divisa", "Efectivo", "Debito", "Transferencia","Abonos"];
 
   //Net By Method 
   $net_methods = [
     "Divisa" => 0,
     "Efectivo" => 0,
     "Debito" => 0,
-    "Transferencia" => 0
+    "Transferencia" => 0,
+    "Abonos" => 0
   ];
 
   $net_USD = 0;    //Net ammount USD All sells   
 
   foreach ($methods as $method) {
 
-    $sql_methods = "SELECT pr.nombre,
+    $sql_methods = "SELECT DISTINCT pr.nombre,
     ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100),2) AS precio_venta,
     pe.quantity,
-    pe.modified,
-    pe.metodo,
+    f.date as modified,
+    f.metodo,
     u.correo,
-    pe.fecha,
     c.cedula,
-    ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100) ,2) * pe.quantity AS subtotal,
-    ROUND(pr.precio + ( (pr.precio * pr.porcentaje) / 100) ,2) * " . $valor . " AS cambio 
+    pe.pay_price * pe.quantity AS subtotal,
+    pe.pay_price * $valor AS cambio 
 
-    FROM pedidos pe,cliente c,producto pr,usuarios u 
+    FROM pedidos pe,cliente c,producto pr,usuarios u, facturas f 
 
     WHERE pe.product_id=pr.id AND 
-    pe.id_usuario=u.id AND
-    pe.cliente_id= c.id AND
-    pe.metodo='" . $method . "' AND
-    pe.estatus='facturado' AND
-    pe.fecha= CURRENT_DATE";
+    f.id_usuarios=u.id AND
+    f.id_cliente = c.id AND
+    f.metodo='".$method."' AND
+    f.estatus='Facturado' AND
+    pe.id_facturas=f.id AND
+    DATE(f.date)= CURRENT_DATE";
 
     $res = mysqli_query($conex, $sql_methods);
 
@@ -104,7 +105,7 @@ try {
       $net_USD += $data['subtotal'];
       $net_methods[$method] += $data['subtotal']; //Same thing but that resets by method 
 
-      if ($data['metodo'] != "Divisa") {
+      if ($data['metodo'] != "Divisa" || $data['metodo'] != 'Abonos') {
 
         $net_methods[$method] = $data["subtotal"] * $valor;
 
@@ -116,9 +117,9 @@ try {
       $pdf->setX(4);
       $pdf->Cell(20, $off, strtoupper(substr('' . $data['nombre'] . '', 0, 12)));
       $pdf->setX(20);
-      $pdf->Cell(11, $off,  ( $method != "Divisa" ? "BS" : "$" ). number_format('' . ($method != "Divisa" ?  $data['precio_venta'] * $valor : $data['precio_venta']  )  . '', 2, ".", ","), 0, 0, "R");
+      $pdf->Cell(11, $off, ($method != "Divisa" ? "BS" : "$") . number_format('' . ($method != "Divisa" ? $data['precio_venta'] * $valor : $data['precio_venta']) . '', 2, ".", ","), 0, 0, "R");
       $pdf->setX(30);
-      $pdf->Cell(11, $off, ( $method != "Divisa" ? "BS" : "$" )  . number_format(($method != "Divisa" ? ( ($data['quantity'] *  $data['precio_venta']) * $valor ) : ($data['quantity'] *  $data['precio_venta'] )), 2, ".", ","), 0, 0, "R");
+      $pdf->Cell(11, $off, ($method != "Divisa" ? "BS" : "$") . number_format(($method != "Divisa" ? (($data['quantity'] * $data['precio_venta']) * $valor) : ($data['quantity'] * $data['precio_venta'])), 2, ".", ","), 0, 0, "R");
       $pdf->setX(32);
 
       $off += 6;
@@ -152,6 +153,12 @@ try {
   $pdf->Cell(5, $textypos, "   TOTAL en: Tran Bs  ");
   $pdf->setX(38);
   $pdf->Cell(5, $textypos, "" . number_format($net_methods['Transferencia'], 2, ".", ","), 0, 0, "R");
+
+  $pdf->Ln(3);
+  $pdf->setX(2);
+  $pdf->Cell(5, $textypos, "   TOTAL en: Abonos ");
+  $pdf->setX(38);
+  $pdf->Cell(5, $textypos, "" . number_format($net_methods['Abonos'], 2, ".", ","), 0, 0, "R");
 
   $pdf->Ln(3);
   $pdf->setX(2);
