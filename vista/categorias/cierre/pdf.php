@@ -63,15 +63,14 @@ try {
   $pdf->setX(4);
   $pdf->Cell(5, $textypos, 'CANT-NOMBRE             UND        SUB-TOTAL ');
 
-  $methods = ["Divisa", "Efectivo", "Debito", "Transferencia","Abonos"];
+  $methods = ["Divisa", "Efectivo", "Debito", "Transferencia"];
 
   //Net By Method 
   $net_methods = [
     "Divisa" => 0,
     "Efectivo" => 0,
     "Debito" => 0,
-    "Transferencia" => 0,
-    "Abonos" => 0
+    "Transferencia" => 0
   ];
 
   $net_USD = 0;    //Net ammount USD All sells   
@@ -104,13 +103,12 @@ try {
 
       $net_USD += $data['subtotal'];
       $net_methods[$method] += $data['subtotal']; //Same thing but that resets by method 
-
-      if ($data['metodo'] != "Divisa" || $data['metodo'] != 'Abonos') {
+  
+      if ($data['metodo'] != "Divisa") {
 
         $net_methods[$method] = $data["subtotal"] * $valor;
 
-      }
-
+      }   
       $pdf->setX(3);
       $pdf->SetFont('Arial', 'B', 5);
       $pdf->Cell(5, $off, '' . $data['quantity'] . '');
@@ -156,12 +154,6 @@ try {
 
   $pdf->Ln(3);
   $pdf->setX(2);
-  $pdf->Cell(5, $textypos, "   TOTAL en: Abonos ");
-  $pdf->setX(38);
-  $pdf->Cell(5, $textypos, "" . number_format($net_methods['Abonos'], 2, ".", ","), 0, 0, "R");
-
-  $pdf->Ln(3);
-  $pdf->setX(2);
   $pdf->Cell(5, $textypos, "   TOTAL CONVERTIDO (USD): ");
   $pdf->setX(38);
   $pdf->Cell(5, $textypos, "" . number_format($net_USD, 2, ".", ","), 0, 0, "R");
@@ -187,15 +179,17 @@ try {
 
 } catch (Exception $e) {
 
-  //echo $e->getMessage();
+  echo $e->getMessage();
 
-  header("Location: ./cierre.php?alert=error");
+  //header("Location: ./cierre.php?alert=error");
 
 } finally {
 
   mysqli_close($conex);
 
-}
+} 
+
+?>
 
 
 

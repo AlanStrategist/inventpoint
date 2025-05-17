@@ -16,6 +16,9 @@ if (isset($alert) && $alert == "save") {
 } else if (isset($alert) && $alert == "Pagado") {
   $al = new ClassAlert("Pago exitoso!<br>", "El recibo al que se le acaba de abonar ha sido pagado en su totalidad, aparecera en la vista de recibos", "warning");
 
+} else if (isset($alert) && $alert == "credit") {
+  $al = new ClassAlert("Cr&eacute;dito creado exitosamente!<br>", "El recibo aparecera en la vista de recibos una vez se haya cancelado la totalidad del cr&eacute;dito", "warning");
+
 }
 
 $sql7 = "SELECT DISTINCT f.id AS id_factura,
@@ -67,9 +70,10 @@ if (!($valid > 0)) { ?>
                   <th class="textAlignLeft">Cliente</th>
                   <th class="textAlignLeft">Monto Total</th>
                   <th class="textAlignLeft">Monto Abonado</th>
+                  <th>Ver detalles de abonos</th>
                   <th class="textAlignLeft">Monto Pendiente</th>
                   <th class="textAlignLeft">Metodo de Pago</th>
-                  <th class="textAlignLeft">Monto a Abonar</th>                 
+                  <th class="textAlignLeft">Monto a Abonar</th>
                   <th class="textAlignLeft">Abonar</th>
                 </thead>
 
@@ -107,24 +111,29 @@ if (!($valid > 0)) { ?>
 
                     ?>
                     <td>&#36;<?= number_format($abono, 2, '.', ',') ?></td>
+
+                    <td><?php if($abono != 0){  ?> <a href="../../../controladores/ControladorCredito.php?operacion=details_ab&id_factura=<?=$pedido['id_factura']?>"><i class="fas fa-2x fa-receipt"></i></a><?php }?></td>
+
                     <td>&#36;<?= number_format(($pedido['total'] - $abono), 2, '.', ',') ?></td>
 
                     <form name="form1" method="post" action="../../../controladores/ControladorCredito.php">
 
-                      <input type="hidden" name="id_factura" value="<?= $pedido['id_factura'] ?>">                   
+                      <input type="hidden" name="id_factura" value="<?= $pedido['id_factura'] ?>">
                       <input type="hidden" name="monto" value="<?= ($pedido['total'] - $abono) ?>">
                       <input type="hidden" name="operacion" value="abonar">
-                      
+
                       <div class="form-group">
 
                         <td><select name="metodo" class="form-control" id="metodo">
-                          <option value="Efectivo">Efectivo BS</option>
-                          <option value="Debito">Débito</option>
-                          <option value="Divisa">Divisa</option>
-                          <option value="Transferencia">Transferencia</option>
-                        </select></td>
+                            <option value="Efectivo">Efectivo BS</option>
+                            <option value="Debito">Débito</option>
+                            <option value="Divisa">Divisa</option>
+                            <option value="Transferencia">Transferencia</option>
+                          </select></td>
 
-                        <td><input type="number" class="form-control" name="abono" placeholder="<?= ($pedido['total'] - $abono) ?>" max="<?= $pedido['total'] - $abono ?>" required>
+                        <td><input type="number" class="form-control" step='0.1'name="abono"
+                            placeholder="<?= ($pedido['total'] - $abono) ?>" max="<?= $pedido['total'] - $abono ?>"
+                            required>
                         </td>
                         <td><input type="submit" class="btn btn-primary" value="Abonar"></td>
                       </div>
@@ -144,7 +153,9 @@ if (!($valid > 0)) { ?>
 
               <table class="table">
                 <tr>
-                  <td><div class='product-nombre'>Total Abonado</div></td>
+                  <td>
+                    <div class='product-nombre'>Total Abonado</div>
+                  </td>
                   <td>
                     <div class='text-success'>&#36;<?= number_format($abonos, 2, '.', ',') ?></div>
                   </td>

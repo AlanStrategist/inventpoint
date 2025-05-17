@@ -28,6 +28,23 @@ class ControladorProducto
         
     }
 
+    public function details_ab()
+    {       
+        if (isset($_REQUEST['id_factura'])) {
+            
+            $id_factura = $_REQUEST['id_factura'];
+
+            header("Location: ../vista/categorias/credits/view_pays.php?id_factura=" . $id_factura);
+
+        } else {
+            
+            header("Location: ../vista/categorias/car/todo_dia.php?alert=error");
+            return;
+
+        }
+        
+    }
+
     public function abonar()
     {       
         extract($_POST);
@@ -112,6 +129,10 @@ class ControladorProducto
             case 'abonar':
                 $pro->abonar();             
                 break; 
+
+            case 'details_ab':
+                $pro->details_ab();             
+                break;    
                
             default:
                 ?>
