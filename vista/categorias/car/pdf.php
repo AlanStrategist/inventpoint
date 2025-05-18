@@ -30,7 +30,8 @@ pe.pay_price * d.valor AS cambio
 
 FROM pedidos pe,producto pr,cliente c, dolar d, facturas f
 
- WHERE f.estatus='Pendiente' AND 
+ WHERE f.estatus='Pendiente' AND
+ c.cedula = '$cedula' AND 
  f.id_cliente=c.id AND 
  pe.product_id=pr.id AND 
  f.id_usuarios = ".$_SESSION['id']." AND
