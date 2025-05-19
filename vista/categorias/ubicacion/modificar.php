@@ -16,7 +16,7 @@ $data = mysqli_fetch_array($res);
     <div class="col-md-8">
       <div class="card">
         <div class="card-header">
-          <h5 class="title">Modificar Ubicacion</h5>
+          <h5 class="title">Modificar Nombre de la Empresa</h5>
         </div>
         <div class="card-body">
 

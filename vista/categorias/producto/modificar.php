@@ -152,7 +152,7 @@ $resub = mysqli_query($conex, $sql3);
 
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="ubicacion">Ubicación</label>
+                  <label for="ubicacion">Empresa</label>
                   <select name="ubicacion" required="required" class="form-control">
 
                     <?php

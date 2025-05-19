@@ -5,7 +5,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title text-info" id="exampleModalLabel">Nueva Ubicación <i class="far fa-warehouse-alt"></i></h5>
+        <h5 class="modal-title text-info" id="exampleModalLabel">Nueva Empresa <i class="far fa-warehouse-alt"></i></h5>
        
         <button type="button" title="Cerrar" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -18,7 +18,7 @@
         
       <div class="col-md-11">
       
-      <p>Ingrese una nueva ubicación</p>  
+      <p>Ingrese el nombre de una nueva empresa</p>  
       
       <input type="text" minlength="3" maxlength="100" class="form-control" name="nombre" placeholder="Ejemplo:Estante 4" title="Ingrese su nueva ubicación" required="required" autofocus>
         

@@ -60,7 +60,7 @@ if ($clave == '' || $pruebo < 0 || $valor == 0) { ?>
                     <th><strong>Existencia</strong></th>
                     <th><strong>Ganancia</strong></th>
                     <th><strong>Categoria</strong></th>
-                    <th><strong>Ubicación</strong> </th>
+                    <th><strong>Empresa</strong> </th>
                     <th><strong>Modificar</strong> </th>
                     <th><strong>Estatus</strong></th>
 

@@ -182,10 +182,10 @@ while($privis = mysqli_fetch_array($rescata)){
                     Categorias</a>
 
                   <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal2" href="">Registrar
-                    <strong>Ubicaciones</strong><br> para Productos</a>
+                    <strong>Empresas proveedoras</strong><br> de Productos</a>
                   <a class="dropdown-item"
                     href="../../../controladores/ControladorUbicacion.php?operacion=index&autorizo=autorizo">Lista de
-                    ubicaciones</a>
+                    Empresas</a>
                 </div>
               </a>
             </li>
