@@ -4,7 +4,7 @@ session_start();
 
 include('../modelos/clasedb.php');
 include './Utils.php';
-$operacion=$_POST['operacion'];
+$operacion=$_REQUEST['operacion'];
 
 class ControladorLogin
 {
