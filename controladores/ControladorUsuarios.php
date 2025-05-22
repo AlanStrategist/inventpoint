@@ -35,6 +35,16 @@ class ControladorUsuarios
             $result = mysqli_query($conex, $nomexist);
             $nombresbd = mysqli_num_rows($result);
 
+            $cl = limpiarCadena($clave);
+
+            if($cl != $clave){
+
+                header("ControladorUsuarios.php?operacion=index&alert=nocon");
+
+                return;
+
+            }
+
             if ($nombresbd > 0) {
 
                 header("Location: ControladorUsuarios.php?operacion=index&alert=dup");
@@ -45,6 +55,8 @@ class ControladorUsuarios
             if ($clave != $clave_repetir) {
 
                 header("ControladorUsuarios.php?operacion=index&alert=nocon");
+
+                return;
 
             }
 
