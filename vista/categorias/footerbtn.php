@@ -25,10 +25,7 @@ include '../modals/modal_ubicacion.php';
   </div>
 
 
-<!-- Only graphics 
-<script src="../../../modelos/Chart.js-2.9.3/dist/Chart.min.js"></script>
-  <script src="../../../modelos/Chart.js-2.9.3/samples/utils.js"></script>
- Only graphics -->
+
 
 
 <script src="../../assets/js/core/bootstrap.bundle.min.js"></script>

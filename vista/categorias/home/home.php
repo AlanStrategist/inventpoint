@@ -110,3 +110,7 @@ $reg = mysqli_num_rows($strong);
 
 
 <?php include '../footerbtn.php'; ?>
+
+ 
+<script src="../../../modelos/Chart.js-2.9.3/dist/Chart.min.js"></script>
+  <script src="../../../modelos/Chart.js-2.9.3/samples/utils.js"></script>
