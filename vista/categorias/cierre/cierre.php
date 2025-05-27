@@ -64,7 +64,7 @@ pe.id_facturas=f.id";
 
   <script>
     alert("Error en la consulta: <?= $e->getMessage() ?>");
-    window.location = '../home.php?alert=error';
+    window.location = '../home/home.php?alert=error';
   </script>
 
   <?php
