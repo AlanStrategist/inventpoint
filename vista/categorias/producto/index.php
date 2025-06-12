@@ -59,15 +59,6 @@ if ($clave == '' || $pruebo < 0 || $valor == 0) { ?>
 
 <?php } else {
 
-  /*
-  while ($data = mysqli_fetch_array($respuesta)) {
-
-    $q =" UPDATE producto SET precio_venta = precio + (precio * porcentaje / 100) WHERE id = " . $data['id'];
-    mysqli_query($conex, $q);
-
-  }
-  */
-
   ?>
 
   <body>

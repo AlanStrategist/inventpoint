@@ -151,22 +151,22 @@ class ControladorProducto
     }
 
     public function guardar_modificacion()
-    {
-        session_start();
-
-        if (empty($_SESSION['id'])) {
-            header("Location: ../index.php?alert=inicia");
-        } else {
-            $id_usuario = $_SESSION['id'];
-        }
+    {       
+        $id_usuario = $_SESSION['id'];
+        
         extract($_POST);
 
         $db = new clasedb();
         $conex = $db->conectar();
-
         $cod_barra_1 = str_replace("'", "-", $cod_barra);
 
-        $sql = "UPDATE producto SET id='$id',cod_barra='$cod_barra_1',nombre='$nombre',precio='$precio',porcentaje='$porcentaje',stock='$stock',estatus='$estatus',id_categorias='$categoria',id_usuario='$id_usuario',id_ubicacion='$ubicacion' WHERE id='$id'";
+        // Calc percentage
+        
+        $porcentaje = ( ( $p_venta - $precio) / $precio) * 100;
+
+        $porcentaje = round($porcentaje, 2);
+
+        $sql = "UPDATE producto SET id='$id',cod_barra='$cod_barra_1',nombre='$nombre',precio_venta=$p_venta , porcentaje='$porcentaje',stock='$stock',estatus='$estatus',id_categorias='$categoria',id_usuario='$id_usuario',id_ubicacion='$ubicacion' WHERE id='$id'";
 
         $resultado = mysqli_query($conex, $sql);
 
