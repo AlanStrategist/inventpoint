@@ -1,5 +1,14 @@
 <?php
 include "../modelos/clasedb.php";
+include "./Utils.php";
+
+if( !isLoged())
+{
+    header("Location: ../index.php?alert=inicia");
+    
+    return;
+}
+
 extract($_REQUEST);
 
 class ControladorProducto
@@ -69,22 +78,25 @@ class ControladorProducto
 
     public function guardar()
     {
-        session_start();
+        $cod_barra = $_POST['cod_barra'];
+        $nombre = $_POST['nombre'];
+        $precio = $_POST['precio'];
+        $p_venta = $_POST['p_venta'];
+        $stock = $_POST['stock'];
+        $estatus = $_POST['estatus'];
+        $categoria = $_POST['categoria'];
+        $ubicacion = $_POST['ubicacion'];
 
-        if (empty($_SESSION['id'])) {
-            header("Location: ../index.php?alert=inicia");
-        } else {
-            $id_usuario = $_SESSION['id'];
+        $id_usuario = $_SESSION['id'];
 
-        }
-        extract($_POST);
+        try{
 
         $db = new clasedb();
         $conex = $db->conectar();
 
         $cod_barra_1 = str_replace("'", "-", $cod_barra);
 
-        $nomexist = "SELECT * FROM producto WHERE nombre='" . $nombre . "' OR cod_barra='" . $cod_barra1 . "' ";
+        $nomexist = "SELECT * FROM producto WHERE nombre='" . $nombre . "' OR cod_barra='" . $cod_barra_1 . "' AND cod_barra != 'N/A' ";
 
         $result = mysqli_query($conex, $nomexist);
         $nombresbd = mysqli_num_rows($result);
@@ -92,23 +104,46 @@ class ControladorProducto
         if ($nombresbd > 0) {
 
             header("Location: ../vista/categorias/producto/registrar.php?alert=nombredu");
-            //si el nombre esta duplicado
+
+            return;
+           
+        } 
+
+        // Calc percentage
+        
+        $porcentaje = ( ( $p_venta - $precio) / $precio) * 100;
+
+        $porcentaje = round($porcentaje, 2);
+
+        $sql = "INSERT INTO `producto` (`id`,`cod_barra`, `nombre`, `precio`,`precio_venta`,`porcentaje`,`stock`, `modified`, `estatus`, `id_categorias`,`id_usuario`,`id_ubicacion`) VALUES (NULL, '" . $cod_barra_1 . "','$nombre',  '$precio', '$p_venta', '$porcentaje','$stock', CURRENT_TIMESTAMP, '$estatus', '$categoria','$id_usuario','$ubicacion');";
+
+        $resultado = mysqli_query($conex, $sql);
+
+        if ($resultado) {
+
+            header("Location: ../vista/categorias/producto/registrar.php?alert=exito");
+
         } else {
-
-            $sql = "INSERT INTO `producto` (`id`,`cod_barra`, `nombre`, `precio`, `porcentaje`,`stock`, `modified`, `estatus`, `id_categorias`,`id_usuario`,`id_ubicacion`) VALUES (NULL, '" . $cod_barra_1 . "','$nombre',  '$precio', '$porcentaje','$stock', CURRENT_TIMESTAMP, '$estatus', '$categoria','$id_usuario','$ubicacion');";
-
-            $resultado = mysqli_query($conex, $sql);
-
-            if ($resultado) {
-
-                header("Location: ../vista/categorias/producto/registrar.php?alert=exito");
-
-            } else {
-                header("Location: ../vista/categorias/producto/registrar.php?alert=error");
-            }
+            
+            header("Location: ../vista/categorias/producto/registrar.php?alert=error");
         }
+        
+        } catch (Exception $e) {
+            
+            echo "Error: " . $e->getMessage();
+
+            echo $sql;
+            //header("Location: ../vista/categorias/producto/registrar.php?alert=error");
+       
+       
+        }finally{
+
+            mysqli_close($conex);
+
+        }
+
     }
-    //fin de funcion guardar
+    
     public function modificar()
     {
         extract($_REQUEST);

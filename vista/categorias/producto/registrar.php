@@ -1,4 +1,5 @@
 <?php
+
 $title = 'Registrar un Producto';
 $nucleo = 'Productos';
 
@@ -11,6 +12,18 @@ if (isset($alert) && $alert == "exito") {
   $al = new ClassAlert("Registro exitoso!<br>", "Se ha registrado exitosamente", "primary");
 } else if (isset($alert) && $alert == "error") {
   $al = new ClassAlert("Error al registrar!<br>", "Verifique su conexion a internet", "danger");
+}
+
+if ( !has_privi($privs,"List","Producto") ) {
+
+  ?>
+
+  <script>
+    window.location = "../home/home.php?alert=sinprivis";
+  </script>
+
+  <?php
+
 }
 
 $sql2 = "SELECT * FROM categorias";
@@ -100,16 +113,14 @@ $resub = mysqli_query($conex, $sqlub);
 
               <div class="col-md-3 pr-1">
                 <div class="form-group">
-                  <label>Porcentaje de ganancia </label>
+                  <label>Precio de venta</label>
 
-                  <input type="number" name="porcentaje" title="Coloque el porcentaje de ganancia de este producto"
-                    min="0.01" max="10000" step="0.01" class="form-control" placeholder="Ejemplo:23"
+                  <input type="number" name="p_venta" title="Coloque el precio de venta de este producto"
+                    min="0.01" step="0.01" class="form-control" placeholder="Ejemplo:23"
                     required="required">
-
 
                   <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
                   <div class="invalid-feedback">¡No puede haber campos vacios! ingrese un número del 1 al 100</div>
-
 
                 </div>
               </div>

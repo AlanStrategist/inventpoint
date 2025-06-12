@@ -9,19 +9,49 @@ extract($_REQUEST);
 
 
 
-$sql = "SELECT * FROM producto WHERE id=" . $id;
+// Consulta optimizada para obtener producto, categoría y ubicación
+$sql = "SELECT p.*, c.nombre AS categoria_nombre, u.nombre AS ubicacion_nombre
+        FROM producto p
+        INNER JOIN categorias c ON c.id = p.id_categorias
+        INNER JOIN ubicacion u ON u.id = p.id_ubicacion
+        WHERE p.id = $id";
 $res = mysqli_query($conex, $sql);
+
 $data = mysqli_fetch_array($res);
 
+// Obtener todas las categorías
 $sql2 = "SELECT * FROM categorias";
-$sql3 = "SELECT * FROM ubicacion";
-
 $res2 = mysqli_query($conex, $sql2);
+
+// Obtener todas las ubicaciones
+$sql3 = "SELECT * FROM ubicacion";
 $resub = mysqli_query($conex, $sql3);
+
+$cat = array();
+$em = array();
+
+while ($u = mysqli_fetch_array($resub)) {
+  $em[] = $u;
+}
+
+while ($c = mysqli_fetch_array($res2)) {
+  $cat[] = $c;
+}
+
+mysqli_close($conex);
+
+if ( !has_privi($privs,"Update","Producto") ) {
+
+  ?>
+  <script>
+    window.location = "../home/home.php?alert=sinprivis";
+  </script>
+
+  <?php
+}
 
 
 ?>
-
 
 <div class="content">
   <div class="row">
@@ -100,12 +130,11 @@ $resub = mysqli_query($conex, $sql3);
 
               <div class="col-md-3 pr-1">
                 <div class="form-group">
-                  <label>Porcentaje </label>
+                  <label>Precio de venta</label>
 
-                  <input type="number" name="porcentaje" title="Coloque el porcentaje de venta de este producto" min="0"
-                    max="100" class="form-control" placeholder="Ejemplo:23" required="required"
-                    value="<?= $data['porcentaje'] ?>">
-
+                  <input type="number" name="p_venta" title="Coloque el precio de venta de este producto" min="1"
+                    step="0.01" class="form-control" placeholder="Ejemplo:23" required="required"
+                    value="<?= $data['precio_venta'] ?>">
 
                   <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
                   <div class="invalid-feedback">¡No puede haber campos vacios! ingrese un número del 1 al 100</div>
@@ -130,7 +159,7 @@ $resub = mysqli_query($conex, $sql3);
 
                     if ($vacio > 0) {
 
-                      while ($c = mysqli_fetch_array($res2)) {
+                      foreach( $cat as $c ) {
 
                         echo "<option value=" . $c['id'] . "  title='Categoria'>" . $c['nombre'] . "</option>";
 
@@ -161,7 +190,7 @@ $resub = mysqli_query($conex, $sql3);
 
                     if ($vacio2 > 0) {
 
-                      while ($u = mysqli_fetch_array($resub)) {
+                      foreach ($em as $u) {
 
                         echo "<option value=" . $u['id'] . "  title='Ubicación'>" . $u['nombre'] . "</option>";
 

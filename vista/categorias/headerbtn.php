@@ -139,8 +139,6 @@ while($privis = mysqli_fetch_array($rescata)){
 
                 <div class="dropdown-menu" aria-labelledby="sidebarDropdownLink">
 
-
-
                   <a class="dropdown-item" href="../producto/registrar.php">Registrar nuevo producto</a>
 
                   <a class="dropdown-item"
@@ -162,7 +160,6 @@ while($privis = mysqli_fetch_array($rescata)){
                 </div>
               </a>
             </li>
-
 
             <li>
 

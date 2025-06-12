@@ -14,10 +14,37 @@ if (isset($alert) && $alert == "modisi") {
   $al = new ClassAlert("Estatus Modificado!<br>", "", "warning");
 } else if (isset($alert) && $alert == "error") {
   $al = new ClassAlert("Error!<br>", "No se registraron los cambios", "danger");
+
+}else if (isset($alert) && $alert == "nombredu") {
+  $al = new ClassAlert("Error!<br>", "El nombre y/o código de barra del producto ya existe", "danger");
 }
 
+if ( !has_privi($privs,"List","Producto") ) {
 
-$lista = "SELECT p.id,p.cod_barra,p.nombre, p.precio, p.porcentaje,p.stock,p.estatus, c.nombre AS categorias, u.nombre AS ubicacion FROM producto p,categorias c, ubicacion u where c.id = p.id_categorias AND u.id = p.id_ubicacion";
+  ?>
+
+  <script>
+    window.location = "../home/home.php?alert=sinprivis";
+  </script>
+
+  <?php
+}
+
+$lista = "SELECT 
+    p.id,
+    p.cod_barra,
+    p.nombre, 
+    p.precio, 
+    p.precio_venta,
+    p.porcentaje,
+    p.stock,
+    p.estatus, 
+    c.nombre AS categorias, 
+    u.nombre AS ubicacion 
+FROM producto p
+INNER JOIN categorias c ON c.id = p.id_categorias
+INNER JOIN ubicacion u ON u.id = p.id_ubicacion";
+
 $respuesta = mysqli_query($conex, $lista);
 $pruebo = mysqli_num_rows($respuesta);
 
@@ -31,6 +58,16 @@ if ($clave == '' || $pruebo < 0 || $valor == 0) { ?>
 
 
 <?php } else {
+
+  /*
+  while ($data = mysqli_fetch_array($respuesta)) {
+
+    $q =" UPDATE producto SET precio_venta = precio + (precio * porcentaje / 100) WHERE id = " . $data['id'];
+    mysqli_query($conex, $q);
+
+  }
+  */
+
   ?>
 
   <body>
@@ -57,8 +94,8 @@ if ($clave == '' || $pruebo < 0 || $valor == 0) { ?>
                     <th><strong>Nombre</strong></th>
                     <th><strong>Precio</strong></th>
                     <th><strong>Precio para vender</strong></th>
-                    <th><strong>Existencia</strong></th>
-                    <th><strong>Ganancia</strong></th>
+                    <th><strong>Porcentaje de Ganancia</strong></th>
+                    <th><strong>Existencia</strong></th>                  
                     <th><strong>Categoria</strong></th>
                     <th><strong>Empresa</strong> </th>
                     <th><strong>Modificar</strong> </th>
@@ -74,8 +111,6 @@ if ($clave == '' || $pruebo < 0 || $valor == 0) { ?>
 
                     $nam++;
 
-                    $porc = $data['precio'] * $data['porcentaje'] / 100;
-                    $precio_venta = $porc + $data['precio'];
                     ?>
                     <tr>
                       <td><?= $data['cod_barra'] ?></td>
@@ -83,54 +118,24 @@ if ($clave == '' || $pruebo < 0 || $valor == 0) { ?>
                       <td><?= number_format($data['precio'], 2, '.', ',')?> $
                         <hr>
                       <?= number_format($data['precio'] * $valor, 2, ',', '.') ?> Bs
-
                       </td>
-
                       <td>
-
-                        <?= number_format($precio_venta, 2, '.', ',') ?> $
+                        <?= number_format($data['precio_venta'], 2, '.', ',') ?> $
                         <hr>
-                        <?= number_format($precio_venta * $valor, 2, ',', '.') ?> Bs
-
+                        <?= number_format($data['precio_venta'] * $valor, 2, ',', '.') ?> Bs
                       </td>
 
-                      <td>
-                        <?= $data['stock'] ?> unidad(es) <a href="" data-toggle='modal' data-target='#stock<?= $nam ?>'
-                          title="¿Modificar cantidad en existencia del producto?"><i
-                            class='far fa-2x fa-pen text-primary'></i></a>
-                      </td>
-
-
-                      <td>
-
-                        <?= $data['porcentaje'] ?> %
-
-                      </td>
-
-
-
-                      <td>
-                        <?= $data['categorias'] ?>
-                      </td>
-
-                      <td>
-
-                        <?= $data['ubicacion'] ?>
-
-                      </td>
-
-
-
-
-                      <td>
-
-                        <a title='Modificar'
+                      <td><?= $data['porcentaje']?> %</td>
+                      <td><?= $data['stock'] ?> unidad(es) <a href="" data-toggle='modal' data-target='#stock<?= $nam ?>'
+                      title="¿Modificar cantidad en existencia del producto?"><i
+                      class='far fa-2x fa-pen text-primary'></i></a></td>
+                      <td><?= $data['categorias'] ?></td>
+                      <td><?= $data['ubicacion'] ?></td>
+                      <td><a title='Modificar'
                           href='../../../controladores/ControladorProducto.php?operacion=modificar&id=<?= $data['id'] ?>'
                           href=''><i class='far fa-2x fa-edit'></i></a>
-
                       </td>
                       <td>
-
                         <?php
 
                         if ($data['estatus'] == 'habilitado') {

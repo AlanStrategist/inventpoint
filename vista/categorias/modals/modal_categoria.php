@@ -14,8 +14,6 @@
 
         <form name="cate" class="needs-validation" method="POST" action="../../../controladores/ControladorCategoria.php" novalidate>
 
-
-
           <div class="col-md-11">
 
             <p>Ingrese una nueva categoria de productos</p>  
@@ -25,10 +23,6 @@
             <div class="invalid-feedback">¡No puede haber campos vacios!</div>
 
           </div>
-
-
-
-
 
         </div>
         <div class="modal-footer">
