@@ -53,8 +53,8 @@ class ControladorPedido
 			$dolar = mysqli_fetch_object($res_dolar);
 			$id_dolar = $dolar->id;
 
-			#verify sales without end
-			$sql_has_p = "SELECT id FROM facturas WHERE estatus='Pendiente'";
+			#verify sales without end by user 
+			$sql_has_p = "SELECT id FROM facturas WHERE estatus='Pendiente' AND id_usuarios=" . $id_usuario . "";
 			$qu = mysqli_query($conex, $sql_has_p);
 			$num = mysqli_num_rows($qu);
 
@@ -388,7 +388,7 @@ class ControladorPedido
 
 		extract($_REQUEST);
 
-		header("Location: ../vista/categorias/factura/details.php?fac=".$fac."&id=" . $id . "");
+		header("Location: ../vista/categorias/factura/details.php?fac=" . $fac . "&id=" . $id . "");
 
 	}
 
