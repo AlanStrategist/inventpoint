@@ -68,13 +68,20 @@ class ControladorPedido
 
 			//pido todos los datos de los productos del carrito segun el usuario y calculo la cantidad en existencia
 
-			$sql = "SELECT DISTINCT cm.product_id,cm.user_id,cm.quantity,p.nombre,
-		ROUND(p.precio + ( (p.precio * p.porcentaje) / 100),2) AS precio_venta,
-		p.stock,(p.stock-cm.quantity) AS restante 
-
-		FROM cart_menu cm,producto p,usuarios u,cliente c 
-
-		WHERE cm.user_id=u.id AND cm.product_id=p.id";
+			$sql = "SELECT DISTINCT 
+    		cm.product_id,
+    		cm.user_id,
+    		cm.quantity,
+    		p.nombre,
+    		ROUND(p.precio + ((p.precio * p.porcentaje) / 100), 2) AS precio_venta,
+    		p.stock,
+    		(p.stock - cm.quantity) AS restante
+    		FROM cart_menu cm
+    		
+			INNER JOIN producto p ON cm.product_id = p.id
+    		INNER JOIN usuarios u ON cm.user_id = u.id   		
+            
+			WHERE cm.user_id = " . $id_usuario;
 
 			$respuesta = mysqli_query($conex, $sql);
 
@@ -115,7 +122,7 @@ class ControladorPedido
 
 			$sql_fac = !isset($fecha_credi) ? "INSERT INTO `facturas`(`id`, `factura`, `total`, `id_cliente`, `id_dolar`,`id_usuarios`, `metodo`, `estatus`, `ref`,`date`,`fecha_credi`) 
 		
-		VALUES (NULL," . $facNum . "," . $total . "," . $id_cliente . "," . $id_dolar . "," . $id_usuario . ",'" . $metodo . "','Pendiente','',CURRENT_TIMESTAMP(),NULL)" :
+			VALUES (NULL," . $facNum . "," . $total . "," . $id_cliente . "," . $id_dolar . "," . $id_usuario . ",'" . $metodo . "','Pendiente','',CURRENT_TIMESTAMP(),NULL)" :
 
 				"INSERT INTO `facturas`(`id`, `factura`, `total`, `id_cliente`, `id_dolar`,`id_usuarios`, `metodo`, `estatus`, `ref`,`date`,`fecha_credi`) VALUES 
 		
@@ -270,9 +277,10 @@ class ControladorPedido
 
 			$total = $rows['total'] - ($q * $cost);
 
-			//Update the total of the invoice
+			$sql_up = $total <= 0 ? "DELETE FROM facturas WHERE id=" . $fac : "UPDATE facturas SET total=$total WHERE id=" . $fac;
+			
+			//If the total is less than or equal to 0, delete the invoice, otherwise update it
 
-			$sql_up = "UPDATE facturas SET total=$total WHERE id=" . $fac;
 			$res = mysqli_query($conex, $sql_up);
 
 			if (!$res) {

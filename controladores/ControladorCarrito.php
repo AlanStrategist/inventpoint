@@ -60,8 +60,6 @@ class ControladorCarrito
 
 		extract($_POST);
 
-
-
 		$user_id = $_SESSION["id"];
 
 		try {
@@ -74,7 +72,6 @@ class ControladorCarrito
 			$res = mysqli_query($conex, $sql);
 
 			if ($res) {
-
 
 				$loc = $ByCon == "true" ? "Location: ../vista/categorias/car/productos.php?alert=ac" : "Location: ../vista/categorias/car/carro.php?alert=ac";
 
@@ -124,7 +121,7 @@ class ControladorCarrito
 
 			#Check if already has in the car
 
-			$sql_check_in_car = "SELECT quantity FROM cart_menu WHERE product_id = " . $id;
+			$sql_check_in_car = "SELECT quantity FROM cart_menu WHERE product_id = " . $id . " AND user_id = " . $user_id . "";
 
 			$query_checkin = mysqli_query($conex, $sql_check_in_car);
 

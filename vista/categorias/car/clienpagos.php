@@ -18,27 +18,26 @@ else if( isset($alert) && $alert == "donefac"){ $al = new ClassAlert("Pedido cre
 
 else if( isset($alert) && $alert == "culm"){ $al = new ClassAlert("No se ha realizado la venta!<br>","Existen a&uacute;n ventas sin culminar","warning"); }
 
-$sql7 = "SELECT DISTINCT pe.id AS id_pedidos,
-pe.id_facturas AS id_factura,
-pr.nombre,
-pr.id AS id_producto,
-pe.pay_price AS precio_venta,
-pe.quantity, 
-f.metodo,
-c.cedula,
-c.telefono,
-c.nombre AS nombre_cliente,
-pe.pay_price * pe.quantity AS subtotal,
-pe.pay_price * d.valor AS cambio 
-
-FROM pedidos pe,producto pr,cliente c, dolar d, facturas f
-
- WHERE f.estatus='Pendiente' AND 
- f.id_cliente=c.id AND 
- pe.product_id=pr.id AND 
- d.id = f.id_dolar AND
- f.id_usuarios = ".$_SESSION['id']." AND
- f.id = pe.id_facturas";
+$sql7 = "SELECT DISTINCT 
+    pe.id AS id_pedidos,
+    pe.id_facturas AS id_factura,
+    pr.nombre,
+    pr.id AS id_producto,
+    pe.pay_price AS precio_venta,
+    pe.quantity, 
+    f.metodo,
+    c.cedula,
+    c.telefono,
+    c.nombre AS nombre_cliente,
+    pe.pay_price * pe.quantity AS subtotal,
+    pe.pay_price * d.valor AS cambio 
+FROM pedidos pe
+INNER JOIN producto pr ON pe.product_id = pr.id
+INNER JOIN facturas f ON pe.id_facturas = f.id
+INNER JOIN cliente c ON f.id_cliente = c.id
+INNER JOIN dolar d ON f.id_dolar = d.id
+WHERE f.estatus = 'Pendiente'
+  AND f.id_usuarios = ".$_SESSION['id'];
 
 
 $respuesta = mysqli_query($conex, $sql7);
