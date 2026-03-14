@@ -16,11 +16,11 @@
           <strong>taza del dolar</strong> <i class="far fa-2x fa-money-bill-alt"></i>=<i class="far fa-2x fa-sack"></i>
         </p>
 
-        <!-- llamar el Dolar de las apis -->
+        <!-- llamar el Dolar de las apis 
         <button id="btnCargar" class="btn btn-primary" type="button">Obtener Dolar Actual</button>
         
         <div id="contenidoDinamico"></div>
-        <!-- Plasmar en este div con ajax -->
+         Plasmar en este div con ajax -->
 
         <form name="form1" class="needs-validation" novalidate="novalidate" method="POST"
           action="../../../controladores/ControladorConversor.php">

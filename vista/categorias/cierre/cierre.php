@@ -173,6 +173,13 @@ pe.id_facturas=f.id";
             <!-- Net amount in credits-->
 
             <h4 class="card-title">Créditos</h4>
+
+            <?php if( empty($pedidos) ){ ?>
+
+              <tr><td colspan="3" class="text-center">No hay créditos registrados para el día de hoy.</td></tr>
+
+            <?php }else{ ?>
+
             <table class="table" id="pays">
               <thead class="text-primary">
                 <th># Recibo</th>
@@ -234,8 +241,19 @@ pe.id_facturas=f.id";
               </tr>
             </table>
 
+            <?php } ?>
+
             <!-- Net amount in pays of credits-->
             <h4 class="card-title">Abonos</h4>
+
+            <?php 
+
+            if(  empty($abonos) ){
+
+              echo "<tr><td colspan='3' class='text-center'>No hay abonos registrados para el día de hoy.</td></tr>";
+
+            }else{ ?>
+
             <table class="table" id="abonos">
               <thead class="text-primary">
                 <th># Recibo</th>
@@ -269,7 +287,7 @@ pe.id_facturas=f.id";
                   <td><a href='pdf.php?cedula=254528' class='btn btn-success'> <i class='fad fa-file-pdf'></i><span class='glyphicon glyphicon-shopping-cart'></span>Imprimir</a></td>
                 </tr>
               </table>          
-        
+            <?php } ?>
           </div>
         </div>
       </div>

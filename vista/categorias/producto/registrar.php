@@ -84,11 +84,11 @@ $resub = mysqli_query($conex, $sqlub);
               <div class="col-md-4 pl-1">
                 <div class="form-group">
                   <label for="exampleInputEmail1">Precio de compra (USD)</label>
-                  <input type="number" name="precio" step="any" title="Solo números sin espacios y símbolos" min="1"
-                    max="10000" class=" form-control" placeholder="Ejemplo:10" required="required">
+                  <input type="number" name="precio" step="0.01" title="Solo números sin espacios y símbolos" min="0.01"
+                    max="100000" class=" form-control" placeholder="Ejemplo:10" required="required">
 
                   <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
-                  <div class="invalid-feedback">¡No puede haber campos vacios! ingrese un número del 1 al 10000</div>
+                  <div class="invalid-feedback">¡No puede haber campos vacios! ingrese un número del 1 al 100000</div>
 
 
 
@@ -158,6 +158,19 @@ $resub = mysqli_query($conex, $sqlub);
                 </div>
               </div>
 
+              <div class="col-md-5 pl-1">
+                <div class="form-group">
+
+                  <label for="medidas">Medidas</label>
+
+                  <select name="medida" required="required" class="form-control">
+                    <option value='units' title='Debes registrar una categoria de productos'> Unidades </option>    
+                    <option value='gr' title='Debes registrar una categoria de productos'> Por Peso </option>                                      
+                  </select>
+                
+                </div>
+              </div>
+
             </div>
             <div class="row">
 
@@ -201,21 +214,10 @@ $resub = mysqli_query($conex, $sqlub);
               <input class="btn btn-primary pull-right" type="submit" value="Cargar">
 
             </div>
-
-
-
-
           </form>
         </div>
       </div>
     </div>
-
-
-
-
-
-
-
 
     <?php
 

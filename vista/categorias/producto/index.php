@@ -35,7 +35,6 @@ $lista = "SELECT
     p.cod_barra,
     p.nombre, 
     p.precio, 
-    p.precio_venta,
     p.porcentaje,
     p.stock,
     p.estatus, 
@@ -102,6 +101,8 @@ if ($clave == '' || $pruebo < 0 || $valor == 0) { ?>
 
                     $nam++;
 
+                    $precio_venta = ( $data['precio'] * $data['porcentaje'] / 100 + $data['precio'] );
+
                     ?>
                     <tr>
                       <td><?= $data['cod_barra'] ?></td>
@@ -111,9 +112,9 @@ if ($clave == '' || $pruebo < 0 || $valor == 0) { ?>
                       <?= number_format($data['precio'] * $valor, 2, ',', '.') ?> Bs
                       </td>
                       <td>
-                        <?= number_format($data['precio_venta'], 2, '.', ',') ?> $
+                        <?= number_format($precio_venta, 2, '.', ',') ?> $
                         <hr>
-                        <?= number_format($data['precio_venta'] * $valor, 2, ',', '.') ?> Bs
+                        <?= number_format($precio_venta * $valor, 2, ',', '.') ?> Bs
                       </td>
 
                       <td><?= $data['porcentaje']?> %</td>
