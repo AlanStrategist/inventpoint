@@ -115,15 +115,7 @@ class ControladorProducto
 
         $porcentaje = round($porcentaje, 2);
 
-        //Set Saved Unit
-
-        if($medida == 'gr') {
-            
-            $stock = $stock * 1000;
-            
-        }
-
-        $sql = "INSERT INTO `producto` (`id`,`cod_barra`, `nombre`, `precio`,`precio_venta`,`porcentaje`,`stock`, `modified`, `estatus`, `id_categorias`,`id_usuario`,`id_ubicacion`,`id_medida`) VALUES (NULL, '" . $cod_barra_1 . "','$nombre',  '$precio', '$p_venta', '$porcentaje','$stock', CURRENT_TIMESTAMP, '$estatus', '$categoria','$id_usuario','$ubicacion','$medida');";
+        $sql = "INSERT INTO `producto` (`id`,`cod_barra`, `nombre`, `precio`,`precio_venta`,`porcentaje`,`stock`, `modified`, `estatus`, `id_categorias`,`id_usuario`,`id_ubicacion`,`medidas`) VALUES (NULL, '" . $cod_barra_1 . "','$nombre',  '$precio', '$p_venta', '$porcentaje','$stock', CURRENT_TIMESTAMP, '$estatus', '$categoria','$id_usuario','$ubicacion','$medida');";
 
         $resultado = mysqli_query($conex, $sql);
 
@@ -133,7 +125,7 @@ class ControladorProducto
 
         } else {
             
-            header("Location: ../vista/categorias/producto/registrar.php?alert=error");
+             echo $sql; //header("Location: ../vista/categorias/producto/registrar.php?alert=error");
         }
         
         } catch (Exception $e) {

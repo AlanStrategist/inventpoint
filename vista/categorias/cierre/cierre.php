@@ -288,6 +288,7 @@ pe.id_facturas=f.id";
                 </tr>
               </table>          
             <?php } ?>
+            <td><a href='pdf.php?cedula=254528' class='btn btn-success'> <i class='fad fa-file-pdf'></i><span class='glyphicon glyphicon-shopping-cart'></span>Imprimir</a></td>
           </div>
         </div>
       </div>

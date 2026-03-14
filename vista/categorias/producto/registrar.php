@@ -100,7 +100,7 @@ $resub = mysqli_query($conex, $sqlub);
               <div class="col-md-5 pr-1">
                 <div class="form-group">
                   <label>Cantidad en existencia</label>
-                  <input type="number" name="stock" min="0" max="1000" class="form-control"
+                  <input type="number" name="stock" min="0" max="1000000" step="0.00001" class="form-control"
                     title='La cantidad que existe del producto a registrar' placeholder="Ejemplo:2" required="required">
 
                   <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>

@@ -100,8 +100,8 @@ if ( !has_privi($privs,"Update","Producto") ) {
               <div class="col-md-4 pl-1">
                 <div class="form-group">
                   <label for="exampleInputEmail1">Precio</label>
-                  <input type="number" step="any" name="precio" title="Solo números sin espacios y símbolos" min="1"
-                    max="10000" class=" form-control" placeholder="Ejemplo:10" required="required"
+                  <input type="number" step="0.00001" name="precio" title="Solo números sin espacios y símbolos" 
+                    max="100000000" class=" form-control" placeholder="Ejemplo:10" required="required"
                     value="<?= $data['precio'] ?>">
 
                   <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
@@ -117,7 +117,7 @@ if ( !has_privi($privs,"Update","Producto") ) {
               <div class="col-md-5 pr-1">
                 <div class="form-group">
                   <label>Cantidad en existencia</label>
-                  <input type="number" name="stock" min="0" max="1000" class="form-control" placeholder="Ejemplo:2"
+                  <input type="number" name="stock" step="0.00001" max="1000000" class="form-control" placeholder="Ejemplo:2"
                     required="required" value="<?= $data['stock'] ?>">
 
                   <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
@@ -132,8 +132,8 @@ if ( !has_privi($privs,"Update","Producto") ) {
                 <div class="form-group">
                   <label>Precio de venta</label>
 
-                  <input type="number" name="p_venta" title="Coloque el precio de venta de este producto" min="1"
-                    step="0.01" class="form-control" placeholder="Ejemplo:23" required="required"
+                  <input type="number" name="p_venta" title="Coloque el precio de venta de este producto" max="10000000"
+                    step="0.0001" class="form-control" placeholder="Ejemplo:23" required="required"
                     value="<?= $data['precio_venta'] ?>">
 
                   <div class="valid-feedback">¡Bien! <i class="far fa-2x fa-smile"></i> </div>
@@ -142,9 +142,6 @@ if ( !has_privi($privs,"Update","Producto") ) {
 
                 </div>
               </div>
-
-
-
 
               <div class="col-md-4 pl-1">
                 <div class="form-group">

@@ -57,7 +57,7 @@
                 <div class="input-group-text"><i class="far fa-box"></i></div>
               </div>
               
-              <input type="number" name='stock' min="1" max="5000" class="form-control" value="<?=$data['stock']?>">
+              <input type="number" name='stock' min="0.00001" max="5000" step="0.00001" class="form-control" value="<?=$data['stock']?>">
             </div>
           
               <input type="hidden" name="operacion" value='Mod_Stock'>

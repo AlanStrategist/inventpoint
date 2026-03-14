@@ -127,7 +127,7 @@ if ($respuesta) {
                         <input type="hidden" name="operacion" value="agregar">
                         <?php
                         echo "<td>";
-                        echo "<input type='number' min='1' max='".$data['stock']."' name='quantity' value='1' class='form-control' /></td>";
+                        echo "<input type='number' step='0.00001' max='".$data['stock']."' name='quantity' value='1' class='form-control' /></td>";
                         echo "<td><input  class='btn-lg btn-primary text-white' type='submit' value='Agregar'></td>";
                                                                                 
 

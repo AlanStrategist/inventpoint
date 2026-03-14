@@ -94,7 +94,7 @@ if ( !($num > 0) ){
                                          <td>
                                          <form id='myForm' action='../../../controladores/ControladorCarrito.php' method='POST'>
                                             <div class='input-group'>
-                                            <input type='number' min='1' max='<?=$data['stock']?>' name='quantity' value='<?=$data['quantity']?>' class='form-control'>
+                                            <input type='number' step='0.00001' max='<?=$data['stock']?>' name='quantity' value='<?=$data['quantity']?>' class='form-control'>
                                             <input type='hidden' name='product_id' value='<?=$data['id']?>'>
                                             <input type='hidden' name='operacion' value='actualizar'>
                                             <span class='input-group-btn'>
